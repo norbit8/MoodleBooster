@@ -1,0 +1,63 @@
+:root {
+    --text: whitesmoke;
+    --background: #222;
+    --header-background: #2c3034;
+}
+
+body *{
+    border-color: white !important;
+}
+
+.navbar,.navbar *{
+    background-color: var(--header-background) !important;
+    color: var(--text);
+}
+
+select {
+    margin: 5px;
+    /* need to adjust */
+}
+
+body, a, span, nav.footer,footer#page-footer.bg-dark {
+    color: var(--text) !important;
+    background-color: var(--background) !important;
+}
+
+#page-header div.d-flex{
+    border: white 0.1rem solid;
+    border-radius: 16px !important;;
+    padding: 0.5rem;
+    margin-top: 0.4rem
+    /*border: none;*/
+}
+
+#page-header div.flex-wrap{
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
+
+a, h1, h2, h3, h4, b {
+    color: var(--text) !important;
+}
+
+h5, h6 {
+    color: black !important;
+}
+
+
+div, section {
+    background-color: var(--background) !important;
+}
+
+#frame2-page,.card.mb-3 {
+    border: white 0.1rem solid;
+    border-radius: 16px !important;;
+    padding: 0.5rem
+}
+
+.card-title{
+    background-image: none !important;
+    background-color: transparent !important;
+    color:white !important;
+}
