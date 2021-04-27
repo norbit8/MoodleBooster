@@ -7,7 +7,7 @@ function listenForClicks() {
         /**
          * Given the name of a beast, get the URL to the corresponding image.
          */
-        function beastNameToURL(beastName) {
+        function actionToScript(beastName) {
             switch (beastName) {
                 case "Remove Courses":
                     browser.tabs.executeScript({ file: "./../content_scripts/courseRemover.js" }).catch(
@@ -15,7 +15,10 @@ function listenForClicks() {
                     );
                     return;
                 case "Dark Mode":
-                    // TODO: implement
+                    darkModeSwitch().catch(e => console.log(e))
+                    // browser.tabs.executeScript({ file: "./../content_scripts/darkMode.js" }).catch(
+                    //     reportError
+                    // );
                     return;
                 case "Enhance Page":
                     // TODO: implement
@@ -26,27 +29,12 @@ function listenForClicks() {
             }
         }
 
-        /**
-         * Insert the page-hiding CSS into the active tab,
-         * then get the beast URL and
-         * send a "beastify" message to the content script in the active tab.
-         */
-        //  function beastify(tabs) {
-        //     browser.tabs.insertCSS({code: hidePage}).then(() => {
-        //       let url = beastNameToURL(e.target.textContent);
-        //       browser.tabs.sendMessage(tabs[0].id, {
-        //         command: "beastify",
-        //         beastURL: url
-        //       });
-        //     });
-        //   }
-
 
         /**
          * Just log the error to the console.
          */
         function reportError(error) {
-            console.error(`Could not beastify: ${error}`);
+            console.error(`Something went wrong: ${error}`);
         }
 
         /**
@@ -55,12 +43,33 @@ function listenForClicks() {
          */
         if (e.target.classList.contains("btn")) {
             console.log("what?");
-            beastNameToURL(e.target.textContent);
-            // browser.tabs.query({active: true, currentWindow: true})
-            //   .then(beastify)
-            //   .catch(reportError);
+            actionToScript(e.target.textContent);
         }
     });
 }
+
+async function darkModeSwitch(){
+    if(window.darkMode){
+        await browser.tabs.removeCSS({file:"./../dark-mode/dark-mode.css"})
+    }else{
+        await browser.tabs.insertCSS({file:"./../dark-mode/dark-mode.css"})
+    }
+    window.darkMode = !window.darkMode
+}
+
+
+// to revisit...
+async function handleMessage(request, sender, sendResponse) {
+    console.log("Message from the content script")
+    if(request === "dark-mode-off"){
+        await browser.tabs.removeCSS({file:"./../dark-mode/dark-mode.css"})
+    } else if(request === "dark-mode-on"){
+        await browser.tabs.insertCSS({file:"./../dark-mode/dark-mode.css"})
+    }
+}
+
+
+browser.runtime.onMessage.addListener(handleMessage);
+
 
 listenForClicks();

@@ -1,0 +1,57 @@
+body *{
+    border-color: white !important;
+}
+
+.navbar,.navbar *{
+    background-color: #2c3034 !important;
+    color: white;
+}
+
+select {
+    margin: 5px;
+    /* need to adjust */
+}
+
+body, a, span, nav.footer,footer#page-footer.bg-dark {
+    color: whitesmoke !important;
+    background-color: #222 !important;
+}
+
+#page-header div.d-flex{
+    border: white 0.1rem solid;
+    border-radius: 16px !important;;
+    padding: 0.5rem;
+    margin-top: 0.4rem
+    /*border: none;*/
+}
+
+#page-header div.flex-wrap{
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
+
+a, h1, h2, h3, h4, b {
+    color: whitesmoke !important;
+}
+
+h5, h6 {
+    color: black !important;
+}
+
+
+div, section {
+    background-color: #222 !important;
+}
+
+#frame2-page,.card.mb-3 {
+    border: white 0.1rem solid;
+    border-radius: 16px !important;;
+    padding: 0.5rem
+}
+
+.card-title{
+    background-image: none !important;
+    background-color: transparent !important;
+    color:white !important;
+}
