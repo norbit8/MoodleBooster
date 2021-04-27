@@ -18,10 +18,11 @@ select {
     /* need to adjust */
 }
 
-body, a, span, nav.footer,footer#page-footer.bg-dark {
+body, a, span, nav.footer,footer#page-footer.bg-dark,.popover-header,.popover-body {
     color: var(--text) !important;
     background-color: var(--background) !important;
 }
+
 
 #page-header div.d-flex{
     border: white 0.1rem solid;
