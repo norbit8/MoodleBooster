@@ -9,6 +9,7 @@ function listenForClicks() {
          */
         function actionToScript(beastName) {
             switch (beastName) {
+                // TODO: maybe implement your own css or take the class you need from bootstrap for buttons instead of injecting bootstrap css to the page
                 case "Remove Courses":
                     browser.tabs.executeScript({ file: "./../content_scripts/courseRemover.js" }).catch(
                         reportError
