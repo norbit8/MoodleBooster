@@ -28,14 +28,16 @@
      * Adds buttons that removes courses from the courses pane
      */
     async function addCourseRemovingOption() {
-        courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
+        var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
         for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
+            // console.log(courses_list[courseIndex].innerText);
             let btn = document.createElement("button");
             btn.type = "button";
             btn.id = "bruh" + courseIndex;
             btn.className = "btn-close";
             // btn.accessKeyLabel ="Close";
             btn.addEventListener('click', async function () {
+                saveToStorage("RemovedCourses", courses_list[courseIndex].innerText, false);
                 await btnCleaner();
                 courses_list[courseIndex].remove();
                 addCourseRemovingOption(); // refresh indecies.
@@ -45,4 +47,5 @@
     }
 
     addCourseRemovingOption();
+    localStorage.setItem('Shit', 'Head');
 })();
