@@ -47,5 +47,4 @@
     }
 
     addCourseRemovingOption();
-    localStorage.setItem('Shit', 'Head');
 })();
