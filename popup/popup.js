@@ -66,12 +66,7 @@ function sendMessageToTabs(tabs, data) {
             data
         ).then(response => {
             // alert(JSON.stringify(response));
-            if (response.DarkMode == "Off") {
-                window.darkMode = false;
-            }
-            else {
-                window.darkMode = true;
-            }
+            window.darkMode = ((response.DarkMode) != "Off");
         }).catch(onError);
     }
 }
