@@ -34,11 +34,18 @@ function loadSave() {
     // ---------------- SAVE FOUND ---------------
     else {  // Found MoodleBooster data on the localStorage (Yay!)
         var parsedData = JSON.parse(moodleBoosterData);
+        // DarkMode
+        if (parsedData.DarkMode == "On") {
+            addDarkMode();
+        }
         // CourseRemover
         if (parsedData.RemovedCourses != []) {
             var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
             const total_length = courses_list.length;
-            while (courses_list.length > total_length - parsedData.RemovedCourses.length) {
+            if (total_length <= 0) {
+                return;
+            }
+            while (courses_list.length != total_length - parsedData.RemovedCourses.length) {
                 for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
                     if (parsedData.RemovedCourses.includes(courses_list[courseIndex].innerText)) {
                         // Remove this course
@@ -47,10 +54,6 @@ function loadSave() {
                 }
                 courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
             }
-        }
-        // DarkMode
-        if (parsedData.DarkMode == "On") {
-            addDarkMode();
         }
         // EnhancePage
         // TODO
