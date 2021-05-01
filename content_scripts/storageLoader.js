@@ -38,7 +38,7 @@ function loadSave() {
         if (parsedData.RemovedCourses != []) {
             var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
             const total_length = courses_list.length;
-            while (courses_list.length != total_length - parsedData.RemovedCourses.length) {
+            while (courses_list.length > total_length - parsedData.RemovedCourses.length) {
                 for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
                     if (parsedData.RemovedCourses.includes(courses_list[courseIndex].innerText)) {
                         // Remove this course
