@@ -37,8 +37,10 @@ async function listenForClicks() {
                     alert("Please refresh your browser tab to apply.");
                     return;
                 case "Monochrome":
-                    console.log("MONO")
                     monochromeSwitch().catch(e=>console.log(e));
+                    return;
+                case "Back":
+                    location.href = './index.html'
                     return;
             }
         }
@@ -61,6 +63,17 @@ async function listenForClicks() {
     });
 }
 
+function listenForRange(){
+    document.addEventListener('input', e => {
+        if(e.target.id == "font-range"){
+            changeFont(e);
+        }
+        if(e.target.id == 'contrast-range'){
+            changeContrast(e);
+        }
+    })
+}
+
 function sendMessageToTabs(tabs, data) {
     /**
      * Send Message to the content-script
@@ -73,6 +86,7 @@ function sendMessageToTabs(tabs, data) {
             // alert(JSON.stringify(response));
             console.log(JSON.stringify(response))
             window.darkMode = ((response.DarkMode) != "Off");
+            window.monochrome = ((response.EnhancePage.Monochrome) != "Off");
         }).catch(onError);
     }
 }
@@ -101,6 +115,38 @@ async function darkModeSwitch() {
     // window.darkMode = !window.darkMode
 }
 
+async function monochromeSwitch() {
+    if (window.monochrome) {
+        const tabs = await browser.tabs.query({
+            currentWindow: true,
+            active: true
+        }).catch(onError);
+        sendMessageToTabs(tabs, { "EnhancePage": {"Monochrome": "Off" }});
+    } else {
+        const tabs = await browser.tabs.query({
+            currentWindow: true,
+            active: true
+        }).catch(onError);
+        sendMessageToTabs(tabs, { "EnhancePage": {"Monochrome": "On" }});
+    }
+}
+
+
+async function changeFont(e) {
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, { "EnhancePage": {"FontSize": e.target.value }});
+}
+
+async function changeContrast(e) {
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, { "EnhancePage": {"Contrast": e.target.value }});
+}
 
 // to revisit... (I don't think we need this anymore)
 async function handleMessage(request, sender, sendResponse) {
@@ -114,6 +160,7 @@ async function handleMessage(request, sender, sendResponse) {
 async function loader() {
     browser.runtime.onMessage.addListener(handleMessage);
     listenForClicks();
+    listenForRange();
     const tabs = await browser.tabs.query({
         currentWindow: true,
         active: true

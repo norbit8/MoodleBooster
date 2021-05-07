@@ -4,8 +4,9 @@ const defaultSaveSettings = {
     'RemovedCourses': [],
     'DarkMode': "Off",
     'EnhancePage': {
-        'Monochrome': false,
-        'FontSize': 0
+        'Monochrome': "Off",
+        'FontSize': "0",
+        'Contrast': "2"
     },
 };
 
@@ -21,13 +22,46 @@ function addDarkMode() {
     document.getElementsByTagName("head")[0].appendChild(link);
 }
 
-const setMonochtome = () => {
+const setMonochrome = () => {
     var link = document.createElement("link");
-    link.id = "DarkModeCss";
-    link.href = "https://ghcdn.rawgit.org/norbit8/MoodleBooster/main/dark-mode/dark-mode.css";
+    link.id = "MonochromeCss";
+    link.href = "https://ghcdn.rawgit.org/norbit8/MoodleBooster/yanir-enhance_page/enhance-page/monochrome.css"; // TODO: Change on merge to the main path
     link.type = "text/css";
     link.rel = "stylesheet";
     document.getElementsByTagName("head")[0].appendChild(link);
+}
+
+
+const setFontSize = (sizeValue) => {
+    switch(sizeValue){
+        case "1":
+            document.getElementsByTagName("body")[0].style = "font-size:30px;";
+            return;
+        case "2":
+            document.getElementsByTagName("body")[0].style = "font-size:50px;";
+            return;
+        default:
+            document.getElementsByTagName("body")[0].style = "";
+    }
+}
+
+const setContrast = (contrastValue) => {
+    switch(contrastValue){
+        case "0":
+            document.getElementsByTagName("body")[0].style = "filter:contrast(0.70);";
+            return;
+        case "1":
+            document.getElementsByTagName("body")[0].style = "filter:contrast(0.75);";
+            return;
+        case "3":
+            document.getElementsByTagName("body")[0].style = "filter:contrast(1.25)";
+            return;
+        case "4":
+            document.getElementsByTagName("body")[0].style = "filter:contrast(1.5)";
+            return;
+        default:
+            document.getElementsByTagName("body")[0].style = "filter:contrast(1)";
+    }
 }
 
 function loadSave() {
@@ -50,6 +84,12 @@ function loadSave() {
         if (parsedData.DarkMode == "On") {
             addDarkMode();
         }
+        // EnhancePage
+        if(parsedData.EnhancePage.Monochrome === "On"){
+            setMonochrome();
+        }
+        setFontSize(parsedData.EnhancePage.FontSize);
+        setContrast(parsedData.EnhancePage.Contrast);
         // CourseRemover
         if (parsedData.RemovedCourses != []) {
             var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
@@ -67,8 +107,6 @@ function loadSave() {
                 courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
             }
         }
-        // EnhancePage
-        // TODO
     }
     // --------------------------------------------
 }
@@ -77,8 +115,8 @@ function listenForBackgroundMessages() {
     browser.runtime.onMessage.addListener(request => {
         var parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
         // console.log("Message from the background script:");
-        // console.log(parsedData);
-        // console.log(request);
+        // console.log("PARSE", JSON.stringify(parsedData));
+        // console.log("REQUEST", JSON.stringify(request));
         if (request.DarkMode) {
             parsedData.DarkMode = request.DarkMode;
             if (request.DarkMode == "Off") {
@@ -86,6 +124,24 @@ function listenForBackgroundMessages() {
             }
             if (request.DarkMode == "On") {
                 addDarkMode();
+            }
+        }
+        if(request.EnhancePage){
+            if (request.EnhancePage?.Monochrome == "On") {
+                setMonochrome();
+                parsedData.EnhancePage.Monochrome = "On" // Should we save prefferences?
+            }
+            if(request.EnhancePage?.Monochrome == "Off"){
+                document.getElementById("MonochromeCss").remove();
+                parsedData.EnhancePage.Monochrome = "Off" // Should we save prefferences?
+            }
+            if(request.EnhancePage?.FontSize){
+                setFontSize(request.EnhancePage.FontSize);
+                // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
+            }
+            if(request.EnhancePage?.Contrast){
+                setContrast(request.EnhancePage.Contrast);
+                // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
             }
         }
         if (request.reset) {
