@@ -25,6 +25,7 @@ async function listenForClicks() {
                     return;
                 case "Enhance Page":
                     // TODO: implement
+                    location.href = "./enahnceMenu.html"
                     return;
                 case "Reset":
                     // TODO: implement
@@ -34,6 +35,10 @@ async function listenForClicks() {
                     }).catch(onError);
                     sendMessageToTabs(tabs, { "reset": "true" });
                     alert("Please refresh your browser tab to apply.");
+                    return;
+                case "Monochrome":
+                    console.log("MONO")
+                    monochromeSwitch().catch(e=>console.log(e));
                     return;
             }
         }
@@ -66,6 +71,7 @@ function sendMessageToTabs(tabs, data) {
             data
         ).then(response => {
             // alert(JSON.stringify(response));
+            console.log(JSON.stringify(response))
             window.darkMode = ((response.DarkMode) != "Off");
         }).catch(onError);
     }
@@ -95,9 +101,9 @@ async function darkModeSwitch() {
     // window.darkMode = !window.darkMode
 }
 
+
 // to revisit... (I don't think we need this anymore)
 async function handleMessage(request, sender, sendResponse) {
-    console.log("Message from the content script")
     if (request === "dark-mode-off") {
         await browser.tabs.removeCSS({ file: "./../dark-mode/dark-mode.css" })
     } else if (request === "dark-mode-on") {
