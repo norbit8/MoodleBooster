@@ -3,13 +3,25 @@
 const defaultSaveSettings = {
     'RemovedCourses': [],
     'DarkMode': "Off",
-    'EnhancePage': "0",
+    'EnhancePage': {
+        'Monochrome': false,
+        'FontSize': 0
+    },
 };
 
 function addDarkMode() {
     /**
      * This function inserts the dark-mode.css file into the head of the current tab.
      */
+    var link = document.createElement("link");
+    link.id = "DarkModeCss";
+    link.href = "https://ghcdn.rawgit.org/norbit8/MoodleBooster/main/dark-mode/dark-mode.css";
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    document.getElementsByTagName("head")[0].appendChild(link);
+}
+
+const setMonochtome = () => {
     var link = document.createElement("link");
     link.id = "DarkModeCss";
     link.href = "https://ghcdn.rawgit.org/norbit8/MoodleBooster/main/dark-mode/dark-mode.css";
