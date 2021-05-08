@@ -88,7 +88,7 @@ function loadSave() {
     var moodleBoosterData = localStorage.getItem('MoodleBooster');   // Load MoodleBooster's data from the localStorage
     // ---------------- SAVE NOT FOUND ----------------
     if (moodleBoosterData == null) {  // No data => init one.
-        moodleBoosterData = localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
+        localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }
     // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
@@ -105,7 +105,7 @@ function loadSave() {
         setFontSize(parsedData.EnhancePage.FontSize);
         setContrast(parsedData.EnhancePage.Contrast);
         // CourseRemover
-        if (parsedData.RemovedCourses != []) {
+        if (parsedData.RemovedCourses.length !== 0) {
             var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
             const total_length = courses_list.length;
             if (total_length <= 0) {
@@ -185,7 +185,7 @@ function saveToStorage(parameter, data, overwrite = true) {
      */
     var moodleBoosterData = localStorage.getItem('MoodleBooster');   // Load MoodleBooster's data from the localStorage
     if (moodleBoosterData == null) {  // No data => init one.
-        moodleBoosterData = localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
+        localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }
     var parsedData = JSON.parse(moodleBoosterData);
     // TODO: make sure that the parameter is a valid one.
