@@ -1,0 +1,25 @@
+{
+  "name": "moodlebooster",
+  "version": "1.0.0",
+  "description": "Enhance the experince of using the huji moodle",
+  "main": "index.js",
+  "scripts": {
+    "start": "web-ext run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/norbit8/MoodleBooster.git"
+  },
+  "keywords": [
+    "Moodle;HUJI;booster"
+  ],
+  "author": "IdanS,Yoav,Yanir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/norbit8/MoodleBooster/issues"
+  },
+  "homepage": "https://github.com/norbit8/MoodleBooster#readme",
+  "devDependencies": {
+    "web-ext": "^6.1.0"
+  }
+}
