@@ -13,6 +13,16 @@ body *{
     color: var(--text);
 }
 
+/* HUJI Logo */
+.page-header-headings h1 img:nth-of-type(1){
+
+}
+
+/* Moodle Logo */
+.page-header-headings h1 img:nth-of-type(2){
+
+}
+
 select {
     margin: 5px;
     /* need to adjust */

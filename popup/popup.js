@@ -19,9 +19,6 @@ async function listenForClicks() {
                     return;
                 case "Dark Mode":
                     darkModeSwitch().catch(e => console.log(e));
-                    // browser.tabs.executeScript({ file: "./../content_scripts/darkMode.js" }).catch(
-                    //     reportError
-                    // );
                     return;
                 case "Enhance Page":
                     // TODO: implement
@@ -65,8 +62,7 @@ function sendMessageToTabs(tabs, data) {
             tab.id,
             data
         ).then(response => {
-            // alert(JSON.stringify(response));
-            window.darkMode = ((response.DarkMode) != "Off");
+            window.darkMode = ((response.DarkMode) !== "Off");
         }).catch(onError);
     }
 }
@@ -76,37 +72,23 @@ function onError(error) {
 }
 
 async function darkModeSwitch() {
-    // console.log(window.darkMode);
     if (window.darkMode) {
-        // await browser.tabs.removeCSS({ file: "./../dark-mode/dark-mode.css" });
         const tabs = await browser.tabs.query({
             currentWindow: true,
             active: true
         }).catch(onError);
         sendMessageToTabs(tabs, { "DarkMode": "Off" });
     } else {
-        // await browser.tabs.insertCSS({ file: "./../dark-mode/dark-mode.css" });
         const tabs = await browser.tabs.query({
             currentWindow: true,
             active: true
         }).catch(onError);
         sendMessageToTabs(tabs, { "DarkMode": "On" });
     }
-    // window.darkMode = !window.darkMode
 }
 
-// to revisit... (I don't think we need this anymore)
-async function handleMessage(request, sender, sendResponse) {
-    console.log("Message from the content script")
-    if (request === "dark-mode-off") {
-        await browser.tabs.removeCSS({ file: "./../dark-mode/dark-mode.css" })
-    } else if (request === "dark-mode-on") {
-        await browser.tabs.insertCSS({ file: "./../dark-mode/dark-mode.css" })
-    }
-}
 
 async function loader() {
-    browser.runtime.onMessage.addListener(handleMessage);
     listenForClicks();
     const tabs = await browser.tabs.query({
         currentWindow: true,
