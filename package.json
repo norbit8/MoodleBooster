@@ -4,7 +4,8 @@
   "description": "Enhance the experince of using the huji moodle",
   "main": "index.js",
   "scripts": {
-    "start": "web-ext run"
+    "start": "web-ext run",
+    "build": "web-ext build"
   },
   "repository": {
     "type": "git",
