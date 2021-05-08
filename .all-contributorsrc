@@ -1,0 +1,35 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "norbit8",
+      "name": "Yoav",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18491183?v=4",
+      "profile": "https://github.com/norbit8",
+      "contributions": [
+        "infra",
+        "code"
+      ]
+    },
+    {
+      "login": "idan2468",
+      "name": "idan2468",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44695990?v=4",
+      "profile": "https://github.com/idan2468",
+      "contributions": [
+        "infra",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "MoodleBooster",
+  "projectOwner": "norbit8",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
