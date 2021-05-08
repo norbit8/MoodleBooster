@@ -1,7 +1,7 @@
 {
   "name": "moodlebooster",
   "version": "1.0.0",
-  "description": "Enhance the experince of using the huji moodle",
+  "description": "Enhance the experience of using the huji moodle",
   "main": "index.js",
   "scripts": {
     "start": "web-ext run",
