@@ -85,7 +85,7 @@ const setContrast = (contrastValue) => {
     }
 }
 
-function loadSave() {
+async function loadSave() {
     /**
      * >>> IMPORTANT <<<
      * Loads the recently saved settings of the MoodleBooster addon (if one exists,
@@ -113,20 +113,19 @@ function loadSave() {
         setContrast(parsedData.EnhancePage.Contrast);
         // CourseRemover
         if (parsedData.RemovedCourses.length !== 0) {
-            var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
+            var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
             const total_length = courses_list.length;
             if (total_length <= 0) {
                 return;
             }
-            while (courses_list.length != total_length - parsedData.RemovedCourses.length) {
-                for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
-                    if (parsedData.RemovedCourses.includes(courses_list[courseIndex].innerText)) {
-                        // Remove this course
-                        courses_list[courseIndex].remove();
+            for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
+                for(let course of parsedData.RemovedCourses){
+                    if(courses_list[courseIndex].innerText.startsWith(course)){
+                        courses_list[courseIndex].remove()
                     }
                 }
-                courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
             }
+            courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
         }
     }
     // --------------------------------------------

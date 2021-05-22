@@ -35,7 +35,7 @@
             btn.id = "bruh" + courseIndex;
             btn.className = "btn-close";
             btn.addEventListener('click', async function () {
-                saveToStorage("RemovedCourses", courses_list[courseIndex].innerText, false);
+                saveToStorage("RemovedCourses", courses_list[courseIndex].innerText.substring(0, courses_list[courseIndex].innerText.indexOf(' ')), false);
                 await btnCleaner();
                 courses_list[courseIndex].remove();
                 addCourseRemovingOption(); // refresh indecies.
