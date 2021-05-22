@@ -16,38 +16,45 @@ let orgHujiLogoSrc = "https://moodle2.cs.huji.ac.il/nu20/theme/image.php/huji/co
 const HUJI_LOGO_SELECTOR = ".page-header-headings h1 img:nth-of-type(1)"
 const MOODLE_LOGO_SELECTOR = ".page-header-headings h1 img:nth-of-type(2)"
 
+const DARK_MODE_CSS_CDN = "https://cdn.jsdelivr.net/gh/norbit8/MoodleBooster/dark-mode/dark-mode.css"
+const MONOCHROME_CSS_CDN = "https://cdn.jsdelivr.net/gh/norbit8/MoodleBooster/enhance-page/monochrome.css"
+
+const MOODLE_LOGO_DARK_MODE_URL = "https://i.ibb.co/t3CTQ0t/moodle-logo-darkmode-withlogo.png"
+const HUJI_LOGO_DARK_MODE_URL = "https://i.ibb.co/6mdGRfv/moodle-huji-logo-darkmode.png"
+
 function addDarkMode() {
     /**
      * This function inserts the dark-mode.css file into the head of the current tab.
      */
-    var link = document.createElement("link");
-    link.id = "DarkModeCss";
-    link.href = "https://ghcdn.rawgit.org/norbit8/MoodleBooster/main/dark-mode/dark-mode.css";
-    link.type = "text/css";
-    link.rel = "stylesheet";
-    document.getElementsByTagName("head")[0].appendChild(link);
+    addCssToPage("DarkModeCss", DARK_MODE_CSS_CDN);
+
     let moodleLogoImg = document.querySelector(MOODLE_LOGO_SELECTOR)
     let hujiLogoImg = document.querySelector(HUJI_LOGO_SELECTOR)
 
     orgMoodleLogoSrc = moodleLogoImg.getAttribute("src");
     orgHujiLogoSrc = hujiLogoImg.getAttribute("src");
 
-    moodleLogoImg.setAttribute("src","https://i.ibb.co/t3CTQ0t/moodle-logo-darkmode-withlogo.png")
-    hujiLogoImg.setAttribute("src","https://i.ibb.co/6mdGRfv/moodle-huji-logo-darkmode.png")
+    moodleLogoImg.setAttribute("src", MOODLE_LOGO_DARK_MODE_URL)
+    hujiLogoImg.setAttribute("src", HUJI_LOGO_DARK_MODE_URL)
 }
 
-const setMonochrome = () => {
+
+function addCssToPage(id, href) {
     var link = document.createElement("link");
-    link.id = "MonochromeCss";
-    link.href = "https://ghcdn.rawgit.org/norbit8/MoodleBooster/yanir-enhance_page/enhance-page/monochrome.css"; // TODO: Change on merge to the main path
+    link.id = id;
+    link.href = href;
     link.type = "text/css";
     link.rel = "stylesheet";
     document.getElementsByTagName("head")[0].appendChild(link);
 }
 
+const setMonochrome = () => {
+    addCssToPage("MonochromeCss", MONOCHROME_CSS_CDN);
+}
+
 
 const setFontSize = (sizeValue) => {
-    switch(sizeValue){
+    switch (sizeValue) {
         case "1":
             document.getElementsByTagName("body")[0].style = "font-size:30px;";
             return;
@@ -60,7 +67,7 @@ const setFontSize = (sizeValue) => {
 }
 
 const setContrast = (contrastValue) => {
-    switch(contrastValue){
+    switch (contrastValue) {
         case "0":
             document.getElementsByTagName("body")[0].style = "filter:contrast(0.70);";
             return;
@@ -90,7 +97,7 @@ function loadSave() {
     if (moodleBoosterData == null) {  // No data => init one.
         localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }
-    // -------------------------------------------
+        // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
     else {  // Found MoodleBooster data on the localStorage (Yay!)
         var parsedData = JSON.parse(moodleBoosterData);
@@ -99,7 +106,7 @@ function loadSave() {
             addDarkMode();
         }
         // EnhancePage
-        if(parsedData.EnhancePage.Monochrome === "On"){
+        if (parsedData.EnhancePage.Monochrome === "On") {
             setMonochrome();
         }
         setFontSize(parsedData.EnhancePage.FontSize);
@@ -130,16 +137,13 @@ function removeDarkMode() {
     let moodleLogoImg = document.querySelector(MOODLE_LOGO_SELECTOR)
     let hujiLogoImg = document.querySelector(HUJI_LOGO_SELECTOR)
 
-    moodleLogoImg.setAttribute("src",orgMoodleLogoSrc)
-    hujiLogoImg.setAttribute("src",orgHujiLogoSrc)
+    moodleLogoImg.setAttribute("src", orgMoodleLogoSrc)
+    hujiLogoImg.setAttribute("src", orgHujiLogoSrc)
 }
 
 function listenForBackgroundMessages() {
     browser.runtime.onMessage.addListener(request => {
         var parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
-        // console.log("Message from the background script:");
-        // console.log("PARSE", JSON.stringify(parsedData));
-        // console.log("REQUEST", JSON.stringify(request));
         if (request.DarkMode) {
             parsedData.DarkMode = request.DarkMode;
             if (request.DarkMode == "Off") {
@@ -149,20 +153,20 @@ function listenForBackgroundMessages() {
                 addDarkMode();
             }
         }
-        if(request.EnhancePage){
+        if (request.EnhancePage) {
             if (request.EnhancePage?.Monochrome == "On") {
                 setMonochrome();
                 parsedData.EnhancePage.Monochrome = "On" // Should we save prefferences?
             }
-            if(request.EnhancePage?.Monochrome == "Off"){
+            if (request.EnhancePage?.Monochrome == "Off") {
                 document.getElementById("MonochromeCss").remove();
                 parsedData.EnhancePage.Monochrome = "Off" // Should we save prefferences?
             }
-            if(request.EnhancePage?.FontSize){
+            if (request.EnhancePage?.FontSize) {
                 setFontSize(request.EnhancePage.FontSize);
                 // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
             }
-            if(request.EnhancePage?.Contrast){
+            if (request.EnhancePage?.Contrast) {
                 setContrast(request.EnhancePage.Contrast);
                 // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
             }
@@ -183,7 +187,7 @@ function saveToStorage(parameter, data, overwrite = true) {
      * > data: Self-explanatory.
      * > overwrite: Should the function overwrite the current data with the given one?
      */
-    var moodleBoosterData = localStorage.getItem('MoodleBooster');   // Load MoodleBooster's data from the localStorage
+    var moodleBoosterData = localStorage.getItem('MoodleBooster');
     if (moodleBoosterData == null) {  // No data => init one.
         localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }

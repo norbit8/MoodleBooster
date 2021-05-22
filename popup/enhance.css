@@ -1,55 +1,55 @@
-.enhance-menu{
-	display: flex;
-	width: 100%;
-	flex-grow: 1;
-	padding: 3px;
-	flex-wrap: wrap;
-	justify-content: space-between;
+.enhance-menu {
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    padding: 3px;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.menu-item{
-	display: flex;
-	flex-direction: column;
-	height: 100px;
-	width: 100px;
-	margin: 3px;
-	justify-content: center;
-	align-items: center;
-	font-size: 14px;
-	background-color: white;
-	border-color: #969696;
-	background-color: #1673ca;
-	color: white;
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+    width: 100px;
+    margin: 3px;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    background-color: white;
+    border-color: #969696;
+    background-color: #1673ca;
+    color: white;
 }
 
-.menu-item:hover{
-	color: white;
-	background-color: #003e77;
+.menu-item:hover {
+    color: white;
+    background-color: #003e77;
 }
 
-  
+
 .slider::-moz-range-thumb {
-	border: 1px solid rgb(255, 255, 255);
-}
-  
-.slider{
-	cursor: default !important;
+    border: 1px solid rgb(255, 255, 255);
 }
 
-.reset{
-	background-color:rgb(199, 0, 0);
+.slider {
+    cursor: default !important;
 }
 
-.reset:hover{
-	color: white;
-	background-color: rgb(155, 0, 0);
+.reset {
+    background-color: rgb(199, 0, 0);
 }
 
-.back{
-	background-color:rgb(122, 122, 122);
+.reset:hover {
+    color: white;
+    background-color: rgb(155, 0, 0);
 }
 
-.back:hover{
-	color: white;
-	background-color: rgb(85, 85, 85);
+.back {
+    background-color: rgb(122, 122, 122);
+}
+
+.back:hover {
+    color: white;
+    background-color: rgb(85, 85, 85);
 }

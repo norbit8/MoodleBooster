@@ -20,7 +20,7 @@
         }
     ],
     "background": {
-      "scripts": ["popup/index.html"]  
+      "scripts": ["popup/popup.js"]
     },
     "permissions": [
         "*://*.ac.il/*cs/*",
