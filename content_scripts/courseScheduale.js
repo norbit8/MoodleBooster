@@ -33,6 +33,7 @@ const getTemplate = (minTime, maxTime) => {
         })
         tableRows.push(`<tr>${dayRow}</tr>`);
     }
+	tableRows = tableRows.join().replaceAll(',', '');
     let table = `
     <h5>זמני הקורס</h5>
     <table class="scheduale-table">
@@ -121,7 +122,7 @@ const addCourseScheduale = () => {
 const addDataToScheduale = (dataToAdd) => {
     for (let data of dataToAdd){
         let typeColor = '#e2e2e2';
-        let typeName = 'שיעור';
+        let typeName = 'סוג לא ידוע';
         switch(data["type"]){
             case 'T': typeColor = '#ffd359';
                       typeName = 'תרגול';
