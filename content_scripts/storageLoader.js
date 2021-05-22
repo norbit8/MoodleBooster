@@ -10,6 +10,12 @@ const defaultSaveSettings = {
     },
 };
 
+
+let orgMoodleLogoSrc = "https://moodle2.cs.huji.ac.il/nu20/theme/image.php/huji/core/1620448000/logo"
+let orgHujiLogoSrc = "https://moodle2.cs.huji.ac.il/nu20/theme/image.php/huji/core/1620448000/huji"
+const HUJI_LOGO_SELECTOR = ".page-header-headings h1 img:nth-of-type(1)"
+const MOODLE_LOGO_SELECTOR = ".page-header-headings h1 img:nth-of-type(2)"
+
 function addDarkMode() {
     /**
      * This function inserts the dark-mode.css file into the head of the current tab.
@@ -20,6 +26,14 @@ function addDarkMode() {
     link.type = "text/css";
     link.rel = "stylesheet";
     document.getElementsByTagName("head")[0].appendChild(link);
+    let moodleLogoImg = document.querySelector(MOODLE_LOGO_SELECTOR)
+    let hujiLogoImg = document.querySelector(HUJI_LOGO_SELECTOR)
+
+    orgMoodleLogoSrc = moodleLogoImg.getAttribute("src");
+    orgHujiLogoSrc = hujiLogoImg.getAttribute("src");
+
+    moodleLogoImg.setAttribute("src","https://i.ibb.co/t3CTQ0t/moodle-logo-darkmode-withlogo.png")
+    hujiLogoImg.setAttribute("src","https://i.ibb.co/6mdGRfv/moodle-huji-logo-darkmode.png")
 }
 
 const setMonochrome = () => {
@@ -74,7 +88,7 @@ function loadSave() {
     var moodleBoosterData = localStorage.getItem('MoodleBooster');   // Load MoodleBooster's data from the localStorage
     // ---------------- SAVE NOT FOUND ----------------
     if (moodleBoosterData == null) {  // No data => init one.
-        moodleBoosterData = localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
+        localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }
     // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
@@ -91,7 +105,7 @@ function loadSave() {
         setFontSize(parsedData.EnhancePage.FontSize);
         setContrast(parsedData.EnhancePage.Contrast);
         // CourseRemover
-        if (parsedData.RemovedCourses != []) {
+        if (parsedData.RemovedCourses.length !== 0) {
             var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
             const total_length = courses_list.length;
             if (total_length <= 0) {
@@ -111,6 +125,15 @@ function loadSave() {
     // --------------------------------------------
 }
 
+function removeDarkMode() {
+    document.getElementById("DarkModeCss").remove();
+    let moodleLogoImg = document.querySelector(MOODLE_LOGO_SELECTOR)
+    let hujiLogoImg = document.querySelector(HUJI_LOGO_SELECTOR)
+
+    moodleLogoImg.setAttribute("src",orgMoodleLogoSrc)
+    hujiLogoImg.setAttribute("src",orgHujiLogoSrc)
+}
+
 function listenForBackgroundMessages() {
     browser.runtime.onMessage.addListener(request => {
         var parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
@@ -120,7 +143,7 @@ function listenForBackgroundMessages() {
         if (request.DarkMode) {
             parsedData.DarkMode = request.DarkMode;
             if (request.DarkMode == "Off") {
-                document.getElementById("DarkModeCss").remove();
+                removeDarkMode();
             }
             if (request.DarkMode == "On") {
                 addDarkMode();
@@ -154,7 +177,7 @@ function listenForBackgroundMessages() {
 
 function saveToStorage(parameter, data, overwrite = true) {
     /**
-     * This function loads MoodleBooster save from the localStorage and then 
+     * This function loads MoodleBooster save from the localStorage and then
      * appends or overwrites the data inside the specific parameter with the given data.
      * > parameter: Parameter to add the data into.
      * > data: Self-explanatory.
@@ -162,14 +185,13 @@ function saveToStorage(parameter, data, overwrite = true) {
      */
     var moodleBoosterData = localStorage.getItem('MoodleBooster');   // Load MoodleBooster's data from the localStorage
     if (moodleBoosterData == null) {  // No data => init one.
-        moodleBoosterData = localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
+        localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }
     var parsedData = JSON.parse(moodleBoosterData);
     // TODO: make sure that the parameter is a valid one.
     if (overwrite) {
         parsedData[parameter] = data;
-    }
-    else {
+    } else {
         parsedData[parameter].push(data);
     }
     localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));

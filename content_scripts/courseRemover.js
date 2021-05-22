@@ -16,7 +16,7 @@
      */
     async function btnCleaner() {
         btns = document.getElementsByClassName("btn-close");
-        while (btns.length != 0) {
+        while (btns.length !== 0) {
             for (let i = 0; i < btns.length; ++i) {
                 btns[i].remove();
             }
@@ -30,12 +30,10 @@
     async function addCourseRemovingOption() {
         var courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
         for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
-            // console.log(courses_list[courseIndex].innerText);
             let btn = document.createElement("button");
             btn.type = "button";
             btn.id = "bruh" + courseIndex;
             btn.className = "btn-close";
-            // btn.accessKeyLabel ="Close";
             btn.addEventListener('click', async function () {
                 saveToStorage("RemovedCourses", courses_list[courseIndex].innerText, false);
                 await btnCleaner();
@@ -43,7 +41,7 @@
                 addCourseRemovingOption(); // refresh indecies.
             });
             courses_list[courseIndex].insertBefore(btn, courses_list[courseIndex].firstChild);
-        };
+        }
     }
 
     addCourseRemovingOption();

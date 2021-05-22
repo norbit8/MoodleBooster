@@ -19,9 +19,6 @@ async function listenForClicks() {
                     return;
                 case "Dark Mode":
                     darkModeSwitch().catch(e => console.log(e));
-                    // browser.tabs.executeScript({ file: "./../content_scripts/darkMode.js" }).catch(
-                    //     reportError
-                    // );
                     return;
                 case "Enhance Page":
                     // TODO: implement
@@ -96,23 +93,19 @@ function onError(error) {
 }
 
 async function darkModeSwitch() {
-    // console.log(window.darkMode);
     if (window.darkMode) {
-        // await browser.tabs.removeCSS({ file: "./../dark-mode/dark-mode.css" });
         const tabs = await browser.tabs.query({
             currentWindow: true,
             active: true
         }).catch(onError);
         sendMessageToTabs(tabs, { "DarkMode": "Off" });
     } else {
-        // await browser.tabs.insertCSS({ file: "./../dark-mode/dark-mode.css" });
         const tabs = await browser.tabs.query({
             currentWindow: true,
             active: true
         }).catch(onError);
         sendMessageToTabs(tabs, { "DarkMode": "On" });
     }
-    // window.darkMode = !window.darkMode
 }
 
 async function monochromeSwitch() {
