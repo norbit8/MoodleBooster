@@ -1,17 +1,18 @@
-.enhance-menu {
+.index-menu {
     display: flex;
+	flex-direction: column;
     width: 100%;
     flex-grow: 1;
     padding: 3px;
-    flex-wrap: wrap;
     justify-content: space-between;
+	align-items: center;
 }
 
 .menu-item {
     display: flex;
     flex-direction: column;
-    height: 100px;
-    width: 100px;
+    height: 50px;
+    width: 90%;
     margin: 3px;
     justify-content: center;
     align-items: center;
@@ -54,6 +55,6 @@
     background-color: rgb(85, 85, 85);
 }
 
-.enhance-title{
+.index-title{
 	padding-top: 10px;
 }
