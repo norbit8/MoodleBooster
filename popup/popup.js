@@ -13,7 +13,7 @@ async function listenForClicks() {
             switch (beastName) {
                 // TODO: maybe implement your own css or take the class you need from bootstrap for buttons instead of injecting bootstrap css to the page
                 case "Remove Courses":
-                    browser.tabs.executeScript({ file: "./../content_scripts/courseRemover.js" }).catch(
+                    browser.tabs.executeScript({file: "./../content_scripts/courseRemover.js"}).catch(
                         reportError
                     );
                     return;
@@ -30,11 +30,11 @@ async function listenForClicks() {
                         currentWindow: true,
                         active: true
                     }).catch(onError);
-                    sendMessageToTabs(tabs, { "reset": "true" });
+                    sendMessageToTabs(tabs, {"reset": "true"});
                     alert("Please refresh your browser tab to apply.");
                     return;
                 case "Monochrome":
-                    monochromeSwitch().catch(e=>console.log(e));
+                    monochromeSwitch().catch(e => console.log(e));
                     return;
                 case "Back":
                     location.href = './index.html'
@@ -49,10 +49,6 @@ async function listenForClicks() {
             console.error(`Something went wrong: ${error}`);
         }
 
-        /**
-         * Get the active tab,
-         * then call "beastify()" or "reset()" as appropriate.
-         */
         if (e.target.classList.contains("btn")) {
             console.log("what?");
             actionToScript(e.target.textContent);
@@ -60,12 +56,12 @@ async function listenForClicks() {
     });
 }
 
-function listenForRange(){
+function listenForRange() {
     document.addEventListener('input', e => {
-        if(e.target.id == "font-range"){
+        if (e.target.id == "font-range") {
             changeFont(e);
         }
-        if(e.target.id == 'contrast-range'){
+        if (e.target.id == 'contrast-range') {
             changeContrast(e);
         }
     })
@@ -98,13 +94,13 @@ async function darkModeSwitch() {
             currentWindow: true,
             active: true
         }).catch(onError);
-        sendMessageToTabs(tabs, { "DarkMode": "Off" });
+        sendMessageToTabs(tabs, {"DarkMode": "Off"});
     } else {
         const tabs = await browser.tabs.query({
             currentWindow: true,
             active: true
         }).catch(onError);
-        sendMessageToTabs(tabs, { "DarkMode": "On" });
+        sendMessageToTabs(tabs, {"DarkMode": "On"});
     }
 }
 
@@ -114,13 +110,13 @@ async function monochromeSwitch() {
             currentWindow: true,
             active: true
         }).catch(onError);
-        sendMessageToTabs(tabs, { "EnhancePage": {"Monochrome": "Off" }});
+        sendMessageToTabs(tabs, {"EnhancePage": {"Monochrome": "Off"}});
     } else {
         const tabs = await browser.tabs.query({
             currentWindow: true,
             active: true
         }).catch(onError);
-        sendMessageToTabs(tabs, { "EnhancePage": {"Monochrome": "On" }});
+        sendMessageToTabs(tabs, {"EnhancePage": {"Monochrome": "On"}});
     }
 }
 
@@ -130,7 +126,7 @@ async function changeFont(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, { "EnhancePage": {"FontSize": e.target.value }});
+    sendMessageToTabs(tabs, {"EnhancePage": {"FontSize": e.target.value}});
 }
 
 async function changeContrast(e) {
@@ -138,20 +134,11 @@ async function changeContrast(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, { "EnhancePage": {"Contrast": e.target.value }});
+    sendMessageToTabs(tabs, {"EnhancePage": {"Contrast": e.target.value}});
 }
 
-// to revisit... (I don't think we need this anymore)
-async function handleMessage(request, sender, sendResponse) {
-    if (request === "dark-mode-off") {
-        await browser.tabs.removeCSS({ file: "./../dark-mode/dark-mode.css" })
-    } else if (request === "dark-mode-on") {
-        await browser.tabs.insertCSS({ file: "./../dark-mode/dark-mode.css" })
-    }
-}
 
 async function loader() {
-    browser.runtime.onMessage.addListener(handleMessage);
     listenForClicks();
     listenForRange();
     const tabs = await browser.tabs.query({
