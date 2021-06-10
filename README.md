@@ -5,9 +5,10 @@
 Firefox (Soon to be Chrome) extension that boosts moodle's UI/UX
 
 ### Running instructions
-- Clone the repo to your pc
-- Run npm install on the root of the project to install all dependencies
-- From the root of the project run "npm run" to start firefox with the web extension.
+- Download Firefox (🔥).
+- Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
+- Run `npm install` in the root directory of the project to install all dependencies.
+- From the root directory of the project run `npm run` to start firefox with the web extension.
 
 #### To build the extension into zip file run "npm build" from the root of the project
 
