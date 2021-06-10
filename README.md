@@ -9,10 +9,10 @@ You can download our production version add-on on [Mozilla's website](https://ad
 ![256910](https://user-images.githubusercontent.com/18491183/121560114-e2097680-ca1f-11eb-8049-bc2e66ebd850.png)
 
 ## Table of Contents  
-[Running Instructions](#instructions)  
-[Notes](#Notes)
-[How To Contribute?](#howtocontribute)  
-[Contributors](#Contributors)  
+- [Running Instructions](#instructions)  
+- [Notes](#Notes)
+- [How To Contribute?](#howtocontribute)  
+- [Contributors](#Contributors)  
 
 <a name="instructions"/>
 
