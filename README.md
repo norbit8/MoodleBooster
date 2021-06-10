@@ -44,6 +44,7 @@ more info here: https://extensionworkshop.com/documentation/develop/getting-star
 ### How To Contribute?
 
 Pushing code to our master branch is forbidden.
+
 If you want to contribute, all you need to do is to open a new branch (locally) and after you finish working on it,
 push it, and then create a new pull request.
 (Thank you! ❤️)
