@@ -2,7 +2,8 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-Firefox (Soon to be Chrome) extension that boosts moodle's UI/UX
+Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX
+You can download our production version add-on on [Mozilla's website](https://addons.mozilla.org/en-US/firefox/addon/moodlebooster/).
 
 ### Running instructions
 - Download Firefox (🔥).
@@ -16,7 +17,7 @@ Firefox (Soon to be Chrome) extension that boosts moodle's UI/UX
 - The dev environment support many features that include with web-ext like hot-reloading
 more info here: https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/
 
-## Contributors ✨
+### Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
