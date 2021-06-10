@@ -10,7 +10,8 @@ You can download our production version add-on on [Mozilla's website](https://ad
 
 ## Table of Contents  
 [Running Instructions](#instructions)  
-[Notes](#Notes)  
+[Notes](#Notes)
+[How To Contribute?](#howtocontribute)  
 [Contributors](#Contributors)  
 
 <a name="instructions"/>
@@ -37,6 +38,16 @@ There are two ways to run our extension, the difference between them is that by 
 ### Notes: 
 - The dev environment support many features that include with web-ext like hot-reloading
 more info here: https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/
+
+<a name="howtocontribute"/>
+
+### How To Contribute?
+
+Pushing code to our master branch is forbidden.
+If you want to contribute, all you need to do is to open a new branch (locally) and after you finish working on it,
+push it, and then create a new pull request.
+(Thank you! ❤️)
+
 
 <a name="Contributors"/>
 
