@@ -2,18 +2,9 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-Firefox / Chrome extension that boosts moodle's UI/UX
+Firefox (Soon to be Chrome) extension that boosts moodle's UI/UX
 
-
-#### Moodle API: https://docs.moodle.org/dev/Web_service_API_functions
-
-Moodle client packages:
-- https://www.npmjs.com/package/moodle-client
-- https://www.npmjs.com/package/@maynoothuniversity/moodle-ws-client
-- https://www.npmjs.com/package/akora-moodle
-
-
-###Running instructions
+### Running instructions
 - Clone the repo to your pc
 - Run npm install on the root of the project to install all dependencies
 - From the root of the project run "npm run" to start firefox with the web extension.
