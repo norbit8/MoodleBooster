@@ -45,8 +45,11 @@ more info here: https://extensionworkshop.com/documentation/develop/getting-star
 
 Pushing code to our master branch is forbidden.
 
-If you want to contribute, all you need to do is to open a new branch (locally) and after you finish working on it,
-push it, and then create a new pull request.
+If you want to contribute, all you need to do is to 
+1. Fork this repo.
+2. Open a new branch (locally) and start working on it.
+3. Push it.
+4. Create a new pull request.
 (Thank you! ❤️)
 
 
