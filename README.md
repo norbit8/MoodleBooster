@@ -18,7 +18,13 @@ You can download our production version add-on on [Mozilla's website](https://ad
 ### Running Instructions
 There are two ways to run our extension, the difference between them is that by using the second way you can have hot-reloading, while developing.
 
+First Way:
+- Download Firefox (🔥).
+- Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
+- Go to Firefox and type: `about:debugging#/runtime/this-firefox` on the search bar.
+- Click on "Load Temporary Addon" and choose any file from the repo you've just cloned.
 
+Second Way (Recommended):
 - Download Firefox (🔥).
 - Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
 - Run `npm install` in the root directory of the project to install all dependencies.
