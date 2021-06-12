@@ -1,7 +1,7 @@
 # MoodleBooster 🚀
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX
@@ -26,6 +26,7 @@ There are two ways to run our extension, the difference between them is that by 
 **First Way (Recommended):**
 
 - Download Firefox ([🔥](https://www.mozilla.org/en-US/firefox/new/)).
+- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows)
 - Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
 - Run `npm install` in the root directory of the project to install all dependencies.
 - From the root directory of the project run `npm run start` to start firefox with the web extension, then browse to moodle.
@@ -75,6 +76,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/idan2468"><img src="https://avatars.githubusercontent.com/u/44695990?v=4?s=100" width="100px;" alt=""/><br /><sub><b>idan2468</b></sub></a><br /><a href="#infra-idan2468" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/norbit8/MoodleBooster/commits?author=idan2468" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/yanirelfasy"><img src="https://avatars.githubusercontent.com/u/24404481?v=4?s=100" width="100px;" alt=""/><br /><sub><b>yanirelfasy</b></sub></a><br /><a href="#infra-yanirelfasy" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/norbit8/MoodleBooster/commits?author=yanirelfasy" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/tamiror6"><img src="https://avatars.githubusercontent.com/u/76107540?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tamiror6</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=tamiror6" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/DanielSaroussy"><img src="https://avatars.githubusercontent.com/u/81748842?v=4?s=100" width="100px;" alt=""/><br /><sub><b>DanielSaroussy</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=DanielSaroussy" title="Documentation">📖</a></td>
   </tr>
 </table>
 
