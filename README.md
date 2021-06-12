@@ -26,6 +26,7 @@ There are two ways to run our extension, the difference between them is that by 
 **First Way (Recommended):**
 
 - Download Firefox (🔥).
+- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows)
 - Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
 - Run `npm install` in the root directory of the project to install all dependencies.
 - From the root directory of the project run `npm run start` to start firefox with the web extension, then browse to moodle.
