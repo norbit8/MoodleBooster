@@ -47,6 +47,7 @@ There are two ways to run our extension, the difference between them is that by 
 - The dev environment support many features that include with web-ext like hot-reloading
   more info here: https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/
 
+- This moodle extension is designed to work mainly on Huji's moodle.
 <a name="howtocontribute"/>
 
 ### How To Contribute?
