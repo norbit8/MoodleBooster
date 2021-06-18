@@ -79,6 +79,42 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "nataly-milman",
+      "name": "Nataly Milman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63509956?v=4",
+      "profile": "https://github.com/nataly-milman",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ori-frenkel",
+      "name": "ori-frenkel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49747014?v=4",
+      "profile": "https://github.com/ori-frenkel",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "rbenjos",
+      "name": "rbenjos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22573117?v=4",
+      "profile": "https://github.com/rbenjos",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "The-Kor",
+      "name": "Koral Haham",
+      "avatar_url": "https://avatars.githubusercontent.com/u/60473978?v=4",
+      "profile": "https://github.com/The-Kor",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
