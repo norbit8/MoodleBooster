@@ -50,7 +50,6 @@ async function listenForClicks() {
         }
 
         if (e.target.classList.contains("btn")) {
-            console.log("what?");
             actionToScript(e.target.textContent);
         }
     });
@@ -147,5 +146,9 @@ async function loader() {
     }).catch(onError);
     sendMessageToTabs(tabs, {});
 }
+
+
+const title = document.querySelector("h2")
+console.log(title)
 
 loader();
