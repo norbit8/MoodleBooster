@@ -4,7 +4,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX
+Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX \
 You can download our production version add-on on [Mozilla's website](https://addons.mozilla.org/en-US/firefox/addon/moodlebooster/).
 
 ![256909](https://user-images.githubusercontent.com/18491183/121560059-d5851e00-ca1f-11eb-9b50-452cbd2630ab.png)
@@ -25,15 +25,17 @@ There are two ways to run our extension, the difference between them is that by 
 
 **First Way (Recommended):**
 
-- Download Firefox ([🔥](https://www.mozilla.org/en-US/firefox/new/)).
-- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows)
-- Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
+- Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/)).
+- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows), [on Ubuntu](https://www.liquidweb.com/kb/create-clone-repo-github-ubuntu-18-04/)
+- Clone the repo to your pc, by running the following command:  
+  `git clone https://github.com/norbit8/MoodleBooster.git`
 - Run `npm install` in the root directory of the project to install all dependencies.
 - From the root directory of the project run `npm run start` to start firefox with the web extension, then browse to [Moodle.](https://moodle2.cs.huji.ac.il/nu20/)
 
+
 **Second Way:**
 
-- Download Firefox ([🔥](https://www.mozilla.org/en-US/firefox/new/)).
+- Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/))
 - Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
 - Go to Firefox and type: `about:debugging#/runtime/this-firefox` on the search bar.
 - Click on "Load Temporary Addon" and choose any file from the repo you've just cloned.
@@ -47,6 +49,7 @@ There are two ways to run our extension, the difference between them is that by 
 - The dev environment support many features that include with web-ext like hot-reloading
   more info here: https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/
 
+- This moodle extension is designed to work mainly on Huji's moodle.
 <a name="howtocontribute"/>
 
 ### How To Contribute?
