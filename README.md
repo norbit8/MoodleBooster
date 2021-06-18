@@ -83,7 +83,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/dorpro13"><img src="https://avatars.githubusercontent.com/u/19567966?v=4?s=100" width="100px;" alt=""/><br /><sub><b>dorpro13</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=dorpro13" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/guys1915"><img src="https://avatars.githubusercontent.com/u/66463385?v=4?s=100" width="100px;" alt=""/><br /><sub><b>guys1915</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=guys1915" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/shakedkialy"><img src="https://avatars.githubusercontent.com/u/45287227?v=4?s=100" width="100px;" alt=""/><br /><sub><b>shakedkialy</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=shakedkialy" title="Documentation">📖</a></td>
-
+    <td align="center"><a href="https://github.com/nataly-milman"><img src="https://avatars.githubusercontent.com/u/63509956?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nataly Milman</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=nataly-milman" title="Documentation">📖</a></td>
   </tr>
 </table>
 
