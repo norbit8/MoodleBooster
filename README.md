@@ -4,7 +4,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX
+Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX \
 You can download our production version add-on on [Mozilla's website](https://addons.mozilla.org/en-US/firefox/addon/moodlebooster/).
 
 ![256909](https://user-images.githubusercontent.com/18491183/121560059-d5851e00-ca1f-11eb-9b50-452cbd2630ab.png)
@@ -25,7 +25,6 @@ There are two ways to run our extension, the difference between them is that by 
 
 **First Way (Recommended):**
 
-
 - Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/)).
 - Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows), [on Ubuntu](https://www.liquidweb.com/kb/create-clone-repo-github-ubuntu-18-04/)
 - Clone the repo to your pc, by running the following command:  
@@ -34,7 +33,6 @@ There are two ways to run our extension, the difference between them is that by 
 - From the root directory of the project run `npm run start` to start firefox with the web extension, then browse to [moodle](https://moodle2.cs.huji.ac.il/nu20/).
 
 **Second Way:**
-
 
 - Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/))
 - Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
