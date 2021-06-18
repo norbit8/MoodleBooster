@@ -27,15 +27,16 @@ There are two ways to run our extension, the difference between them is that by 
 
 
 - Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/)).
-- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows)
-- Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`
+- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows), [on Ubuntu](https://www.liquidweb.com/kb/create-clone-repo-github-ubuntu-18-04/)
+- Clone the repo to your pc, by running the following command:  
+  `git clone https://github.com/norbit8/MoodleBooster.git`
 - Run `npm install` in the root directory of the project to install all dependencies.
 - From the root directory of the project run `npm run start` to start firefox with the web extension, then browse to [moodle](https://moodle2.cs.huji.ac.il/nu20/).
 
 **Second Way:**
 
 
-- Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/)).
+- Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/))
 - Clone the repo to your pc, by running the following command: `git clone https://github.com/norbit8/MoodleBooster.git`.
 - Go to Firefox and type: `about:debugging#/runtime/this-firefox` on the search bar.
 - Click on "Load Temporary Addon" and choose any file from the repo you've just cloned.
