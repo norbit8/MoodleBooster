@@ -61,6 +61,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ori-frenkel",
+      "name": "ori-frenkel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49747014?v=4",
+      "profile": "https://github.com/ori-frenkel",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
