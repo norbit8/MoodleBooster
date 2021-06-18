@@ -1,7 +1,7 @@
 # MoodleBooster 🚀
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX \
@@ -85,6 +85,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/shakedkialy"><img src="https://avatars.githubusercontent.com/u/45287227?v=4?s=100" width="100px;" alt=""/><br /><sub><b>shakedkialy</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=shakedkialy" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/nataly-milman"><img src="https://avatars.githubusercontent.com/u/63509956?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nataly Milman</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=nataly-milman" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/ori-frenkel"><img src="https://avatars.githubusercontent.com/u/49747014?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ori-frenkel</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=ori-frenkel" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/rbenjos"><img src="https://avatars.githubusercontent.com/u/22573117?v=4?s=100" width="100px;" alt=""/><br /><sub><b>rbenjos</b></sub></a><br /><a href="https://github.com/norbit8/MoodleBooster/commits?author=rbenjos" title="Documentation">📖</a></td>
   </tr>
 </table>
 
