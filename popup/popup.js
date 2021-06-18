@@ -63,6 +63,9 @@ function listenForRange() {
         if (e.target.id == 'contrast-range') {
             changeContrast(e);
         }
+        if(e.target.id == 'saturation-range'){
+            changeSaturation(e);
+        }
     })
 }
 
@@ -134,6 +137,14 @@ async function changeContrast(e) {
         active: true
     }).catch(onError);
     sendMessageToTabs(tabs, {"EnhancePage": {"Contrast": e.target.value}});
+}
+
+async function changeSaturation(e) {
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, {"EnhancePage": {"Saturation": e.target.value}});
 }
 
 
