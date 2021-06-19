@@ -32,13 +32,8 @@ async function listenForClicks() {
               active: true,
             })
             .catch(onError);
-          const confirm = window.confirm(
-            'Are you sure? reset is an irrevertible action'
-          );
-          if (confirm) {
-            sendMessageToTabs(tabs, { reset: 'true' });
-            alert('Please refresh your browser tab to apply.');
-          }
+          sendMessageToTabs(tabs, { reset: 'true' });
+          alert('Please refresh your browser tab to apply.');
           return;
         case 'Monochrome':
           monochromeSwitch().catch((e) => console.log(e));
