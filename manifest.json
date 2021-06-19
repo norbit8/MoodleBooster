@@ -14,7 +14,7 @@
             "css": [
                 "bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css"
             ],
-            "js": ["/content_scripts/storageLoader.js", "bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js", "/content_scripts/courseScheduale.js"
+            "js": ["/content_scripts/storageLoader.js", "bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js", "/content_scripts/courseScheduale.js", "/content_scripts/courseReverseOrder.js"
             ],
             "run_at": "document_end"
         }
