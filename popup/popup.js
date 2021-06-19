@@ -51,7 +51,7 @@ async function listenForClicks() {
 }
 
 async function handleReset() {
-    const confirm = window.confirm("Are you sure? reset is an irreversable action")
+    const confirm = window.confirm("Are you sure? reset is an irreversible action")
     if(confirm){
         const tabs = await browser.tabs.query({
             currentWindow: true,
