@@ -25,7 +25,8 @@
     "permissions": [
         "*://*.ac.il/*cs/*",
         "downloads",
-        "activeTab"
+        "activeTab",
+        "tabs"
     ],
     "browser_action": {
         "default_icon": {
