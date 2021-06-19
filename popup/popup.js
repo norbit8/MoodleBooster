@@ -1,30 +1,30 @@
-'use strict';
+"use strict";
 
 /**
  * Listen for clicks on the buttons, and send the appropriate message to
  * the content script in the page.
  */
 async function listenForClicks() {
-  document.addEventListener('click', (e) => {
+  document.addEventListener("click", (e) => {
     /**
      * Given the name of a beast, get the URL to the corresponding image.
      */
     async function actionToScript(beastName) {
       switch (beastName) {
         // TODO: maybe implement your own css or take the class you need from bootstrap for buttons instead of injecting bootstrap css to the page
-        case 'Remove Courses':
+        case "Remove Courses":
           browser.tabs
-            .executeScript({ file: './../content_scripts/courseRemover.js' })
+            .executeScript({ file: "./../content_scripts/courseRemover.js" })
             .catch(reportError);
           return;
-        case 'Dark Mode':
+        case "Dark Mode":
           darkModeSwitch().catch((e) => console.log(e));
           return;
-        case 'Enhance Page':
+        case "Enhance Page":
           // TODO: implement
-          location.href = './enahnceMenu.html';
+          location.href = "./enahnceMenu.html";
           return;
-        case 'Reset':
+        case "Reset":
           // TODO: implement
           const tabs = await browser.tabs
             .query({
@@ -32,14 +32,14 @@ async function listenForClicks() {
               active: true,
             })
             .catch(onError);
-          sendMessageToTabs(tabs, { reset: 'true' });
-          alert('Please refresh your browser tab to apply.');
+          sendMessageToTabs(tabs, { reset: "true" });
+          alert("Please refresh your browser tab to apply.");
           return;
-        case 'Monochrome':
+        case "Monochrome":
           monochromeSwitch().catch((e) => console.log(e));
           return;
-        case 'Back':
-          location.href = './index.html';
+        case "Back":
+          location.href = "./index.html";
           return;
       }
     }
@@ -51,19 +51,19 @@ async function listenForClicks() {
       console.error(`Something went wrong: ${error}`);
     }
 
-    if (e.target.classList.contains('btn')) {
-      console.log('what?');
+    if (e.target.classList.contains("btn")) {
+      console.log("what?");
       actionToScript(e.target.textContent);
     }
   });
 }
 
 function listenForRange() {
-  document.addEventListener('input', (e) => {
-    if (e.target.id == 'font-range') {
+  document.addEventListener("input", (e) => {
+    if (e.target.id == "font-range") {
       changeFont(e);
     }
-    if (e.target.id == 'contrast-range') {
+    if (e.target.id == "contrast-range") {
       changeContrast(e);
     }
   });
@@ -79,8 +79,8 @@ function sendMessageToTabs(tabs, data) {
       .then((response) => {
         // alert(JSON.stringify(response));
         console.log(JSON.stringify(response));
-        window.darkMode = response.DarkMode != 'Off';
-        window.monochrome = response.EnhancePage.Monochrome != 'Off';
+        window.darkMode = response.DarkMode != "Off";
+        window.monochrome = response.EnhancePage.Monochrome != "Off";
       })
       .catch(onError);
   }
@@ -98,7 +98,7 @@ async function darkModeSwitch() {
         active: true,
       })
       .catch(onError);
-    sendMessageToTabs(tabs, { DarkMode: 'Off' });
+    sendMessageToTabs(tabs, { DarkMode: "Off" });
   } else {
     const tabs = await browser.tabs
       .query({
@@ -106,7 +106,7 @@ async function darkModeSwitch() {
         active: true,
       })
       .catch(onError);
-    sendMessageToTabs(tabs, { DarkMode: 'On' });
+    sendMessageToTabs(tabs, { DarkMode: "On" });
   }
 }
 
@@ -118,7 +118,7 @@ async function monochromeSwitch() {
         active: true,
       })
       .catch(onError);
-    sendMessageToTabs(tabs, { EnhancePage: { Monochrome: 'Off' } });
+    sendMessageToTabs(tabs, { EnhancePage: { Monochrome: "Off" } });
   } else {
     const tabs = await browser.tabs
       .query({
@@ -126,7 +126,7 @@ async function monochromeSwitch() {
         active: true,
       })
       .catch(onError);
-    sendMessageToTabs(tabs, { EnhancePage: { Monochrome: 'On' } });
+    sendMessageToTabs(tabs, { EnhancePage: { Monochrome: "On" } });
   }
 }
 
