@@ -6,7 +6,8 @@ const defaultSaveSettings = {
     'EnhancePage': {
         'Monochrome': "Off",
         'FontSize': "0",
-        'Contrast': "2"
+        'Contrast': "2",
+        'Saturation': "2"
     },
 };
 
@@ -85,6 +86,25 @@ const setContrast = (contrastValue) => {
     }
 }
 
+const setSaturation = (saturationValue) => {
+    switch (saturationValue) {
+        case "0":
+            document.getElementsByTagName("body")[0].style = "filter:saturate(0.70);";
+            return;
+        case "1":
+            document.getElementsByTagName("body")[0].style = "filter:saturate(0.75);";
+            return;
+        case "3":
+            document.getElementsByTagName("body")[0].style = "filter:saturate(1.25)";
+            return;
+        case "4":
+            document.getElementsByTagName("body")[0].style = "filter:saturate(1.5)";
+            return;
+        default:
+            document.getElementsByTagName("body")[0].style = "filter:saturate(1)";
+    }
+}
+
 async function loadSave() {
     /**
      * >>> IMPORTANT <<<
@@ -111,6 +131,7 @@ async function loadSave() {
         }
         setFontSize(parsedData.EnhancePage.FontSize);
         setContrast(parsedData.EnhancePage.Contrast);
+        setSaturation(parsedData.EnhancePage.Saturation);
         // CourseRemover
         if (parsedData.RemovedCourses.length !== 0) {
             var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
@@ -168,6 +189,9 @@ function listenForBackgroundMessages() {
             if (request.EnhancePage?.Contrast) {
                 setContrast(request.EnhancePage.Contrast);
                 // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+            }
+            if(request.EnhancePage?.Saturation){
+                setSaturation(request.EnhancePage.Saturation)
             }
         }
         if (request.reset) {

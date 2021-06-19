@@ -1,5 +1,7 @@
 "use strict";
 
+
+
 /**
  * Listen for clicks on the buttons, and send the appropriate message to
  * the content script in the page.
@@ -9,34 +11,27 @@ async function listenForClicks() {
         /**
          * Given the name of a beast, get the URL to the corresponding image.
          */
-        async function actionToScript(beastName) {
-            switch (beastName) {
+        async function actionToScript(id) {
+            switch (id) {
                 // TODO: maybe implement your own css or take the class you need from bootstrap for buttons instead of injecting bootstrap css to the page
-                case "Remove Courses":
+                case "remove-courses":
                     browser.tabs.executeScript({file: "./../content_scripts/courseRemover.js"}).catch(
                         reportError
                     );
                     return;
-                case "Dark Mode":
+                case "dark-mode":
                     darkModeSwitch().catch(e => console.log(e));
                     return;
-                case "Enhance Page":
-                    // TODO: implement
+                case "enhance-page":
                     location.href = "./enahnceMenu.html"
                     return;
-                case "Reset":
-                    // TODO: implement
-                    const tabs = await browser.tabs.query({
-                        currentWindow: true,
-                        active: true
-                    }).catch(onError);
-                    sendMessageToTabs(tabs, {"reset": "true"});
-                    alert("Please refresh your browser tab to apply.");
+                case "reset":
+                    await handleReset();
                     return;
-                case "Monochrome":
+                case "monochrome":
                     monochromeSwitch().catch(e => console.log(e));
                     return;
-                case "Back":
+                case "back":
                     location.href = './index.html'
                     return;
             }
@@ -50,9 +45,18 @@ async function listenForClicks() {
         }
 
         if (e.target.classList.contains("btn")) {
-            actionToScript(e.target.textContent);
+            actionToScript(e.target.id);
         }
     });
+}
+
+async function handleReset() {
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, {"reset": "true"});
+    alert("Please refresh your browser tab to apply.");
 }
 
 function listenForRange() {
@@ -62,6 +66,9 @@ function listenForRange() {
         }
         if (e.target.id == 'contrast-range') {
             changeContrast(e);
+        }
+        if(e.target.id == 'saturation-range'){
+            changeSaturation(e);
         }
     })
 }
@@ -75,7 +82,6 @@ function sendMessageToTabs(tabs, data) {
             tab.id,
             data
         ).then(response => {
-            // alert(JSON.stringify(response));
             console.log(JSON.stringify(response))
             window.darkMode = ((response.DarkMode) != "Off");
             window.monochrome = ((response.EnhancePage.Monochrome) != "Off");
@@ -136,6 +142,14 @@ async function changeContrast(e) {
     sendMessageToTabs(tabs, {"EnhancePage": {"Contrast": e.target.value}});
 }
 
+async function changeSaturation(e) {
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, {"EnhancePage": {"Saturation": e.target.value}});
+}
+
 
 async function loader() {
     listenForClicks();
@@ -147,8 +161,5 @@ async function loader() {
     sendMessageToTabs(tabs, {});
 }
 
-
-const title = document.querySelector("h2")
-console.log(title)
 
 loader();
