@@ -56,12 +56,15 @@ async function listenForClicks() {
 }
 
 async function handleReset() {
-    const tabs = await browser.tabs.query({
-        currentWindow: true,
-        active: true
-    }).catch(onError);
-    sendMessageToTabs(tabs, {"reset": "true"});
-    alert("Please refresh your browser tab to apply.");
+    const confirm = window.confirm("Are you sure? reset is an irreversible action")
+    if(confirm){
+        const tabs = await browser.tabs.query({
+            currentWindow: true,
+            active: true
+        }).catch(onError);
+        sendMessageToTabs(tabs, {"reset": "true"});
+        alert("Please refresh your browser tab to apply.");
+    }
 }
 
 function listenForRange() {
