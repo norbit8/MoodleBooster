@@ -14,13 +14,13 @@
             "css": [
                 "bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css"
             ],
-            "js": ["/content_scripts/storageLoader.js", "bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js", "/content_scripts/courseScheduale.js"
+            "js": ["node_modules/webextension-polyfill/dist/browser-polyfill.js", "/content_scripts/storageLoader.js", "bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js", "/content_scripts/courseScheduale.js"
             ],
             "run_at": "document_end"
         }
     ],
     "background": {
-      "scripts": ["popup/popup.js"]
+      "scripts": ["node_modules/webextension-polyfill/dist/browser-polyfill.js", "popup/popup.js"]
     },
     "permissions": [
         "*://*.ac.il/*cs/*",

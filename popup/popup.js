@@ -84,7 +84,7 @@ function sendMessageToTabs(tabs, data) {
 }
 
 function onError(error) {
-    console.error(`Error: ${error}`);
+    console.log("Error occured " + error)
 }
 
 async function darkModeSwitch() {
