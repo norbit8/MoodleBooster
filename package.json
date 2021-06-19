@@ -4,7 +4,7 @@
   "description": "Enhance the experience of using the huji moodle",
   "main": "index.js",
   "scripts": {
-    "start": "web-ext run",
+    "start": "web-ext run --start-url https://moodle2.cs.huji.ac.il/nu20/",
     "build": "web-ext build"
   },
   "repository": {
