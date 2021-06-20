@@ -2,3 +2,4 @@ LICENSE
 .idea
 .all-contributorsrc
 node_modules
+package-lock.json
