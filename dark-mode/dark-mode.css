@@ -2,43 +2,53 @@
     --text: whitesmoke;
     --background: #222;
     --header-background: #2c3034;
+    --text-schedule-title: #bb86fc;
+    --text-schedule-text: #03dac5;
 }
 
-body *{
+.scheduale-table th {
+    background-color: var(--header-background) !important;
+    color: var(--text-schedule-title);
+}
+
+.scheduale-table td {
+    background-color: var(--background) !important;
+    color: var(--text-schedule-text);
+}
+
+body * {
     border-color: white !important;
 }
 
-.navbar,.navbar *{
+.navbar, .navbar * {
     background-color: var(--header-background) !important;
     color: var(--text);
 }
 
-input,select{
+input, select {
     background-color: #505967 !important;
     color: white !important;
 }
 
-body, a, span, nav.footer,footer#page-footer.bg-dark,.popover-header,.popover-body {
+body, a, span, nav.footer, footer#page-footer.bg-dark, .popover-header, .popover-body {
     color: var(--text) !important;
     background-color: var(--background) !important;
 }
 
 
-#page-header div.d-flex{
+#page-header div.d-flex {
     border: white 0.1rem solid;
     border-radius: 16px !important;;
     padding: 0.5rem;
     margin-top: 0.4rem
-    /*border: none;*/
 }
 
-#page-header div.flex-wrap{
+#page-header div.flex-wrap {
     background-image: none !important;
     background-color: transparent !important;
 }
 
-
-a, h1, h2, h3, h4, b {
+a, h1, h2, h3, h4, .scheduale-area > h5, b {
     color: var(--text) !important;
 }
 
@@ -51,14 +61,14 @@ div, section {
     background-color: var(--background) !important;
 }
 
-#frame2-page,.card.mb-3 {
+#frame2-page, .card.mb-3 {
     border: white 0.1rem solid;
     border-radius: 16px !important;;
     padding: 0.5rem
 }
 
-.card-title{
+.card-title {
     background-image: none !important;
     background-color: transparent !important;
-    color:white !important;
+    color: white !important;
 }
