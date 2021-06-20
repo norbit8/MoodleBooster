@@ -36,6 +36,9 @@ async function listenForClicks() {
                 case "monochrome":
                     monochromeSwitch().catch(e => console.log(e));
                     return;
+                case "cursor":
+                    cursorSwitch().catch(e => console.log(e));
+                    return;
                 case "back":
                     location.href = './index.html'
                     return;
@@ -93,6 +96,7 @@ function sendMessageToTabs(tabs, data) {
             console.log(JSON.stringify(response))
             window.darkMode = ((response.DarkMode) != "Off");
             window.monochrome = ((response.EnhancePage.Monochrome) != "Off");
+            window.cursor = ((response.EnhancePage.cursor) != "normal");
         }).catch(onError);
     }
 }
@@ -133,6 +137,22 @@ async function monochromeSwitch() {
     }
 }
 
+
+async function cursorSwitch() {
+    if (window.cursor) {
+        const tabs = await browser.tabs.query({
+            currentWindow: true,
+            active: true
+        }).catch(onError);
+        sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "normal"}});
+    } else {
+        const tabs = await browser.tabs.query({
+            currentWindow: true,
+            active: true
+        }).catch(onError);
+        sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "big"}});
+    }
+}
 
 async function changeFont(e) {
     const tabs = await browser.tabs.query({
