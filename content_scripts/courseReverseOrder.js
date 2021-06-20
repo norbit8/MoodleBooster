@@ -39,7 +39,7 @@ const addCourseReverse = () => {
         reverseCourseBtn.className = 'reverse-button';
         reverseCourseBtn.addEventListener('click', async function () {
             DEGREES += DEGREES_TO_REVERSE;
-            document.getElementsByClassName("topics")[0].style.transform = `rotate(${DEGREES}deg)`;
+            document.getElementsByClassName("section main clearfix")[0].parentElement.style.transform = `rotate(${DEGREES}deg)`;
             allTopics = document.getElementsByClassName("section main clearfix");
             for (let topicIndex = 0; topicIndex < allTopics.length; ++topicIndex) {
                 allTopics[topicIndex].style.transform = `rotate(${DEGREES}deg)`;
