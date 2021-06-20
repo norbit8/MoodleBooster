@@ -1,6 +1,7 @@
 "use strict";
 
-
+// minified courseRemover.js to be chrome compatible. 
+const cr = '!async function(){if(window.hasRun)return await e(),void(window.hasRun=!1);async function e(){for(btns=document.getElementsByClassName("btn-close");0!==btns.length;){for(let e=0;e<btns.length;++e)btns[e].remove();btns=document.getElementsByClassName("btn-close")}}window.hasRun=!0,async function n(){var t=document.getElementsByClassName("type_course depth_3 contains_branch");for(let s=0;s<t.length-1;++s){let o=document.createElement("button");o.type="button",o.id="bruh"+s,o.className="btn-close",o.addEventListener("click",async function(){saveToStorage("RemovedCourses",t[s].innerText.substring(0,t[s].innerText.indexOf(" ")),!1),await e(),t[s].remove(),n()}),t[s].insertBefore(o,t[s].firstChild)}}()}();'
 
 /**
  * Listen for clicks on the buttons, and send the appropriate message to
@@ -12,10 +13,14 @@ async function listenForClicks() {
          * Given the name of a beast, get the URL to the corresponding image.
          */
         async function actionToScript(id) {
+            const tabs = await browser.tabs.query({
+                currentWindow: true,
+                active: true
+            }).catch(onError);
             switch (id) {
                 // TODO: maybe implement your own css or take the class you need from bootstrap for buttons instead of injecting bootstrap css to the page
                 case "remove-courses":
-                    browser.tabs.executeScript({file: "./../content_scripts/courseRemover.js"}).catch(
+                    browser.tabs.executeScript({code: cr}).catch(
                         reportError
                     );
                     return;
@@ -41,7 +46,7 @@ async function listenForClicks() {
          * Just log the error to the console.
          */
         function reportError(error) {
-            console.error(`Something went wrong: ${error}`);
+            console.log("Something went wrong " + error);
         }
 
         if (e.target.classList.contains("btn")) {
@@ -93,7 +98,7 @@ function sendMessageToTabs(tabs, data) {
 }
 
 function onError(error) {
-    console.error(`Error: ${error}`);
+    console.log("Error occured " + error)
 }
 
 async function darkModeSwitch() {
