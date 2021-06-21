@@ -7,7 +7,8 @@ const defaultSaveSettings = {
         'Monochrome': "Off",
         'FontSize': "0",
         'Contrast': "2",
-        'Saturation': "2"
+        'Saturation': "2",
+        'cursor': "normal"
     },
 };
 
@@ -22,6 +23,7 @@ const MONOCHROME_CSS_CDN = "https://cdn.jsdelivr.net/gh/norbit8/MoodleBooster/en
 
 const MOODLE_LOGO_DARK_MODE_URL = "https://i.ibb.co/t3CTQ0t/moodle-logo-darkmode-withlogo.png"
 const HUJI_LOGO_DARK_MODE_URL = "https://i.ibb.co/6mdGRfv/moodle-huji-logo-darkmode.png"
+const CURSOR_CSS = "https://cdn.jsdelivr.net/gh/norbit8/MoodleBooster/enhance-page/biggerCursor.css"
 
 function addDarkMode() {
     /**
@@ -53,6 +55,9 @@ const setMonochrome = () => {
     addCssToPage("MonochromeCss", MONOCHROME_CSS_CDN);
 }
 
+const makeCursorBigger = () => {
+    addCssToPage("biggerCursor", CURSOR_CSS);
+}
 
 const setFontSize = (sizeValue) => {
     switch (sizeValue) {
@@ -129,6 +134,9 @@ async function loadSave() {
         if (parsedData.EnhancePage.Monochrome === "On") {
             setMonochrome();
         }
+        if (parsedData.EnhancePage.cursor === "big") {
+            makeCursorBigger();
+        }
         setFontSize(parsedData.EnhancePage.FontSize);
         setContrast(parsedData.EnhancePage.Contrast);
         setSaturation(parsedData.EnhancePage.Saturation);
@@ -174,6 +182,15 @@ function listenForBackgroundMessages() {
             }
         }
         if (request.EnhancePage) {
+            console.log(request)
+            if (request.EnhancePage?.cursor == "big") {
+                makeCursorBigger();
+                parsedData.EnhancePage.cursor = "big"
+            }
+            if (request.EnhancePage?.cursor == "normal") {
+                document.getElementById("biggerCursor").remove();
+                parsedData.EnhancePage.cursor = "normal"
+            }
             if (request.EnhancePage?.Monochrome == "On") {
                 setMonochrome();
                 parsedData.EnhancePage.Monochrome = "On" // Should we save prefferences?
