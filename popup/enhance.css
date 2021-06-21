@@ -3,22 +3,21 @@
     width: 100%;
     flex-grow: 1;
     padding: 3px;
-    flex-wrap: wrap;
     justify-content: space-evenly;
-    align-content: center;
+    flex-wrap: wrap;
 }
 
 .menu-item {
     display: flex;
     flex-direction: column;
-    height: 125px;
-    width: 125px;
+    height: 100px;
+    width: 150px;
     margin: 3px;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: 16px;
     border-color: #969696;
-    background-color: #1673ca;
+    background-color: #3731a0;
     color: white;
 }
 
@@ -30,6 +29,7 @@
 
 .slider::-moz-range-thumb {
     border: 1px solid rgb(255, 255, 255);
+    --form-range-thumb-active-bg: green;
 }
 
 .slider {
