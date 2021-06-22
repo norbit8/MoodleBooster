@@ -219,6 +219,14 @@ function listenForBackgroundMessages() {
     });
 }
 
+/**
+ * General method to scrape DOM inside html
+ * @param url   The url consisting the DOM element
+ * @param cssSelector   CSS selector to find the DOM element
+ * @param all   Get all DOM elements matching the selector or just the first one (default false)
+ * @returns {Promise<NodeListOf<Element>|Element>}  Array of dom elements in case sent with all param "true"
+ *                                                   otherwise just one DOM element
+ */
 async function scrapeWebsiteDOM(url, cssSelector, all = false) {
     let parser = new DOMParser()
     let response = await fetch(url)
@@ -235,7 +243,11 @@ async function scrapeWebsiteDOM(url, cssSelector, all = false) {
     return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
 }
 
-//Initial scrapping functionality from Syllabus
+/**
+ *  Initial scrapping functionality from Syllabus to get in which semester is a course by Syllabus content
+ * @param courseId  The ID of the course to check
+ * @returns {Promise<string>} "a" for semester A and "b" for semester B
+ */
 async function getCourseSemester(courseId) {
     if (courseId.length < 5) {
         let numOfZero = 5 - courseId.length
