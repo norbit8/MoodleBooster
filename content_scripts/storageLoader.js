@@ -148,8 +148,8 @@ async function loadSave() {
                 return;
             }
             for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
-                for(let course of parsedData.RemovedCourses){
-                    if(courses_list[courseIndex].innerText.startsWith(course)){
+                for (let course of parsedData.RemovedCourses) {
+                    if (courses_list[courseIndex].innerText.startsWith(course)) {
                         courses_list[courseIndex].remove()
                     }
                 }
@@ -207,7 +207,7 @@ function listenForBackgroundMessages() {
                 setContrast(request.EnhancePage.Contrast);
                 // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
             }
-            if(request.EnhancePage?.Saturation){
+            if (request.EnhancePage?.Saturation) {
                 setSaturation(request.EnhancePage.Saturation)
             }
         }
@@ -219,17 +219,31 @@ function listenForBackgroundMessages() {
     });
 }
 
+async function scrapeWebsiteDOM(url, cssSelector, all = false) {
+    let parser = new DOMParser()
+    let response = await fetch(url)
+    const contentType = response.headers.get('Content-Type')
+    const charsetStartIndex = contentType.lastIndexOf("charset=")
+    let htmlDoc
+    if (charsetStartIndex !== -1) {
+        const charSet = contentType.substring(charsetStartIndex + 8)
+        const html = new TextDecoder(charSet).decode(await response.arrayBuffer())
+        htmlDoc = parser.parseFromString(html, 'text/html')
+    } else {
+        htmlDoc = parser.parseFromString(await response.text(), 'text/html')
+    }
+    return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
+}
+
 //Initial scrapping functionality from Syllabus
 async function getCourseSemester(courseId) {
-    if (courseId.length < 5){
+    if (courseId.length < 5) {
         let numOfZero = 5 - courseId.length
         courseId = "0".repeat(numOfZero) + courseId
     }
-    let parser = new DOMParser()
-    let html = await fetch(`https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`)
-    html = new TextDecoder("windows-1255").decode(await html.arrayBuffer())
-    let htmlDoc = parser.parseFromString(html,'text/html')
-    const semester = htmlDoc.querySelector('.hebItem:nth-of-type(4)')
+    const semester = await scrapeWebsiteDOM(
+        `https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`,
+        '.hebItem:nth-of-type(4)')
     return semester.textContent.includes("ב'") ? "b" : "a"
 }
 
