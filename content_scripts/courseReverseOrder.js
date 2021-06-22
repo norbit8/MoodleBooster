@@ -30,10 +30,10 @@ const addButtonStyle = () => {
 }
 
 const addCourseReverse = () => {
-    let courseContent = document.getElementsByClassName("dashboard-container");
-    if (courseContent) {
+    let dashboard = document.getElementsByClassName("dashboard-container");
+    if (dashboard) {
         addButtonStyle();
-        let topDiv = courseContent[0];
+        let topDiv = dashboard[0];
         var reverseCourseBtn = document.createElement("button");
         reverseCourseBtn.innerHTML = 'Reverse topics order';
         reverseCourseBtn.className = 'reverse-button';
