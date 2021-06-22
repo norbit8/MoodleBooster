@@ -8,6 +8,7 @@ const defaultSaveSettings = {
         'FontSize': "0",
         'Contrast': "2",
         'Saturation': "2",
+        'lineSpacing': "2",
         'cursor': "normal"
     },
 };
@@ -110,6 +111,25 @@ const setSaturation = (saturationValue) => {
     }
 }
 
+const setLineSpacing = (lineSpacingValue) => {
+    switch (lineSpacingValue) {
+        case "0":
+            document.getElementsByTagName("body")[0].style = "line-height: 1";
+            return;
+        case "1":
+            document.getElementsByTagName("body")[0].style = "line-height: 1.25";
+            return;
+        case "3":
+            document.getElementsByTagName("body")[0].style = "line-height: 1.75";
+            return;
+        case "4":
+            document.getElementsByTagName("body")[0].style = "line-height: 2";
+            return;
+        default:
+            document.getElementsByTagName("body")[0].style = "line-height: 1.5";
+    }
+}
+
 async function loadSave() {
     /**
      * >>> IMPORTANT <<<
@@ -140,6 +160,7 @@ async function loadSave() {
         setFontSize(parsedData.EnhancePage.FontSize);
         setContrast(parsedData.EnhancePage.Contrast);
         setSaturation(parsedData.EnhancePage.Saturation);
+        setLineSpacing(parsedData.EnhancePage.lineSpacing)
         // CourseRemover
         if (parsedData.RemovedCourses.length !== 0) {
             var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
@@ -209,6 +230,9 @@ function listenForBackgroundMessages() {
             }
             if(request.EnhancePage?.Saturation){
                 setSaturation(request.EnhancePage.Saturation)
+            }
+            if(request.EnhancePage?.lineSpacing){
+                setLineSpacing(request.EnhancePage.lineSpacing)
             }
         }
         if (request.reset) {
