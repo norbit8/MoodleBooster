@@ -22,6 +22,7 @@
     background-color: #1673ca;
     color: white;
 }
+button:focus {color: black;}
 
 .menu-item:hover {
     color: white;
