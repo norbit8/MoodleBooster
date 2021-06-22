@@ -30,7 +30,7 @@ const addButtonStyle = () => {
 }
 
 const addCourseReverse = () => {
-    let courseContent = document.getElementsByClassName("course-content");
+    let courseContent = document.getElementsByClassName("dashboard-container");
     if (courseContent) {
         addButtonStyle();
         let topDiv = courseContent[0];
@@ -45,7 +45,7 @@ const addCourseReverse = () => {
                 allTopics[topicIndex].style.transform = `rotate(${DEGREES}deg)`;
             }
         });
-        topDiv.insertBefore(reverseCourseBtn, topDiv.childNodes[0]);
+        topDiv.insertBefore(reverseCourseBtn, topDiv.childNodes[1]);
     }
 }
 
