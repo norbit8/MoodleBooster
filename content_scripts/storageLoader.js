@@ -219,6 +219,20 @@ function listenForBackgroundMessages() {
     });
 }
 
+//Initial scrapping functionality from Syllabus
+async function getCourseSemester(courseId) {
+    if (courseId.length < 5){
+        let numOfZero = 5 - courseId.length
+        courseId = "0".repeat(numOfZero) + courseId
+    }
+    let parser = new DOMParser()
+    let html = await fetch(`https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`)
+    html = new TextDecoder("windows-1255").decode(await html.arrayBuffer())
+    let htmlDoc = parser.parseFromString(html,'text/html')
+    const semester = htmlDoc.querySelector('.hebItem:nth-of-type(4)')
+    return semester.textContent.includes("ב'") ? "b" : "a"
+}
+
 function saveToStorage(parameter, data, overwrite = true) {
     /**
      * This function loads MoodleBooster save from the localStorage and then
