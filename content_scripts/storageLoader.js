@@ -63,70 +63,84 @@ const makeCursorBigger = () => {
 const setFontSize = (sizeValue) => {
     switch (sizeValue) {
         case "1":
-            document.getElementsByTagName("body")[0].style = "font-size:30px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "30px";
             return;
         case "2":
-            document.getElementsByTagName("body")[0].style = "font-size:50px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "50px;";
             return;
         default:
-            document.getElementsByTagName("body")[0].style = "";
+            document.getElementsByTagName("body")[0].style.fontSize = "";
     }
 }
 
 const setContrast = (contrastValue) => {
+    if(!document.getElementsByTagName("body")[0].style.filter.includes("contrast")){
+        document.getElementsByTagName("body")[0].style.filter += "contrast(1)";
+    }
+    let value = document.getElementsByTagName("body")[0].style.filter;
+    const REGEX = /(contrast\(\d+\.?\d*?\))/g
     switch (contrastValue) {
         case "0":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(0.70);";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(0.70)");
+            break;
         case "1":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(0.75);";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(0.75)");
+            break;
         case "3":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1.25)";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(1.25)");
+            break;
         case "4":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1.5)";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(1.5)");
+            break;
         default:
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1)";
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(1)");
+            break;
     }
+    document.getElementsByTagName("body")[0].style.filter = value;
 }
 
 const setSaturation = (saturationValue) => {
+    if(!document.getElementsByTagName("body")[0].style.filter.includes("saturate")){
+        document.getElementsByTagName("body")[0].style.filter += "saturate(1)";
+    }
+    let value = document.getElementsByTagName("body")[0].style.filter;
+    const REGEX = /(saturate\(\d+\.?\d*?\))/g
     switch (saturationValue) {
         case "0":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(0.70);";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(0.70)");
+            break;
         case "1":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(0.75);";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(0.75)");
+            break;
         case "3":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1.25)";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(1.25)");
+            break;
         case "4":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1.5)";
-            return;
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(1.5)");
+            break;
         default:
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1)";
+            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(1)");
+            break;
     }
+    document.getElementsByTagName("body")[0].style.filter = value;
 }
 
 const setLineSpacing = (lineSpacingValue) => {
     switch (lineSpacingValue) {
         case "0":
-            document.getElementsByTagName("body")[0].style = "line-height: 1";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1";
             return;
         case "1":
-            document.getElementsByTagName("body")[0].style = "line-height: 1.25";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.25";
             return;
         case "3":
-            document.getElementsByTagName("body")[0].style = "line-height: 1.75";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.75";
             return;
         case "4":
-            document.getElementsByTagName("body")[0].style = "line-height: 2";
+            document.getElementsByTagName("body")[0].style.lineHeight = "2";
             return;
         default:
-            document.getElementsByTagName("body")[0].style = "line-height: 1.5";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.5";
     }
 }
 
@@ -203,7 +217,6 @@ function listenForBackgroundMessages() {
             }
         }
         if (request.EnhancePage) {
-            console.log(request)
             if (request.EnhancePage?.cursor == "big") {
                 makeCursorBigger();
                 parsedData.EnhancePage.cursor = "big"
