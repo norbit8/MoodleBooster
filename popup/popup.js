@@ -1,6 +1,6 @@
 "use strict";
 
-// minified courseRemover.js to be chrome compatible. 
+// minified courseRemover.js to be chrome compatible.
 const cr = '!async function(){if(window.hasRun)return await e(),void(window.hasRun=!1);async function e(){for(btns=document.getElementsByClassName("btn-close");0!==btns.length;){for(let e=0;e<btns.length;++e)btns[e].remove();btns=document.getElementsByClassName("btn-close")}}window.hasRun=!0,async function n(){var t=document.getElementsByClassName("type_course depth_3 contains_branch");for(let s=0;s<t.length-1;++s){let o=document.createElement("button");o.type="button",o.id="bruh"+s,o.className="btn-close",o.addEventListener("click",async function(){saveToStorage("RemovedCourses",t[s].innerText.substring(0,t[s].innerText.indexOf(" ")+1),!1),await e(),t[s].remove(),n()}),t[s].insertBefore(o,t[s].firstChild)}}()}();'
 
 /**
@@ -60,12 +60,15 @@ async function listenForClicks() {
 
 async function handleReset() {
     const confirm = window.confirm("Are you sure? reset is an irreversible action")
-    if(confirm){
+    if (confirm) {
         const tabs = await browser.tabs.query({
             currentWindow: true,
             active: true
         }).catch(onError);
-        sendMessageToTabs(tabs, {"reset": "true"});
+        sendMessageToTabs(tabs, {
+            action: "reset",
+            payload: {}
+        });
         alert("Please refresh your browser tab to apply.");
     }
 }
@@ -78,7 +81,7 @@ function listenForRange() {
         if (e.target.id == 'contrast-range') {
             changeContrast(e);
         }
-        if(e.target.id == 'saturation-range'){
+        if (e.target.id == 'saturation-range') {
             changeSaturation(e);
         }
     })
@@ -93,10 +96,10 @@ function sendMessageToTabs(tabs, data) {
             tab.id,
             data
         ).then(response => {
-            console.log(JSON.stringify(response))
-            window.darkMode = ((response.DarkMode) != "Off");
-            window.monochrome = ((response.EnhancePage.Monochrome) != "Off");
-            window.cursor = ((response.EnhancePage.cursor) != "normal");
+            console.log(response)
+            window.darkMode = response.DarkMode;
+            window.monochrome = response.EnhancePage.Monochrome;
+            window.cursor = response.EnhancePage.cursor;
         }).catch(onError);
     }
 }
@@ -106,52 +109,58 @@ function onError(error) {
 }
 
 async function darkModeSwitch() {
-    if (window.darkMode) {
-        const tabs = await browser.tabs.query({
-            currentWindow: true,
-            active: true
-        }).catch(onError);
-        sendMessageToTabs(tabs, {"DarkMode": "Off"});
-    } else {
-        const tabs = await browser.tabs.query({
-            currentWindow: true,
-            active: true
-        }).catch(onError);
-        sendMessageToTabs(tabs, {"DarkMode": "On"});
-    }
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, {
+        action: "DarkMode",
+        payload: {
+            val: !window.darkMode
+        }
+    });
 }
 
 async function monochromeSwitch() {
-    if (window.monochrome) {
-        const tabs = await browser.tabs.query({
-            currentWindow: true,
-            active: true
-        }).catch(onError);
-        sendMessageToTabs(tabs, {"EnhancePage": {"Monochrome": "Off"}});
-    } else {
-        const tabs = await browser.tabs.query({
-            currentWindow: true,
-            active: true
-        }).catch(onError);
-        sendMessageToTabs(tabs, {"EnhancePage": {"Monochrome": "On"}});
-    }
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, {
+        action: "MonoChrome",
+        payload: {
+            val: !window.monochrome
+        }
+    });
 }
 
 
 async function cursorSwitch() {
-    if (window.cursor) {
-        const tabs = await browser.tabs.query({
-            currentWindow: true,
-            active: true
-        }).catch(onError);
-        sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "normal"}});
-    } else {
-        const tabs = await browser.tabs.query({
-            currentWindow: true,
-            active: true
-        }).catch(onError);
-        sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "big"}});
-    }
+    const val = window.cursor === "big" ? "normal" : "big"
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, {
+        action: "EnhancePage",
+        payload: {
+            "cursor": val
+        }
+    });
+
+    // if (window.cursor) {
+    //     const tabs = await browser.tabs.query({
+    //         currentWindow: true,
+    //         active: true
+    //     }).catch(onError);
+    //     sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "normal"}});
+    // } else {
+    //     const tabs = await browser.tabs.query({
+    //         currentWindow: true,
+    //         active: true
+    //     }).catch(onError);
+    //     sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "big"}});
+    // }
 }
 
 async function changeFont(e) {
@@ -159,7 +168,15 @@ async function changeFont(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {"EnhancePage": {"FontSize": e.target.value}});
+    // sendMessageToTabs(tabs, {"EnhancePage": {"FontSize": e.target.value}});
+    sendMessageToTabs(tabs, {
+        "EnhancePage": {
+            action: "EnhancePage",
+            payload: {
+                "FontSize": e.target.value
+            }
+        }
+    });
 }
 
 async function changeContrast(e) {
@@ -167,7 +184,15 @@ async function changeContrast(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {"EnhancePage": {"Contrast": e.target.value}});
+    // sendMessageToTabs(tabs, {"EnhancePage": {"Contrast": e.target.value}});
+    sendMessageToTabs(tabs, {
+        "EnhancePage": {
+            action: "EnhancePage",
+            payload: {
+                "Contrast": e.target.value
+            }
+        }
+    });
 }
 
 async function changeSaturation(e) {
@@ -175,7 +200,14 @@ async function changeSaturation(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {"EnhancePage": {"Saturation": e.target.value}});
+    sendMessageToTabs(tabs, {
+        "EnhancePage": {
+            action: "EnhancePage",
+            payload: {
+                "Saturation": e.target.value
+            }
+        }
+    });
 }
 
 
@@ -186,7 +218,7 @@ async function loader() {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {});
+    sendMessageToTabs(tabs, {action: ""});
 }
 
 
