@@ -77,6 +77,9 @@ function listenForRange() {
         if (e.target.id === 'saturation-range') {
             changeSaturation(e);
         }
+        if(e.target.id === 'line-spacing-range'){
+            changeLineSpacing(e)
+        }
     })
 }
 
@@ -154,6 +157,14 @@ async function changeSaturation(e) {
         active: true
     }).catch(onError);
     sendMessageToTabs(tabs, "EnhancePage", {saturation: e.target.value})
+}
+
+async function changeLineSpacing(e) {
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, "EnhancePage", {"lineSpacing": e.target.value})
 }
 
 

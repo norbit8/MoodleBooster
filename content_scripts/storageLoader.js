@@ -8,6 +8,7 @@ const defaultSaveSettings = {
         'FontSize': "0",
         'Contrast': "2",
         'Saturation': "2",
+        'lineSpacing': "2",
         'cursor': "normal"
     },
 };
@@ -62,51 +63,84 @@ const makeCursorBigger = () => {
 const setFontSize = (sizeValue) => {
     switch (sizeValue) {
         case "1":
-            document.getElementsByTagName("body")[0].style = "font-size:30px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "30px";
             return;
         case "2":
-            document.getElementsByTagName("body")[0].style = "font-size:50px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "50px;";
             return;
         default:
-            document.getElementsByTagName("body")[0].style = "";
+            document.getElementsByTagName("body")[0].style.fontSize = "";
     }
 }
 
 const setContrast = (contrastValue) => {
+    if(!document.getElementsByTagName("body")[0].style.filter.includes("contrast")){
+        document.getElementsByTagName("body")[0].style.filter += "contrast(1)";
+    }
+    let value = document.getElementsByTagName("body")[0].style.filter;
+    const REGEX = /(contrast\(\d+\.?\d*?\))/g
     switch (contrastValue) {
         case "0":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(0.70);";
-            return;
+            value = value.replace(REGEX, "contrast(0.70)");
+            break;
         case "1":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(0.75);";
-            return;
+            value = value.replace(REGEX, "contrast(0.75)");
+            break;
         case "3":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1.25)";
-            return;
+            value = value.replace(REGEX, "contrast(1.25)");
+            break;
         case "4":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1.5)";
-            return;
+            value = value.replace(REGEX, "contrast(1.5)");
+            break;
         default:
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1)";
+            value = value.replace(REGEX, "contrast(1)");
+            break;
     }
+    document.getElementsByTagName("body")[0].style.filter = value;
 }
 
 const setSaturation = (saturationValue) => {
+    if(!document.getElementsByTagName("body")[0].style.filter.includes("saturate")){
+        document.getElementsByTagName("body")[0].style.filter += "saturate(1)";
+    }
+    let value = document.getElementsByTagName("body")[0].style.filter;
+    const REGEX = /(saturate\(\d+\.?\d*?\))/g
     switch (saturationValue) {
         case "0":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(0.70);";
+            value = value.replace(REGEX, "saturate(0.70)");
+            break;
+        case "1":
+            value = value.replace(REGEX, "saturate(0.75)");
+            break;
+        case "3":
+            value = value.replace(REGEX, "saturate(1.25)");
+            break;
+        case "4":
+            value = value.replace(REGEX, "saturate(1.5)");
+            break;
+        default:
+            value = value.replace(REGEX, "saturate(1)");
+            break;
+    }
+    document.getElementsByTagName("body")[0].style.filter = value;
+}
+
+const setLineSpacing = (lineSpacingValue) => {
+    switch (lineSpacingValue) {
+        case "0":
+            document.getElementsByTagName("body")[0].style.lineHeight = "1";
             return;
         case "1":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(0.75);";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.25";
             return;
         case "3":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1.25)";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.75";
             return;
         case "4":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1.5)";
+            document.getElementsByTagName("body")[0].style.lineHeight = "2";
             return;
         default:
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1)";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.5";
     }
 }
 
@@ -156,6 +190,7 @@ async function loadSave() {
         setFontSize(parsedData.EnhancePage.FontSize);
         setContrast(parsedData.EnhancePage.Contrast);
         setSaturation(parsedData.EnhancePage.Saturation);
+        setLineSpacing(parsedData.EnhancePage.lineSpacing)
         // CourseRemover
         removeCoursesByConfiguration(parsedData);
     }
@@ -172,7 +207,7 @@ function removeDarkMode() {
 }
 
 function handleEnhancePageAction(parsedData, payload) {
-    const {contrast, fontSize, saturation, cursor} = payload
+    const {contrast, fontSize, saturation, cursor,lineSpacing} = payload
     if (cursor === "big") {
         makeCursorBigger();
         parsedData.EnhancePage.cursor = "big"
@@ -188,6 +223,9 @@ function handleEnhancePageAction(parsedData, payload) {
     if (contrast) {
         setContrast(contrast);
         // parsedData.EnhancePage.Contrast = payload.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+    }
+    if(lineSpacing){
+        setLineSpacing(lineSpacing)
     }
     if (saturation) {
         setSaturation(saturation)
