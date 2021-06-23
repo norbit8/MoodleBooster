@@ -297,6 +297,56 @@ function saveToStorage(parameter, data, overwrite = true) {
     localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
 }
 
+/**
+ * General method to scrape DOM inside html
+ * @param url   The url consisting the DOM element
+ * @param cssSelector   CSS selector to find the DOM element
+ * @param all   Get all DOM elements matching the selector or just the first one (default false)
+ * @returns {Promise<NodeListOf<Element>|Element>}  Array of dom elements in case sent with all param "true"
+ *                                                   otherwise just one DOM element
+ */
+async function scrapeWebsiteDOM(url, cssSelector, all = false) {
+    const CharSetInContentType = "charset="
+    let parser = new DOMParser()
+    let response = await fetch(url)
+    const contentType = response.headers.get('Content-Type')
+    const charsetStartIndex = contentType.lastIndexOf(CharSetInContentType)
+    let htmlDoc
+
+    // in case the charset of the html is different than utf-8 we encoding it with the correct charset format we got from Content-Type
+    if (charsetStartIndex !== -1) {
+        const charSet = contentType.substring(charsetStartIndex + CharSetInContentType.length)
+        const html = new TextDecoder(charSet).decode(await response.arrayBuffer())
+        htmlDoc = parser.parseFromString(html, 'text/html')
+    } else {
+        htmlDoc = parser.parseFromString(await response.text(), 'text/html')
+    }
+    return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
+}
+
+/**
+ *  Initial scrapping functionality from Syllabus to get in which semester is a course by Syllabus content
+ * @param courseId  The ID of the course to check
+ * @returns {Promise<string>} "a" for semester A and "b" for semester B
+ */
+async function getCourseSemester(courseId) {
+    const ValidCourseIdLength = 5
+    courseId = courseId.trim()
+    if (courseId.length > ValidCourseIdLength){
+        throw "course id invalid"
+    }
+    // as syllabus expecting id with 5 chars we need to add prefix of 0s so the id will be with 5 chars
+    if (courseId.length < ValidCourseIdLength) {
+        let numOfZero = ValidCourseIdLength - courseId.length
+        courseId = "0".repeat(numOfZero) + courseId
+    }
+    const semester = await scrapeWebsiteDOM(
+        `https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`,
+        '.hebItem:nth-of-type(4)')
+    return semester.textContent.includes("ב'") ? "b" : "a"
+}
+
+
 function main() {
     loadSave();
     listenForBackgroundMessages();
