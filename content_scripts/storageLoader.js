@@ -182,7 +182,7 @@ function listenForBackgroundMessages() {
                     removeDarkMode();
                 }
                 break
-            case "Monochrome":
+            case "MonoChrome":
                 parsedData.EnhancePage.Monochrome = request.payload.val
                 if (request.payload.val) {
                     setMonochrome();
@@ -191,25 +191,26 @@ function listenForBackgroundMessages() {
                 }
                 break
             case "EnhancePage":
-                console.log(request.payload)
-                if (request.payload.cursor === "big") {
+                const {contrast, fontSize, saturation, cursor} = request.payload
+
+                if (cursor === "big") {
                     makeCursorBigger();
                     parsedData.EnhancePage.cursor = "big"
                 }
-                if (request.payload.cursor === "normal") {
+                if (cursor === "normal") {
                     document.getElementById("biggerCursor").remove();
                     parsedData.EnhancePage.cursor = "normal"
                 }
-                if (request.payload.FontSize) {
-                    setFontSize(request.EnhancePage.FontSize);
+                if (fontSize) {
+                    setFontSize(fontSize);
                     // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
                 }
-                if (request.payload.Contrast) {
-                    setContrast(request.EnhancePage.Contrast);
+                if (contrast) {
+                    setContrast(contrast);
                     // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
                 }
-                if (request.payload.Saturation) {
-                    setSaturation(request.EnhancePage.Saturation)
+                if (saturation) {
+                    setSaturation(saturation)
                 }
                 break
             case "reset": {

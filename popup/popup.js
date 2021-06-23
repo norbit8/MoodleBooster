@@ -65,36 +65,36 @@ async function handleReset() {
             currentWindow: true,
             active: true
         }).catch(onError);
-        sendMessageToTabs(tabs, {
-            action: "reset",
-            payload: {}
-        });
+        sendMessageToTabs(tabs, "reset")
         alert("Please refresh your browser tab to apply.");
     }
 }
 
 function listenForRange() {
     document.addEventListener('input', e => {
-        if (e.target.id == "font-range") {
+        if (e.target.id === "font-range") {
             changeFont(e);
         }
-        if (e.target.id == 'contrast-range') {
+        if (e.target.id === 'contrast-range') {
             changeContrast(e);
         }
-        if (e.target.id == 'saturation-range') {
+        if (e.target.id === 'saturation-range') {
             changeSaturation(e);
         }
     })
 }
 
-function sendMessageToTabs(tabs, data) {
+function sendMessageToTabs(tabs, action, payload = {}) {
     /**
      * Send Message to the content-script
      */
     for (let tab of tabs) {
         browser.tabs.sendMessage(
             tab.id,
-            data
+            {
+                action: action,
+                payload: payload
+            }
         ).then(response => {
             console.log(response)
             window.darkMode = response.DarkMode;
@@ -113,12 +113,7 @@ async function darkModeSwitch() {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {
-        action: "DarkMode",
-        payload: {
-            val: !window.darkMode
-        }
-    });
+    sendMessageToTabs(tabs, "DarkMode", {val: !window.darkMode})
 }
 
 async function monochromeSwitch() {
@@ -126,12 +121,7 @@ async function monochromeSwitch() {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {
-        action: "MonoChrome",
-        payload: {
-            val: !window.monochrome
-        }
-    });
+    sendMessageToTabs(tabs, "MonoChrome", {val: !window.monochrome})
 }
 
 
@@ -141,26 +131,7 @@ async function cursorSwitch() {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {
-        action: "EnhancePage",
-        payload: {
-            "cursor": val
-        }
-    });
-
-    // if (window.cursor) {
-    //     const tabs = await browser.tabs.query({
-    //         currentWindow: true,
-    //         active: true
-    //     }).catch(onError);
-    //     sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "normal"}});
-    // } else {
-    //     const tabs = await browser.tabs.query({
-    //         currentWindow: true,
-    //         active: true
-    //     }).catch(onError);
-    //     sendMessageToTabs(tabs, {"EnhancePage": {"cursor": "big"}});
-    // }
+    sendMessageToTabs(tabs, "EnhancePage", {cursor: val})
 }
 
 async function changeFont(e) {
@@ -168,15 +139,7 @@ async function changeFont(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    // sendMessageToTabs(tabs, {"EnhancePage": {"FontSize": e.target.value}});
-    sendMessageToTabs(tabs, {
-        "EnhancePage": {
-            action: "EnhancePage",
-            payload: {
-                "FontSize": e.target.value
-            }
-        }
-    });
+    sendMessageToTabs(tabs, "EnhancePage", {fontSize: e.target.value})
 }
 
 async function changeContrast(e) {
@@ -184,15 +147,7 @@ async function changeContrast(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    // sendMessageToTabs(tabs, {"EnhancePage": {"Contrast": e.target.value}});
-    sendMessageToTabs(tabs, {
-        "EnhancePage": {
-            action: "EnhancePage",
-            payload: {
-                "Contrast": e.target.value
-            }
-        }
-    });
+    sendMessageToTabs(tabs, "EnhancePage", {contrast: e.target.value})
 }
 
 async function changeSaturation(e) {
@@ -200,14 +155,7 @@ async function changeSaturation(e) {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {
-        "EnhancePage": {
-            action: "EnhancePage",
-            payload: {
-                "Saturation": e.target.value
-            }
-        }
-    });
+    sendMessageToTabs(tabs, "EnhancePage", {saturation: e.target.value})
 }
 
 
@@ -218,7 +166,7 @@ async function loader() {
         currentWindow: true,
         active: true
     }).catch(onError);
-    sendMessageToTabs(tabs, {action: ""});
+    sendMessageToTabs(tabs, "");
 }
 
 
