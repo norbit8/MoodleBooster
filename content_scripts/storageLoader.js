@@ -2,9 +2,9 @@
 
 const defaultSaveSettings = {
     'RemovedCourses': [],
-    'DarkMode': "Off",
+    'DarkMode': false,
     'EnhancePage': {
-        'Monochrome': "Off",
+        'Monochrome': false,
         'FontSize': "0",
         'Contrast': "2",
         'Saturation': "2",
@@ -144,6 +144,22 @@ const setLineSpacing = (lineSpacingValue) => {
     }
 }
 
+function removeCoursesByConfiguration(parsedData) {
+    if (parsedData.RemovedCourses.length !== 0) {
+        var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
+        if (courses_list.length <= 0) {
+            return;
+        }
+        for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
+            const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
+            const courseID = new URL(link).searchParams.get("id")
+            if(parsedData.RemovedCourses.includes(courseID)){
+                courses_list[courseIndex].remove()
+            }
+        }
+    }
+}
+
 async function loadSave() {
     /**
      * >>> IMPORTANT <<<
@@ -161,11 +177,11 @@ async function loadSave() {
     else {  // Found MoodleBooster data on the localStorage (Yay!)
         var parsedData = JSON.parse(moodleBoosterData);
         // DarkMode
-        if (parsedData.DarkMode == "On") {
+        if (parsedData.DarkMode) {
             addDarkMode();
         }
         // EnhancePage
-        if (parsedData.EnhancePage.Monochrome === "On") {
+        if (parsedData.EnhancePage.Monochrome) {
             setMonochrome();
         }
         if (parsedData.EnhancePage.cursor === "big") {
@@ -176,21 +192,7 @@ async function loadSave() {
         setSaturation(parsedData.EnhancePage.Saturation);
         setLineSpacing(parsedData.EnhancePage.lineSpacing)
         // CourseRemover
-        if (parsedData.RemovedCourses.length !== 0) {
-            var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
-            const total_length = courses_list.length;
-            if (total_length <= 0) {
-                return;
-            }
-            for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
-                for(let course of parsedData.RemovedCourses){
-                    if(courses_list[courseIndex].innerText.startsWith(course)){
-                        courses_list[courseIndex].remove()
-                    }
-                }
-            }
-            courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
-        }
+        removeCoursesByConfiguration(parsedData);
     }
     // --------------------------------------------
 }
@@ -204,52 +206,68 @@ function removeDarkMode() {
     hujiLogoImg.setAttribute("src", orgHujiLogoSrc)
 }
 
+function handleEnhancePageAction(request, parsedData) {
+    const {contrast, fontSize, saturation, cursor,lineSpacing} = request.payload
+    if (cursor === "big") {
+        makeCursorBigger();
+        parsedData.EnhancePage.cursor = "big"
+    }
+    if (cursor === "normal") {
+        document.getElementById("biggerCursor").remove();
+        parsedData.EnhancePage.cursor = "normal"
+    }
+    if (fontSize) {
+        setFontSize(fontSize);
+        // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
+    }
+    if (contrast) {
+        setContrast(contrast);
+        // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+    }
+    if(lineSpacing){
+        setLineSpacing(request.EnhancePage.lineSpacing)
+    }
+    if (saturation) {
+        setSaturation(saturation)
+    }
+}
+
+function handleMonoChromeAction(parsedData, request) {
+    parsedData.EnhancePage.Monochrome = request.payload.val
+    if (request.payload.val) {
+        setMonochrome();
+    } else {
+        document.getElementById("MonochromeCss").remove();
+    }
+}
+
+function handleDarkModeAction(parsedData, request) {
+    parsedData.DarkMode = request.payload.val;
+    if (parsedData.DarkMode) {
+        addDarkMode();
+    } else {
+        removeDarkMode();
+    }
+}
+
 function listenForBackgroundMessages() {
     browser.runtime.onMessage.addListener(request => {
-        var parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
-        if (request.DarkMode) {
-            parsedData.DarkMode = request.DarkMode;
-            if (request.DarkMode == "Off") {
-                removeDarkMode();
+        let parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
+        switch (request.action) {
+            case "DarkMode":
+                handleDarkModeAction(parsedData, request);
+                break
+            case "MonoChrome":
+                handleMonoChromeAction(parsedData, request);
+                break
+            case "EnhancePage":
+                handleEnhancePageAction(request, parsedData);
+                break
+            case "reset": {
+                parsedData = defaultSaveSettings;
             }
-            if (request.DarkMode == "On") {
-                addDarkMode();
-            }
-        }
-        if (request.EnhancePage) {
-            if (request.EnhancePage?.cursor == "big") {
-                makeCursorBigger();
-                parsedData.EnhancePage.cursor = "big"
-            }
-            if (request.EnhancePage?.cursor == "normal") {
-                document.getElementById("biggerCursor").remove();
-                parsedData.EnhancePage.cursor = "normal"
-            }
-            if (request.EnhancePage?.Monochrome == "On") {
-                setMonochrome();
-                parsedData.EnhancePage.Monochrome = "On" // Should we save prefferences?
-            }
-            if (request.EnhancePage?.Monochrome == "Off") {
-                document.getElementById("MonochromeCss").remove();
-                parsedData.EnhancePage.Monochrome = "Off" // Should we save prefferences?
-            }
-            if (request.EnhancePage?.FontSize) {
-                setFontSize(request.EnhancePage.FontSize);
-                // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
-            }
-            if (request.EnhancePage?.Contrast) {
-                setContrast(request.EnhancePage.Contrast);
-                // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
-            }
-            if(request.EnhancePage?.Saturation){
-                setSaturation(request.EnhancePage.Saturation)
-            }
-            if(request.EnhancePage?.lineSpacing){
-                setLineSpacing(request.EnhancePage.lineSpacing)
-            }
-        }
-        if (request.reset) {
-            parsedData = defaultSaveSettings;
+                break
+
         }
         localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
         return Promise.resolve(parsedData);
