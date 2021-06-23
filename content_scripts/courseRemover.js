@@ -37,7 +37,6 @@
             btn.addEventListener('click', async function () {
                 const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
                 const courseID = new URL(link).searchParams.get("id")
-                console.log(courseID)
                 saveToStorage("RemovedCourses", courseID, false);
                 await btnCleaner();
                 courses_list[courseIndex].remove();
