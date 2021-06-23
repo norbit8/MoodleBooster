@@ -32,8 +32,8 @@ class Dashboard{
             align-items:center;
             margin-left: 30px;
             margin-right:30px;
-            min-height:225px;
             border-radius:5px;
+            padding: 20px;
             background-color: #CCF2FF;
         }
         `);
@@ -48,5 +48,5 @@ class Dashboard{
     }
 }
 const dashboard = new Dashboard()
-dashboard.insertHtmlToDashboard('<h1 class="title">MoodleBooster Dashboard</h1>',`.title{font-family:Arial;}`)
+dashboard.insertHtmlToDashboard('<h1 class="title">MoodleBooster Dashboard</h1>',`.title{font-family:Arial; margin-bottom:15px;}`)
 //TODO add more html content with dashboard.insertHtmlToDashboard()

@@ -30,10 +30,10 @@ const addButtonStyle = () => {
 }
 
 const addCourseReverse = () => {
-    let courseContent = document.getElementsByClassName("course-content");
-    if (courseContent) {
+    let dashboard = document.getElementsByClassName("dashboard-container");
+    if (dashboard) {
         addButtonStyle();
-        let topDiv = courseContent[0];
+        let topDiv = dashboard[0];
         var reverseCourseBtn = document.createElement("button");
         reverseCourseBtn.innerHTML = 'Reverse topics order';
         reverseCourseBtn.className = 'reverse-button';
@@ -45,7 +45,7 @@ const addCourseReverse = () => {
                 allTopics[topicIndex].style.transform = `rotate(${DEGREES}deg)`;
             }
         });
-        topDiv.insertBefore(reverseCourseBtn, topDiv.childNodes[0]);
+        topDiv.insertBefore(reverseCourseBtn, topDiv.childNodes[1]);
     }
 }
 
