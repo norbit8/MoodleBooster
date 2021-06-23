@@ -81,19 +81,19 @@ const setContrast = (contrastValue) => {
     const REGEX = /(contrast\(\d+\.?\d*?\))/g
     switch (contrastValue) {
         case "0":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(0.70)");
+            value = value.replace(REGEX, "contrast(0.70)");
             break;
         case "1":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(0.75)");
+            value = value.replace(REGEX, "contrast(0.75)");
             break;
         case "3":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(1.25)");
+            value = value.replace(REGEX, "contrast(1.25)");
             break;
         case "4":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(1.5)");
+            value = value.replace(REGEX, "contrast(1.5)");
             break;
         default:
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "contrast(1)");
+            value = value.replace(REGEX, "contrast(1)");
             break;
     }
     document.getElementsByTagName("body")[0].style.filter = value;
@@ -107,19 +107,19 @@ const setSaturation = (saturationValue) => {
     const REGEX = /(saturate\(\d+\.?\d*?\))/g
     switch (saturationValue) {
         case "0":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(0.70)");
+            value = value.replace(REGEX, "saturate(0.70)");
             break;
         case "1":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(0.75)");
+            value = value.replace(REGEX, "saturate(0.75)");
             break;
         case "3":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(1.25)");
+            value = value.replace(REGEX, "saturate(1.25)");
             break;
         case "4":
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(1.5)");
+            value = value.replace(REGEX, "saturate(1.5)");
             break;
         default:
-            value = document.getElementsByTagName("body")[0].style.filter.replace(REGEX, "saturate(1)");
+            value = value.replace(REGEX, "saturate(1)");
             break;
     }
     document.getElementsByTagName("body")[0].style.filter = value;
@@ -225,7 +225,7 @@ function handleEnhancePageAction(request, parsedData) {
         // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
     }
     if(lineSpacing){
-        setLineSpacing(request.EnhancePage.lineSpacing)
+        setLineSpacing(lineSpacing)
     }
     if (saturation) {
         setSaturation(saturation)
