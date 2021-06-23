@@ -19,7 +19,7 @@ async function listenForClicks() {
                     browser.tabs.executeScript({code: cr}).catch(
                         reportError
                     );
-                    
+                    courseRemoverSwitch().catch(e => console.log(e));
                     return;
                 case "dark-mode":
                     darkModeSwitch().catch(e => console.log(e));
@@ -100,6 +100,7 @@ function sendMessageToTabs(tabs, action, payload = {}) {
             }
         ).then(response => {
             setBtnsStyle(response)
+            window.courseRemoverStatus = response.courseRemoverStatus;
             window.darkMode = response.DarkMode;
             window.monochrome = response.EnhancePage.Monochrome;
             window.cursor = response.EnhancePage.cursor;
@@ -118,6 +119,7 @@ const setBtnsStyle = (localStorageData) => {
     }
     else{
         setBtnStyle("dark-mode", localStorageData.DarkMode)
+        setBtnStyle("remove-courses", localStorageData.courseRemoverStatus)
     }
 }
 
@@ -141,6 +143,14 @@ async function darkModeSwitch() {
         active: true
     }).catch(onError);
     sendMessageToTabs(tabs, "DarkMode", {val: !window.darkMode})
+}
+
+async function courseRemoverSwitch(){
+    const tabs = await browser.tabs.query({
+        currentWindow: true,
+        active: true
+    }).catch(onError);
+    sendMessageToTabs(tabs, "CourseRemoverStatus", {val: !window.courseRemoverStatus})
 }
 
 async function monochromeSwitch() {

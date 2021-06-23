@@ -2,6 +2,7 @@
 
 const defaultSaveSettings = {
     'RemovedCourses': [],
+    'courseRemoverStatus': false,
     'DarkMode': false,
     'EnhancePage': {
         'Monochrome': false,
@@ -177,7 +178,7 @@ async function loadSave() {
         // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
     else {  // Found MoodleBooster data on the localStorage (Yay!)
-        var parsedData = JSON.parse(moodleBoosterData);
+        var parsedData = JSON.parse(moodleBoosterData);        
         // DarkMode
         if (parsedData.DarkMode) {
             addDarkMode();
@@ -195,6 +196,7 @@ async function loadSave() {
         setLineSpacing(parsedData.EnhancePage.lineSpacing)
         // CourseRemover
         removeCoursesByConfiguration(parsedData);
+        resetCourseRemoverStatus(parsedData);
     }
     // --------------------------------------------
 }
@@ -254,6 +256,15 @@ function handleDarkModeAction(parsedData, payload) {
     }
 }
 
+function handleCourseRemoverAction(parsedData, payload){
+    parsedData.courseRemoverStatus = payload.val;
+}
+
+function resetCourseRemoverStatus(parsedData){
+    parsedData.courseRemoverStatus = false;
+    localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
+}
+
 /**
  * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
  */
@@ -264,6 +275,9 @@ function listenForBackgroundMessages() {
             case "DarkMode":
                 handleDarkModeAction(parsedData, payload);
                 break
+            case "CourseRemoverStatus":
+                handleCourseRemoverAction(parsedData, payload);
+                break;
             case "MonoChrome":
                 handleMonoChromeAction(parsedData, payload);
                 break
@@ -292,6 +306,7 @@ function saveToStorage(parameter, data, overwrite = true) {
         localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }
     var parsedData = JSON.parse(moodleBoosterData);
+    parsedData.courseRemoverStatus = false;
     // TODO: make sure that the parameter is a valid one.
     if (overwrite) {
         parsedData[parameter] = data;
