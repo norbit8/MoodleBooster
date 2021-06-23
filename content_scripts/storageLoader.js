@@ -2,12 +2,13 @@
 
 const defaultSaveSettings = {
     'RemovedCourses': [],
-    'DarkMode': "Off",
+    'DarkMode': false,
     'EnhancePage': {
-        'Monochrome': "Off",
+        'Monochrome': false,
         'FontSize': "0",
         'Contrast': "2",
         'Saturation': "2",
+        'lineSpacing': "2",
         'cursor': "normal"
     },
 };
@@ -62,51 +63,100 @@ const makeCursorBigger = () => {
 const setFontSize = (sizeValue) => {
     switch (sizeValue) {
         case "1":
-            document.getElementsByTagName("body")[0].style = "font-size:30px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "30px";
             return;
         case "2":
-            document.getElementsByTagName("body")[0].style = "font-size:50px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "50px;";
             return;
         default:
-            document.getElementsByTagName("body")[0].style = "";
+            document.getElementsByTagName("body")[0].style.fontSize = "";
     }
 }
 
 const setContrast = (contrastValue) => {
+    if(!document.getElementsByTagName("body")[0].style.filter.includes("contrast")){
+        document.getElementsByTagName("body")[0].style.filter += "contrast(1)";
+    }
+    let value = document.getElementsByTagName("body")[0].style.filter;
+    const REGEX = /(contrast\(\d+\.?\d*?\))/g
     switch (contrastValue) {
         case "0":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(0.70);";
-            return;
+            value = value.replace(REGEX, "contrast(0.70)");
+            break;
         case "1":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(0.75);";
-            return;
+            value = value.replace(REGEX, "contrast(0.75)");
+            break;
         case "3":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1.25)";
-            return;
+            value = value.replace(REGEX, "contrast(1.25)");
+            break;
         case "4":
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1.5)";
-            return;
+            value = value.replace(REGEX, "contrast(1.5)");
+            break;
         default:
-            document.getElementsByTagName("body")[0].style = "filter:contrast(1)";
+            value = value.replace(REGEX, "contrast(1)");
+            break;
     }
+    document.getElementsByTagName("body")[0].style.filter = value;
 }
 
 const setSaturation = (saturationValue) => {
+    if(!document.getElementsByTagName("body")[0].style.filter.includes("saturate")){
+        document.getElementsByTagName("body")[0].style.filter += "saturate(1)";
+    }
+    let value = document.getElementsByTagName("body")[0].style.filter;
+    const REGEX = /(saturate\(\d+\.?\d*?\))/g
     switch (saturationValue) {
         case "0":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(0.70);";
+            value = value.replace(REGEX, "saturate(0.70)");
+            break;
+        case "1":
+            value = value.replace(REGEX, "saturate(0.75)");
+            break;
+        case "3":
+            value = value.replace(REGEX, "saturate(1.25)");
+            break;
+        case "4":
+            value = value.replace(REGEX, "saturate(1.5)");
+            break;
+        default:
+            value = value.replace(REGEX, "saturate(1)");
+            break;
+    }
+    document.getElementsByTagName("body")[0].style.filter = value;
+}
+
+const setLineSpacing = (lineSpacingValue) => {
+    switch (lineSpacingValue) {
+        case "0":
+            document.getElementsByTagName("body")[0].style.lineHeight = "1";
             return;
         case "1":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(0.75);";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.25";
             return;
         case "3":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1.25)";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.75";
             return;
         case "4":
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1.5)";
+            document.getElementsByTagName("body")[0].style.lineHeight = "2";
             return;
         default:
-            document.getElementsByTagName("body")[0].style = "filter:saturate(1)";
+            document.getElementsByTagName("body")[0].style.lineHeight = "1.5";
+    }
+}
+
+function removeCoursesByConfiguration(parsedData) {
+    if (parsedData.RemovedCourses.length !== 0) {
+        var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
+        if (courses_list.length <= 0) {
+            return;
+        }
+        for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
+            const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
+            const courseID = new URL(link).searchParams.get("id")
+            if (parsedData.RemovedCourses.includes(courseID)) {
+                courses_list[courseIndex].remove()
+            }
+        }
     }
 }
 
@@ -127,11 +177,11 @@ async function loadSave() {
     else {  // Found MoodleBooster data on the localStorage (Yay!)
         var parsedData = JSON.parse(moodleBoosterData);
         // DarkMode
-        if (parsedData.DarkMode == "On") {
+        if (parsedData.DarkMode) {
             addDarkMode();
         }
         // EnhancePage
-        if (parsedData.EnhancePage.Monochrome === "On") {
+        if (parsedData.EnhancePage.Monochrome) {
             setMonochrome();
         }
         if (parsedData.EnhancePage.cursor === "big") {
@@ -140,22 +190,9 @@ async function loadSave() {
         setFontSize(parsedData.EnhancePage.FontSize);
         setContrast(parsedData.EnhancePage.Contrast);
         setSaturation(parsedData.EnhancePage.Saturation);
+        setLineSpacing(parsedData.EnhancePage.lineSpacing)
         // CourseRemover
-        if (parsedData.RemovedCourses.length !== 0) {
-            var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
-            const total_length = courses_list.length;
-            if (total_length <= 0) {
-                return;
-            }
-            for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
-                for (let course of parsedData.RemovedCourses) {
-                    if (courses_list[courseIndex].innerText.startsWith(course)) {
-                        courses_list[courseIndex].remove()
-                    }
-                }
-            }
-            courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
-        }
+        removeCoursesByConfiguration(parsedData);
     }
     // --------------------------------------------
 }
@@ -169,103 +206,73 @@ function removeDarkMode() {
     hujiLogoImg.setAttribute("src", orgHujiLogoSrc)
 }
 
+function handleEnhancePageAction(parsedData, payload) {
+    const {contrast, fontSize, saturation, cursor,lineSpacing} = payload
+    if (cursor === "big") {
+        makeCursorBigger();
+        parsedData.EnhancePage.cursor = "big"
+    }
+    if (cursor === "normal") {
+        document.getElementById("biggerCursor").remove();
+        parsedData.EnhancePage.cursor = "normal"
+    }
+    if (fontSize) {
+        setFontSize(fontSize);
+        // parsedData.EnhancePage.FontSize = payload.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
+    }
+    if (contrast) {
+        setContrast(contrast);
+        // parsedData.EnhancePage.Contrast = payload.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+    }
+    if(lineSpacing){
+        setLineSpacing(lineSpacing)
+    }
+    if (saturation) {
+        setSaturation(saturation)
+    }
+}
+
+function handleMonoChromeAction(parsedData, payload) {
+    parsedData.EnhancePage.Monochrome = payload.val
+    if (payload.val) {
+        setMonochrome();
+    } else {
+        document.getElementById("MonochromeCss").remove();
+    }
+}
+
+function handleDarkModeAction(parsedData, payload) {
+    parsedData.DarkMode = payload.val;
+    if (parsedData.DarkMode) {
+        addDarkMode();
+    } else {
+        removeDarkMode();
+    }
+}
+
+/**
+ * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
+ */
 function listenForBackgroundMessages() {
-    browser.runtime.onMessage.addListener(request => {
-        var parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
-        if (request.DarkMode) {
-            parsedData.DarkMode = request.DarkMode;
-            if (request.DarkMode == "Off") {
-                removeDarkMode();
-            }
-            if (request.DarkMode == "On") {
-                addDarkMode();
-            }
-        }
-        if (request.EnhancePage) {
-            console.log(request)
-            if (request.EnhancePage?.cursor == "big") {
-                makeCursorBigger();
-                parsedData.EnhancePage.cursor = "big"
-            }
-            if (request.EnhancePage?.cursor == "normal") {
-                document.getElementById("biggerCursor").remove();
-                parsedData.EnhancePage.cursor = "normal"
-            }
-            if (request.EnhancePage?.Monochrome == "On") {
-                setMonochrome();
-                parsedData.EnhancePage.Monochrome = "On" // Should we save prefferences?
-            }
-            if (request.EnhancePage?.Monochrome == "Off") {
-                document.getElementById("MonochromeCss").remove();
-                parsedData.EnhancePage.Monochrome = "Off" // Should we save prefferences?
-            }
-            if (request.EnhancePage?.FontSize) {
-                setFontSize(request.EnhancePage.FontSize);
-                // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
-            }
-            if (request.EnhancePage?.Contrast) {
-                setContrast(request.EnhancePage.Contrast);
-                // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
-            }
-            if (request.EnhancePage?.Saturation) {
-                setSaturation(request.EnhancePage.Saturation)
-            }
-        }
-        if (request.reset) {
-            parsedData = defaultSaveSettings;
+    browser.runtime.onMessage.addListener(({action, payload}) => {
+        let parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
+        switch (action) {
+            case "DarkMode":
+                handleDarkModeAction(parsedData, payload);
+                break
+            case "MonoChrome":
+                handleMonoChromeAction(parsedData, payload);
+                break
+            case "EnhancePage":
+                handleEnhancePageAction(parsedData, payload);
+                break
+            case "reset":
+                parsedData = defaultSaveSettings;
+                break
         }
         localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
         return Promise.resolve(parsedData);
     });
-}
-
-/**
- * General method to scrape DOM inside html
- * @param url   The url consisting the DOM element
- * @param cssSelector   CSS selector to find the DOM element
- * @param all   Get all DOM elements matching the selector or just the first one (default false)
- * @returns {Promise<NodeListOf<Element>|Element>}  Array of dom elements in case sent with all param "true"
- *                                                   otherwise just one DOM element
- */
-async function scrapeWebsiteDOM(url, cssSelector, all = false) {
-    const CharSetInContentType = "charset="
-    let parser = new DOMParser()
-    let response = await fetch(url)
-    const contentType = response.headers.get('Content-Type')
-    const charsetStartIndex = contentType.lastIndexOf(CharSetInContentType)
-    let htmlDoc
-
-    // in case the charset of the html is different than utf-8 we encoding it with the correct charset format we got from Content-Type
-    if (charsetStartIndex !== -1) {
-        const charSet = contentType.substring(charsetStartIndex + CharSetInContentType.length)
-        const html = new TextDecoder(charSet).decode(await response.arrayBuffer())
-        htmlDoc = parser.parseFromString(html, 'text/html')
-    } else {
-        htmlDoc = parser.parseFromString(await response.text(), 'text/html')
-    }
-    return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
-}
-
-/**
- *  Initial scrapping functionality from Syllabus to get in which semester is a course by Syllabus content
- * @param courseId  The ID of the course to check
- * @returns {Promise<string>} "a" for semester A and "b" for semester B
- */
-async function getCourseSemester(courseId) {
-    const ValidCourseIdLength = 5
-    courseId = courseId.trim()
-    if (courseId.length > ValidCourseIdLength){
-        throw "course id invalid"
-    }
-    // as syllabus expecting id with 5 chars we need to add prefix of 0s so the id will be with 5 chars
-    if (courseId.length < ValidCourseIdLength) {
-        let numOfZero = ValidCourseIdLength - courseId.length
-        courseId = "0".repeat(numOfZero) + courseId
-    }
-    const semester = await scrapeWebsiteDOM(
-        `https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`,
-        '.hebItem:nth-of-type(4)')
-    return semester.textContent.includes("ב'") ? "b" : "a"
 }
 
 function saveToStorage(parameter, data, overwrite = true) {

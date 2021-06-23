@@ -19,6 +19,14 @@
             line-height: 1.50;
         }
 
+        /* css for chrome */
+        @media screen and (-webkit-min-device-pixel-ratio: 0)
+        and (min-resolution: .001dpcm) {
+            body {
+                width: 400px;
+            }
+        }
+
         h2 {
             font-size: 20px;
         }
@@ -34,10 +42,10 @@
     <div class="container">
         <h2 class="text-center index-title">MoodleBooster 🚀</h2>
         <div class='index-menu'>
-            <div class='menu-item btn' id="remove-courses">Remove Courses</div>
-            <div class='menu-item btn' id="dark-mode">Dark Mode</div>
-            <div class='menu-item btn' id="enhance-page">Enhance Page</div>
-            <div class='menu-item btn reset' id="reset">Reset</div>
+            <button class='menu-item btn' id="remove-courses">Remove Courses</button>
+            <button class='menu-item btn' id="dark-mode">Dark Mode</button>
+            <button class='menu-item btn' id="enhance-page">Enhance Page</button>
+            <button class='menu-item btn reset' id="reset">Reset</button>
         </div>
     </div>
 <!-- <div class="container">
