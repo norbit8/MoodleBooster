@@ -96,7 +96,6 @@ function sendMessageToTabs(tabs, action, payload = {}) {
                 payload: payload
             }
         ).then(response => {
-            console.log(response)
             window.darkMode = response.DarkMode;
             window.monochrome = response.EnhancePage.Monochrome;
             window.cursor = response.EnhancePage.cursor;
