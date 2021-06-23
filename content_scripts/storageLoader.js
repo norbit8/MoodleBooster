@@ -306,7 +306,6 @@ function saveToStorage(parameter, data, overwrite = true) {
         localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
     }
     var parsedData = JSON.parse(moodleBoosterData);
-    parsedData.courseRemoverStatus = false;
     // TODO: make sure that the parameter is a valid one.
     if (overwrite) {
         parsedData[parameter] = data;
