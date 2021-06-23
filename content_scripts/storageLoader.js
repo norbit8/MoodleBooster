@@ -13,18 +13,20 @@ const defaultSaveSettings = {
     },
 };
 
+const repoVersion = "latest"
+const repo = `MoodleBooster@${repoVersion}`
 
 let orgMoodleLogoSrc = "https://moodle2.cs.huji.ac.il/nu20/theme/image.php/huji/core/1620448000/logo"
 let orgHujiLogoSrc = "https://moodle2.cs.huji.ac.il/nu20/theme/image.php/huji/core/1620448000/huji"
 const HUJI_LOGO_SELECTOR = ".page-header-headings h1 img:nth-of-type(1)"
 const MOODLE_LOGO_SELECTOR = ".page-header-headings h1 img:nth-of-type(2)"
 
-const DARK_MODE_CSS_CDN = "https://cdn.jsdelivr.net/gh/norbit8/MoodleBooster/dark-mode/dark-mode.css"
-const MONOCHROME_CSS_CDN = "https://cdn.jsdelivr.net/gh/norbit8/MoodleBooster/enhance-page/monochrome.css"
+const DARK_MODE_CSS_CDN = `https://cdn.jsdelivr.net/gh/norbit8/${repo}/dark-mode/dark-mode.css`
+const MONOCHROME_CSS_CDN = `https://cdn.jsdelivr.net/gh/norbit8/${repo}/enhance-page/monochrome.css`
 
 const MOODLE_LOGO_DARK_MODE_URL = "https://i.ibb.co/t3CTQ0t/moodle-logo-darkmode-withlogo.png"
 const HUJI_LOGO_DARK_MODE_URL = "https://i.ibb.co/6mdGRfv/moodle-huji-logo-darkmode.png"
-const CURSOR_CSS = "https://cdn.jsdelivr.net/gh/norbit8/MoodleBooster/enhance-page/biggerCursor.css"
+const CURSOR_CSS = `https://cdn.jsdelivr.net/gh/norbit8/${repo}/enhance-page/biggerCursor.css`
 
 function addDarkMode() {
     /**
