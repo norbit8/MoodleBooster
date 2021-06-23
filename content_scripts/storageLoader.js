@@ -228,13 +228,16 @@ function listenForBackgroundMessages() {
  *                                                   otherwise just one DOM element
  */
 async function scrapeWebsiteDOM(url, cssSelector, all = false) {
+    const CharSetInContentType = "charset="
     let parser = new DOMParser()
     let response = await fetch(url)
     const contentType = response.headers.get('Content-Type')
-    const charsetStartIndex = contentType.lastIndexOf("charset=")
+    const charsetStartIndex = contentType.lastIndexOf(CharSetInContentType)
     let htmlDoc
+
+    // in case the charset of the html is different than utf-8 we encoding it with the correct charset format we got from Content-Type
     if (charsetStartIndex !== -1) {
-        const charSet = contentType.substring(charsetStartIndex + 8)
+        const charSet = contentType.substring(charsetStartIndex + CharSetInContentType.length)
         const html = new TextDecoder(charSet).decode(await response.arrayBuffer())
         htmlDoc = parser.parseFromString(html, 'text/html')
     } else {
@@ -249,8 +252,14 @@ async function scrapeWebsiteDOM(url, cssSelector, all = false) {
  * @returns {Promise<string>} "a" for semester A and "b" for semester B
  */
 async function getCourseSemester(courseId) {
-    if (courseId.length < 5) {
-        let numOfZero = 5 - courseId.length
+    const ValidCourseIdLength = 5
+    courseId = courseId.trim()
+    if (courseId.length > ValidCourseIdLength){
+        throw "course id invalid"
+    }
+    // as syllabus expecting id with 5 chars we need to add prefix of 0s so the id will be with 5 chars
+    if (courseId.length < ValidCourseIdLength) {
+        let numOfZero = ValidCourseIdLength - courseId.length
         courseId = "0".repeat(numOfZero) + courseId
     }
     const semester = await scrapeWebsiteDOM(
