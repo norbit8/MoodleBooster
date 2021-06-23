@@ -263,11 +263,9 @@ function listenForBackgroundMessages() {
             case "EnhancePage":
                 handleEnhancePageAction(request, parsedData);
                 break
-            case "reset": {
+            case "reset":
                 parsedData = defaultSaveSettings;
-            }
                 break
-
         }
         localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
         return Promise.resolve(parsedData);
