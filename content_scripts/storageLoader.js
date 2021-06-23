@@ -119,7 +119,7 @@ function removeCoursesByConfiguration(parsedData) {
         for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
             const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
             const courseID = new URL(link).searchParams.get("id")
-            if(parsedData.RemovedCourses.includes(courseID)){
+            if (parsedData.RemovedCourses.includes(courseID)) {
                 courses_list[courseIndex].remove()
             }
         }
@@ -171,8 +171,8 @@ function removeDarkMode() {
     hujiLogoImg.setAttribute("src", orgHujiLogoSrc)
 }
 
-function handleEnhancePageAction(request, parsedData) {
-    const {contrast, fontSize, saturation, cursor} = request.payload
+function handleEnhancePageAction(parsedData, payload) {
+    const {contrast, fontSize, saturation, cursor} = payload
     if (cursor === "big") {
         makeCursorBigger();
         parsedData.EnhancePage.cursor = "big"
@@ -183,28 +183,28 @@ function handleEnhancePageAction(request, parsedData) {
     }
     if (fontSize) {
         setFontSize(fontSize);
-        // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
+        // parsedData.EnhancePage.FontSize = payload.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
     }
     if (contrast) {
         setContrast(contrast);
-        // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+        // parsedData.EnhancePage.Contrast = payload.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
     }
     if (saturation) {
         setSaturation(saturation)
     }
 }
 
-function handleMonoChromeAction(parsedData, request) {
-    parsedData.EnhancePage.Monochrome = request.payload.val
-    if (request.payload.val) {
+function handleMonoChromeAction(parsedData, payload) {
+    parsedData.EnhancePage.Monochrome = payload.val
+    if (payload.val) {
         setMonochrome();
     } else {
         document.getElementById("MonochromeCss").remove();
     }
 }
 
-function handleDarkModeAction(parsedData, request) {
-    parsedData.DarkMode = request.payload.val;
+function handleDarkModeAction(parsedData, payload) {
+    parsedData.DarkMode = payload.val;
     if (parsedData.DarkMode) {
         addDarkMode();
     } else {
@@ -212,18 +212,21 @@ function handleDarkModeAction(parsedData, request) {
     }
 }
 
+/**
+ * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
+ */
 function listenForBackgroundMessages() {
-    browser.runtime.onMessage.addListener(request => {
+    browser.runtime.onMessage.addListener(({action, payload}) => {
         let parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
-        switch (request.action) {
+        switch (action) {
             case "DarkMode":
-                handleDarkModeAction(parsedData, request);
+                handleDarkModeAction(parsedData, payload);
                 break
             case "MonoChrome":
-                handleMonoChromeAction(parsedData, request);
+                handleMonoChromeAction(parsedData, payload);
                 break
             case "EnhancePage":
-                handleEnhancePageAction(request, parsedData);
+                handleEnhancePageAction(parsedData, payload);
                 break
             case "reset":
                 parsedData = defaultSaveSettings;

@@ -81,6 +81,9 @@ function listenForRange() {
     })
 }
 
+/**
+ * Send messages with request that contains action to be preformed and payload to the storageLoader
+ */
 function sendMessageToTabs(tabs, action, payload = {}) {
     /**
      * Send Message to the content-script
