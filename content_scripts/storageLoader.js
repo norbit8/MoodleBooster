@@ -68,7 +68,7 @@ const setFontSize = (sizeValue) => {
             document.getElementsByTagName("body")[0].style.fontSize = "30px";
             return;
         case "2":
-            document.getElementsByTagName("body")[0].style.fontSize = "50px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "50px";
             return;
         default:
             document.getElementsByTagName("body")[0].style.fontSize = "";
@@ -220,17 +220,19 @@ function handleEnhancePageAction(parsedData, payload) {
     }
     if (fontSize) {
         setFontSize(fontSize);
-        // parsedData.EnhancePage.FontSize = payload.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
+        parsedData.EnhancePage.FontSize = fontSize;
     }
     if (contrast) {
         setContrast(contrast);
-        // parsedData.EnhancePage.Contrast = payload.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+        parsedData.EnhancePage.Contrast = contrast;
     }
     if(lineSpacing){
         setLineSpacing(lineSpacing)
+        parsedData.EnhancePage.lineSpacing = lineSpacing;
     }
     if (saturation) {
         setSaturation(saturation)
+        parsedData.EnhancePage.Saturation = saturation;
     }
 }
 

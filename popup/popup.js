@@ -19,6 +19,7 @@ async function listenForClicks() {
                     browser.tabs.executeScript({code: cr}).catch(
                         reportError
                     );
+                    
                     return;
                 case "dark-mode":
                     darkModeSwitch().catch(e => console.log(e));
@@ -98,11 +99,36 @@ function sendMessageToTabs(tabs, action, payload = {}) {
                 payload: payload
             }
         ).then(response => {
+            setBtnsStyle(response)
             window.darkMode = response.DarkMode;
             window.monochrome = response.EnhancePage.Monochrome;
             window.cursor = response.EnhancePage.cursor;
         }).catch(onError);
     }
+}
+
+const setBtnsStyle = (localStorageData) => {
+    if(window.location.href.includes("enahnceMenu.html")){
+        setBtnStyle("monochrome", localStorageData.EnhancePage.Monochrome)
+        setSliderValue("font-range", localStorageData.EnhancePage.FontSize)
+        setSliderValue("contrast-range", localStorageData.EnhancePage.Contrast)
+        setSliderValue("saturation-range", localStorageData.EnhancePage.Saturation)
+        setSliderValue("line-spacing-range", localStorageData.EnhancePage.lineSpacing)
+        setBtnStyle("cursor", localStorageData.EnhancePage.cursor === "big")
+    }
+    else{
+        setBtnStyle("dark-mode", localStorageData.DarkMode)
+    }
+}
+
+function setBtnStyle(btnID, isActive){
+    const NOT_ACTIVE = "menu-item btn";
+    const ACTIVE = "menu-item btn active";
+    isActive ? document.getElementById(btnID).className = ACTIVE : document.getElementById(btnID).className = NOT_ACTIVE
+}
+
+function setSliderValue(sliderID, value){
+    document.getElementById(sliderID).value = value;
 }
 
 function onError(error) {
