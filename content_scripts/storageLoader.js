@@ -117,10 +117,10 @@ function removeCoursesByConfiguration(parsedData) {
             return;
         }
         for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
-            for (let course of parsedData.RemovedCourses) {
-                if (courses_list[courseIndex].innerText.startsWith(course)) {
-                    courses_list[courseIndex].remove()
-                }
+            const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
+            const courseID = new URL(link).searchParams.get("id")
+            if(parsedData.RemovedCourses.includes(courseID)){
+                courses_list[courseIndex].remove()
             }
         }
     }
