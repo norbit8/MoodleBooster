@@ -110,6 +110,22 @@ const setSaturation = (saturationValue) => {
     }
 }
 
+function removeCoursesByConfiguration(parsedData) {
+    if (parsedData.RemovedCourses.length !== 0) {
+        var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
+        if (courses_list.length <= 0) {
+            return;
+        }
+        for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
+            for (let course of parsedData.RemovedCourses) {
+                if (courses_list[courseIndex].innerText.startsWith(course)) {
+                    courses_list[courseIndex].remove()
+                }
+            }
+        }
+    }
+}
+
 async function loadSave() {
     /**
      * >>> IMPORTANT <<<
@@ -141,21 +157,7 @@ async function loadSave() {
         setContrast(parsedData.EnhancePage.Contrast);
         setSaturation(parsedData.EnhancePage.Saturation);
         // CourseRemover
-        if (parsedData.RemovedCourses.length !== 0) {
-            var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
-            const total_length = courses_list.length;
-            if (total_length <= 0) {
-                return;
-            }
-            for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
-                for (let course of parsedData.RemovedCourses) {
-                    if (courses_list[courseIndex].innerText.startsWith(course)) {
-                        courses_list[courseIndex].remove()
-                    }
-                }
-            }
-            courses_list = document.getElementsByClassName('type_course depth_3 contains_branch');
-        }
+        removeCoursesByConfiguration(parsedData);
     }
     // --------------------------------------------
 }
@@ -169,49 +171,59 @@ function removeDarkMode() {
     hujiLogoImg.setAttribute("src", orgHujiLogoSrc)
 }
 
+function handleEnhancePageAction(request, parsedData) {
+    const {contrast, fontSize, saturation, cursor} = request.payload
+    if (cursor === "big") {
+        makeCursorBigger();
+        parsedData.EnhancePage.cursor = "big"
+    }
+    if (cursor === "normal") {
+        document.getElementById("biggerCursor").remove();
+        parsedData.EnhancePage.cursor = "normal"
+    }
+    if (fontSize) {
+        setFontSize(fontSize);
+        // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
+    }
+    if (contrast) {
+        setContrast(contrast);
+        // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+    }
+    if (saturation) {
+        setSaturation(saturation)
+    }
+}
+
+function handleMonoChromeAction(parsedData, request) {
+    parsedData.EnhancePage.Monochrome = request.payload.val
+    if (request.payload.val) {
+        setMonochrome();
+    } else {
+        document.getElementById("MonochromeCss").remove();
+    }
+}
+
+function handleDarkModeAction(parsedData, request) {
+    parsedData.DarkMode = request.payload.val;
+    if (parsedData.DarkMode) {
+        addDarkMode();
+    } else {
+        removeDarkMode();
+    }
+}
+
 function listenForBackgroundMessages() {
     browser.runtime.onMessage.addListener(request => {
-        console.log(request)
-        var parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
+        let parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
         switch (request.action) {
             case "DarkMode":
-                parsedData.DarkMode = request.payload.val;
-                if (parsedData.DarkMode) {
-                    addDarkMode();
-                } else {
-                    removeDarkMode();
-                }
+                handleDarkModeAction(parsedData, request);
                 break
             case "MonoChrome":
-                parsedData.EnhancePage.Monochrome = request.payload.val
-                if (request.payload.val) {
-                    setMonochrome();
-                } else {
-                    document.getElementById("MonochromeCss").remove();
-                }
+                handleMonoChromeAction(parsedData, request);
                 break
             case "EnhancePage":
-                const {contrast, fontSize, saturation, cursor} = request.payload
-
-                if (cursor === "big") {
-                    makeCursorBigger();
-                    parsedData.EnhancePage.cursor = "big"
-                }
-                if (cursor === "normal") {
-                    document.getElementById("biggerCursor").remove();
-                    parsedData.EnhancePage.cursor = "normal"
-                }
-                if (fontSize) {
-                    setFontSize(fontSize);
-                    // parsedData.EnhancePage.FontSize = request.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
-                }
-                if (contrast) {
-                    setContrast(contrast);
-                    // parsedData.EnhancePage.Contrast = request.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
-                }
-                if (saturation) {
-                    setSaturation(saturation)
-                }
+                handleEnhancePageAction(request, parsedData);
                 break
             case "reset": {
                 parsedData = defaultSaveSettings;
