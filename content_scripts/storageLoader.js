@@ -147,12 +147,22 @@ const setLineSpacing = (lineSpacingValue) => {
     }
 }
 
+function addSemesterCourses(coursesList, semesterA, title) {
+    const semesterTitle = document.createElement('li')
+    semesterTitle.appendChild(document.createTextNode(title))
+    coursesList.appendChild(semesterTitle)
+    for (const semesterAElement of semesterA) {
+        coursesList.appendChild(semesterAElement)
+    }
+}
+
 function rearrangeCourses(parsedData) {
     if (!parsedData['userCoursesBySemester']) {
         return
     }
     const semesterA = []
     const semesterB = []
+    const unknownSemester = []
     let coursesList = document.querySelector('.type_system.depth_2.contains_branch > ul')
     if (coursesList === null) {
         return
@@ -162,26 +172,17 @@ function rearrangeCourses(parsedData) {
         const courseID = new URL(link).searchParams.get("id")
         if (parsedData['userCoursesBySemester']['a'].includes(courseID)) {
             semesterA.push(c)
-        } else {
+        } else if (parsedData['userCoursesBySemester']['b'].includes(courseID)) {
             semesterB.push(c)
+        } else {
+            unknownSemester.push(c)
         }
     })
     coursesList.childNodes.forEach(c => c.remove())
 
-
-    const semesterATitle = document.createElement('li')
-    semesterATitle.appendChild(document.createTextNode("Semester A"))
-    coursesList.appendChild(semesterATitle)
-    for (const semesterAElement of semesterA) {
-        coursesList.appendChild(semesterAElement)
-    }
-    const semesterBTitle = document.createElement('li')
-    semesterBTitle.appendChild(document.createTextNode("Semester B"))
-    coursesList.appendChild(semesterBTitle)
-    for (const semesterBElement of semesterB) {
-        coursesList.appendChild(semesterBElement)
-    }
-
+    addSemesterCourses(coursesList, semesterA, "Semester A")
+    addSemesterCourses(coursesList, semesterB, "Semester B")
+    addSemesterCourses(coursesList, unknownSemester, "Semester Unknown")
 }
 
 function removeCoursesByConfiguration(parsedData) {
@@ -206,7 +207,8 @@ async function saveUserCoursesBySemester(parsedData) {
     }
     let userCoursesBySemester = {
         "a": [],
-        "b": []
+        "b": [],
+        "Unknown": []
     }
     let courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
     if (courses_list.length === 0) {
@@ -238,7 +240,7 @@ async function loadSave() {
         // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
     else {  // Found MoodleBooster data on the localStorage (Yay!)
-        var parsedData = JSON.parse(moodleBoosterData);        
+        var parsedData = JSON.parse(moodleBoosterData);
         // DarkMode
         if (parsedData.DarkMode) {
             addDarkMode();
@@ -318,11 +320,11 @@ function handleDarkModeAction(parsedData, payload) {
     }
 }
 
-function handleCourseRemoverAction(parsedData, payload){
+function handleCourseRemoverAction(parsedData, payload) {
     parsedData.courseRemoverStatus = payload.val;
 }
 
-function resetCourseRemoverStatus(parsedData){
+function resetCourseRemoverStatus(parsedData) {
     parsedData.courseRemoverStatus = false;
     localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
 }
@@ -378,7 +380,6 @@ function saveToStorage(parameter, data, overwrite = true) {
 }
 
 
-
 /**
  * Send messages with request that contains action to be preformed and payload to the storageLoader
  */
@@ -404,7 +405,7 @@ async function sendMessageToBackgroundScript(action, payload = {}) {
  *                                                   otherwise just one DOM element
  */
 async function scrapeWebsiteDOM(url, cssSelector, all = false) {
-    const html = await sendMessageToBackgroundScript("FetchHtml",{url:url})
+    const html = await sendMessageToBackgroundScript("FetchHtml", {url: url})
     let parser = new DOMParser()
     let htmlDoc = parser.parseFromString(html, 'text/html')
     return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
@@ -413,14 +414,13 @@ async function scrapeWebsiteDOM(url, cssSelector, all = false) {
 /**
  *  Initial scrapping functionality from Syllabus to get in which semester is a course by Syllabus content
  * @param courseId  The ID of the course to check
- * @returns {Promise<string>} "a" for semester A and "b" for semester B
+ * @returns {Promise<string>} "a" for semester A and "b" for semester B and Unknown in case not found
  */
 async function getCourseSemester(courseId) {
     const ValidCourseIdLength = 5
     courseId = courseId.trim()
     if (courseId.length > ValidCourseIdLength) {
-        courseId = courseId.substring(ValidCourseIdLength)
-        // throw "course id invalid"
+        courseId = courseId.substring(0, ValidCourseIdLength)
     }
     // as syllabus expecting id with 5 chars we need to add prefix of 0s so the id will be with 5 chars
     if (courseId.length < ValidCourseIdLength) {
@@ -433,7 +433,7 @@ async function getCourseSemester(courseId) {
         '.hebItem:nth-of-type(4)')
 
     if (semester == null) {
-        return 'a'
+        return 'Unknown'
     }
     return semester.textContent.includes("ב'") ? "b" : "a"
 }

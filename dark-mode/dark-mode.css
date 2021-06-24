@@ -30,6 +30,10 @@ input, select {
     color: white !important;
 }
 
+.dimmed_text:link {
+    color: #AAA !important;
+}
+
 body, a, span, nav.footer, footer#page-footer.bg-dark, .popover-header, .popover-body {
     color: var(--text) !important;
     background-color: var(--background) !important;
