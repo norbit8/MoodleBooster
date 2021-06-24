@@ -47,6 +47,19 @@ class Dashboard{
         }
     }
 }
-const dashboard = new Dashboard()
-dashboard.insertHtmlToDashboard('<h1 class="title">MoodleBooster Dashboard</h1>',`.title{font-family:Arial; margin-bottom:15px;}`)
+
+function isInCourseView(){
+    let url = new URL(window.location.href)
+    return url.searchParams.get("id") !== null && url.pathname.includes("course/view.php")
+}
+
+async function createDashboard() {
+    const dashboard = new Dashboard()
+    dashboard.insertHtmlToDashboard('<h1 class="title">MoodleBooster Dashboard</h1>',`.title{font-family:Arial; margin-bottom:15px;}`)
+}
+
+
+if(isInCourseView()){
+    createDashboard()
+}
 //TODO add more html content with dashboard.insertHtmlToDashboard()
