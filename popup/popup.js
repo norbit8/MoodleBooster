@@ -77,7 +77,7 @@ function listenForRange() {
         if (e.target.id === 'saturation-range') {
             changeSaturation(e);
         }
-        if(e.target.id === 'line-spacing-range'){
+        if (e.target.id === 'line-spacing-range') {
             changeLineSpacing(e)
         }
     })
@@ -180,32 +180,27 @@ async function loader() {
 }
 
 
-
 /**
  * General method to scrape DOM inside html
  * @param url   The url consisting the DOM element
  * @param cssSelector   CSS selector to find the DOM element
  * @param all   Get all DOM elements matching the selector or just the first one (default false)
- * @returns {Promise<NodeListOf<Element>|Element>}  Array of dom elements in case sent with all param "true"
+ * @returns {Promise<String>}  Array of dom elements in case sent with all param "true"
  *                                                   otherwise just one DOM element
  */
-async function scrapeWebsiteDOM(url, cssSelector, all = false) {
+async function fetchHtml(url, cssSelector, all = false) {
     const CharSetInContentType = "charset="
-    let parser = new DOMParser()
     let response = await fetch(url)
     const contentType = response.headers.get('Content-Type')
     const charsetStartIndex = contentType.lastIndexOf(CharSetInContentType)
-    let htmlDoc
 
     // in case the charset of the html is different than utf-8 we encoding it with the correct charset format we got from Content-Type
     if (charsetStartIndex !== -1) {
         const charSet = contentType.substring(charsetStartIndex + CharSetInContentType.length)
-        const html = new TextDecoder(charSet).decode(await response.arrayBuffer())
-        htmlDoc = parser.parseFromString(html, 'text/html')
+        return new TextDecoder(charSet).decode(await response.arrayBuffer())
     } else {
-        htmlDoc = parser.parseFromString(await response.text(), 'text/html')
+        return await response.text()
     }
-    return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
 }
 
 
@@ -214,9 +209,11 @@ async function scrapeWebsiteDOM(url, cssSelector, all = false) {
  */
 function listenForContentScriptsMessages() {
     browser.runtime.onMessage.addListener(async ({action, payload}) => {
+        console.log("got message action", action, "payload ", payload)
         switch (action) {
-            case "ScrapeSite":
-                return await scrapeWebsiteDOM(payload.url,payload.cssSelector,payload.all);
+            case "FetchHtml":
+                const res = await fetchHtml(payload.url)
+                return {response: res}
         }
     });
 }

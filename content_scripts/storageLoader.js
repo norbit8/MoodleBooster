@@ -164,8 +164,10 @@ function rearrangeCourses(parsedData) {
         } else {
             semesterB.push(c)
         }
-        c.remove()
     })
+    coursesList.childNodes.forEach(c => c.remove())
+
+
     const semesterATitle = document.createElement('li')
     semesterATitle.appendChild(document.createTextNode("Semester A"))
     coursesList.appendChild(semesterATitle)
@@ -217,6 +219,7 @@ async function saveUserCoursesBySemester(parsedData) {
     }
     console.log(userCoursesBySemester)
     saveToStorage('userCoursesBySemester', userCoursesBySemester, true)
+    parsedData['userCoursesBySemester'] = userCoursesBySemester
 }
 
 async function loadSave() {
@@ -252,6 +255,7 @@ async function loadSave() {
         setLineSpacing(parsedData.EnhancePage.lineSpacing)
         // CourseRemover
         await saveUserCoursesBySemester(parsedData)
+        rearrangeCourses(parsedData)
         removeCoursesByConfiguration(parsedData);
     }
     // --------------------------------------------
@@ -357,6 +361,24 @@ function saveToStorage(parameter, data, overwrite = true) {
     localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
 }
 
+
+
+/**
+ * Send messages with request that contains action to be preformed and payload to the storageLoader
+ */
+async function sendMessageToBackgroundScript(action, payload = {}) {
+    /**
+     * Send Message to the content-script
+     */
+    const resp = await browser.runtime.sendMessage(
+        {
+            action: action,
+            payload: payload
+        }
+    )
+    return resp.response
+}
+
 /**
  * General method to scrape DOM inside html
  * @param url   The url consisting the DOM element
@@ -366,44 +388,10 @@ function saveToStorage(parameter, data, overwrite = true) {
  *                                                   otherwise just one DOM element
  */
 async function scrapeWebsiteDOM(url, cssSelector, all = false) {
-    const CharSetInContentType = "charset="
+    const html = await sendMessageToBackgroundScript("FetchHtml",{url:url})
     let parser = new DOMParser()
-    let response = await fetch(url)
-    const contentType = response.headers.get('Content-Type')
-    const charsetStartIndex = contentType.lastIndexOf(CharSetInContentType)
-    let htmlDoc
-
-    // in case the charset of the html is different than utf-8 we encoding it with the correct charset format we got from Content-Type
-    if (charsetStartIndex !== -1) {
-        const charSet = contentType.substring(charsetStartIndex + CharSetInContentType.length)
-        const html = new TextDecoder(charSet).decode(await response.arrayBuffer())
-        htmlDoc = parser.parseFromString(html, 'text/html')
-    } else {
-        htmlDoc = parser.parseFromString(await response.text(), 'text/html')
-    }
+    let htmlDoc = parser.parseFromString(html, 'text/html')
     return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
-}
-
-/**
- * Send messages with request that contains action to be preformed and payload to the storageLoader
- */
-function sendMessageToTabs(tabs, action, payload = {}) {
-    /**
-     * Send Message to the content-script
-     */
-    for (let tab of tabs) {
-        browser.tabs.sendMessage(
-            tab.id,
-            {
-                action: action,
-                payload: payload
-            }
-        ).then(response => {
-            window.darkMode = response.DarkMode;
-            window.monochrome = response.EnhancePage.Monochrome;
-            window.cursor = response.EnhancePage.cursor;
-        }).catch(onError);
-    }
 }
 
 /**
@@ -427,6 +415,7 @@ async function getCourseSemester(courseId) {
     const semester = await scrapeWebsiteDOM(
         `https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`,
         '.hebItem:nth-of-type(4)')
+
     if (semester == null) {
         return 'a'
     }
