@@ -104,10 +104,14 @@ const getMinMaxTimes = (data) => {
     return {minTime, maxTime};
 }
 
+function isInCourseView(){
+    let url = new URL(window.location.href)
+    return url.searchParams.get("id") !== null && url.pathname.includes("course/view.php")
+}
+
 const addCourseScheduale = () => {
-    const url = new URL(window.location.href)
-    let courseContent = document.getElementsByClassName("course-content");
-    if (url.searchParams.get('id') !== null) {
+    if (isInCourseView()) {
+        let courseContent = document.getElementsByClassName("course-content");
         addStyles();
         let dataToAdd = getSchedualeData();
         let {minTime, maxTime} = getMinMaxTimes(dataToAdd);
