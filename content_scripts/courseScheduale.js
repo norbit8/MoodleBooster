@@ -107,9 +107,14 @@ const getMinMaxTimes = (data) => {
     return {minTime, maxTime};
 }
 
+const isScheduleExist = () => {
+    let element = document.querySelector('.scheduale-area')
+    return element !== null
+}
+
 const addCourseScheduale = () => {
     let dashboard = window.moodleBoosterDashboard
-    if (dashboard) {
+    if (dashboard && !isScheduleExist()) {
         let dataToAdd = getSchedualeData();
         let {minTime, maxTime} = getMinMaxTimes(dataToAdd);
         let courseSchedule = document.createElement("div");
