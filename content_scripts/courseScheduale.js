@@ -106,6 +106,7 @@ const getMinMaxTimes = (data) => {
 
 const addCourseScheduale = () => {
     const url = new URL(window.location.href)
+    let courseContent = document.getElementsByClassName("course-content");
     if (url.searchParams.get('id') !== null) {
         addStyles();
         let dataToAdd = getSchedualeData();
