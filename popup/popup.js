@@ -10,6 +10,7 @@ async function listenForClicks() {
         /**
          * Given the name of a beast, get the URL to the corresponding image.
          */
+
         async function actionToScript(id) {
             switch (id) {
                 case "remove-courses":
@@ -133,7 +134,20 @@ function onError(error) {
     console.log("Error occured " + error)
 }
 
+function setIconListeners() {
+    browser.tabs.onUpdated.addListener(function (tabId, change, tab) {
+        if (!tab.url || tab.url.match(/.*:\/\/.*[.]ac[.]il\/.*/) === null) {
+            browser.browserAction.setPopup({tabId: tabId, popup: ''});
+            browser.browserAction.setIcon({path: '/images/moodlebooster_icon_disabled.png', tabId: tabId});
+        } else {
+            browser.browserAction.setIcon({path: '/images/moodlebooster_icon.png', tabId: tabId});
+            browser.browserAction.setPopup({tabId: tabId, popup: '/popup/index.html'});
+        }
+    });
+}
+
 async function loader() {
+    setIconListeners()
     listenForClicks()
     listenForRange()
     sendMessageToTabs("")
