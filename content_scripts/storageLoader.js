@@ -2,6 +2,7 @@
 
 const defaultSaveSettings = {
     'RemovedCourses': [],
+    'courseRemoverStatus': false,
     'DarkMode': false,
     'EnhancePage': {
         'Monochrome': false,
@@ -68,7 +69,7 @@ const setFontSize = (sizeValue) => {
             document.getElementsByTagName("body")[0].style.fontSize = "30px";
             return;
         case "2":
-            document.getElementsByTagName("body")[0].style.fontSize = "50px;";
+            document.getElementsByTagName("body")[0].style.fontSize = "50px";
             return;
         default:
             document.getElementsByTagName("body")[0].style.fontSize = "";
@@ -237,7 +238,7 @@ async function loadSave() {
         // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
     else {  // Found MoodleBooster data on the localStorage (Yay!)
-        var parsedData = JSON.parse(moodleBoosterData);
+        var parsedData = JSON.parse(moodleBoosterData);        
         // DarkMode
         if (parsedData.DarkMode) {
             addDarkMode();
@@ -257,6 +258,7 @@ async function loadSave() {
         await saveUserCoursesBySemester(parsedData)
         rearrangeCourses(parsedData)
         removeCoursesByConfiguration(parsedData);
+        resetCourseRemoverStatus(parsedData);
     }
     // --------------------------------------------
 }
@@ -282,17 +284,19 @@ function handleEnhancePageAction(parsedData, payload) {
     }
     if (fontSize) {
         setFontSize(fontSize);
-        // parsedData.EnhancePage.FontSize = payload.EnhancePage.FontSize; // TODO: Need to see how to set slider value dynamically (React app?)
+        parsedData.EnhancePage.FontSize = fontSize;
     }
     if (contrast) {
         setContrast(contrast);
-        // parsedData.EnhancePage.Contrast = payload.EnhancePage.Contrast; // TODO: Need to see how to set slider value dynamically (React app?)
+        parsedData.EnhancePage.Contrast = contrast;
     }
     if (lineSpacing) {
         setLineSpacing(lineSpacing)
+        parsedData.EnhancePage.lineSpacing = lineSpacing;
     }
     if (saturation) {
         setSaturation(saturation)
+        parsedData.EnhancePage.Saturation = saturation;
     }
 }
 
@@ -314,6 +318,15 @@ function handleDarkModeAction(parsedData, payload) {
     }
 }
 
+function handleCourseRemoverAction(parsedData, payload){
+    parsedData.courseRemoverStatus = payload.val;
+}
+
+function resetCourseRemoverStatus(parsedData){
+    parsedData.courseRemoverStatus = false;
+    localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
+}
+
 /**
  * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
  */
@@ -324,6 +337,9 @@ function listenForBackgroundMessages() {
             case "DarkMode":
                 handleDarkModeAction(parsedData, payload);
                 break
+            case "CourseRemoverStatus":
+                handleCourseRemoverAction(parsedData, payload);
+                break;
             case "MonoChrome":
                 handleMonoChromeAction(parsedData, payload);
                 break

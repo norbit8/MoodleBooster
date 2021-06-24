@@ -8,7 +8,7 @@
 	align-items: center;
 }
 
-.menu-item {
+.menu-item, .menu-item:active, .menu-item:focus {
     display: flex;
     flex-direction: column;
     height: 50px;
@@ -58,4 +58,9 @@ button:focus {color: black;}
 
 .index-title{
 	padding-top: 10px;
+}
+
+.active, .active:active, .active:focus{
+    background-color: green;
+    color: white
 }
