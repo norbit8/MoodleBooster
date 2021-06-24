@@ -23,7 +23,7 @@ function addStyle(styleString) {
     document.head.append(style);
 }
 
-function isPageInEnglish(){
+function isPageInEnglish() {
     return document.querySelector('.dropdown-toggle.nav-link').innerText.trim() === "English"
 }
 
@@ -40,16 +40,16 @@ const getTemplate = (minTime, maxTime) => {
     tableRows = tableRows.join().replaceAll(',', '');
     const isHebrew = !isPageInEnglish()
     return `
-    <h5>${isHebrew ? 'זמני הקורס': 'Course Schedule'}</h5>
+    <h5>${isHebrew ? 'זמני הקורס' : 'Course Schedule'}</h5>
     <table class="scheduale-table">
         <thead>
             <tr>
                 <th style="width: 3%;"></th>
-                <th style="width: 19%;"> ${isHebrew ? 'א': 'Sunday'} </th>
-                <th style="width: 19%;"> ${isHebrew ? 'ב': 'Monday'} </th>
-                <th style="width: 19%;"> ${isHebrew ? 'ג': 'Tuesday'} </th>
-                <th style="width: 19%;"> ${isHebrew ? 'ד': 'Wednesday'} </th>
-                <th style="width: 19%;"> ${isHebrew ? 'ה': 'Thursday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'א' : 'Sunday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ב' : 'Monday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ג' : 'Tuesday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ד' : 'Wednesday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ה' : 'Thursday'} </th>
             </tr>
         </thead>
         <tbody>
@@ -59,12 +59,7 @@ const getTemplate = (minTime, maxTime) => {
     `;
 }
 
-/**
- * Adds styles for the scheduale - TEMP, couldn't add css file.
- */
-//TODO: inject with css file using the new cdn like dark-mode and monochrome
-const addStyles = () => {
-    addStyle(`
+const STYLE = `
     .scheduale-area{
         border-bottom: 1px solid #dee2e6;
         display: flex;
@@ -72,8 +67,12 @@ const addStyles = () => {
         justify-content: center;
         padding: 10px;
         margin-bottom: 5px;
+        width:100%;
     }
-
+    .scheduale-area h5{
+            font-size: 20px;
+            font-weight: 500;
+    }
     .scheduale-table{
         width: 100%;
         text-align: center;
@@ -90,8 +89,7 @@ const addStyles = () => {
     .scheduale-table thead{
         background-color: #e2e2e2;
     }
-    `);
-}
+    `
 
 const getMinMaxTimes = (data) => {
     let minTime = 20;
@@ -110,16 +108,14 @@ const getMinMaxTimes = (data) => {
 }
 
 const addCourseScheduale = () => {
-    let courseContent = document.getElementsByClassName("course-content");
-    if (courseContent) {
-        addStyles();
+    let dashboard = window.moodleBoosterDashboard
+    if (dashboard) {
         let dataToAdd = getSchedualeData();
         let {minTime, maxTime} = getMinMaxTimes(dataToAdd);
-        let topDiv = courseContent[0];
-        var courseScheduale = document.createElement("div");
-        courseScheduale.className = 'scheduale-area'
-        courseScheduale.innerHTML = getTemplate(minTime, maxTime);
-        topDiv.insertBefore(courseScheduale, topDiv.childNodes[0]);
+        let courseSchedule = document.createElement("div");
+        courseSchedule.className = 'scheduale-area'
+        courseSchedule.innerHTML = getTemplate(minTime, maxTime);
+        dashboard.insertHtmlToDashboard(courseSchedule, STYLE)
         addDataToScheduale(dataToAdd);
     }
 }
@@ -154,7 +150,7 @@ const addDataToScheduale = (dataToAdd) => {
                 <div>${typeName}</div>
                 <div>${isHebrew ? "קבוצה:" : "Group:"} ${data["group"]}</div>
                 <div>${isHebrew ? "מרצה:" : "Teacher:"} ${data["teacher"]}</div>
-                ${ data["location"] !== "Unknown" ? `<div>${data["location"]}</div>` : ""}
+                ${data["location"] !== "Unknown" ? `<div>${data["location"]}</div>` : ""}
             `
         }
     }

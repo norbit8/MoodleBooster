@@ -1,7 +1,7 @@
 let DEGREES = 0;
 const DEGREES_TO_REVERSE = 180;
 
-const STYLE = `
+const BUTTON_STYLE = `
     .reverse-button{
         background-color: #269CE9;
         border: none;
@@ -39,7 +39,7 @@ const addCourseReverse = () => {
             }
 
         });
-        dashboard.insertHtmlToDashboard(reverseCourseBtn, STYLE)
+        dashboard.insertHtmlToDashboard(reverseCourseBtn, BUTTON_STYLE)
     }
 }
 
