@@ -1,10 +1,7 @@
 let DEGREES = 0;
 const DEGREES_TO_REVERSE = 180;
 
-//TODO: Move CSS to CDN.
-const addButtonStyle = () => {
-    const style = document.createElement('style');
-    style.textContent = `
+const STYLE = `
     .reverse-button{
         background-color: #269CE9;
         border: none;
@@ -25,16 +22,12 @@ const addButtonStyle = () => {
     .reverse-button:active{
         background: #269CE9;
     }
-    `;
-    document.head.append(style);
-}
+    `
 
 const addCourseReverse = () => {
-    let dashboard = document.getElementsByClassName("dashboard-container");
-    if (dashboard) {
-        addButtonStyle();
-        let topDiv = dashboard[0];
-        var reverseCourseBtn = document.createElement("button");
+    const dashboard = window.moodleBoosterDashboard
+    if (dashboard !== null) {
+        let reverseCourseBtn = document.createElement("button");
         reverseCourseBtn.innerHTML = 'Reverse topics order';
         reverseCourseBtn.className = 'reverse-button';
         reverseCourseBtn.addEventListener('click', async function () {
@@ -44,8 +37,9 @@ const addCourseReverse = () => {
             for (let topicIndex = 0; topicIndex < allTopics.length; ++topicIndex) {
                 allTopics[topicIndex].style.transform = `rotate(${DEGREES}deg)`;
             }
+
         });
-        topDiv.insertBefore(reverseCourseBtn, topDiv.childNodes[1]);
+        dashboard.insertHtmlToDashboard(reverseCourseBtn, STYLE)
     }
 }
 

@@ -40,7 +40,11 @@ class Dashboard{
     }
     insertHtmlToDashboard(strictHtml,style){
         try{
-            this.container.insertAdjacentHTML('beforeend',strictHtml );
+            if(typeof strictHtml === "string" ){
+                this.container.insertAdjacentHTML('beforeend',strictHtml);
+            }else{
+                this.container.insertAdjacentElement('beforeend',strictHtml)
+            }
             this.addStyle(style);
         }catch(err){
             console.log(err)
@@ -55,6 +59,7 @@ function isInCourseView(){
 
 async function createDashboard() {
     const dashboard = new Dashboard()
+    window.moodleBoosterDashboard = dashboard
     dashboard.insertHtmlToDashboard('<h1 class="title">MoodleBooster Dashboard</h1>',`.title{font-family:Arial; margin-bottom:15px;}`)
 }
 
