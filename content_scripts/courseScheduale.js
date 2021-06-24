@@ -23,6 +23,10 @@ function addStyle(styleString) {
     document.head.append(style);
 }
 
+function isPageInEnglish(){
+    return document.querySelector('.dropdown-toggle.nav-link').innerText.trim() === "English"
+}
+
 const getTemplate = (minTime, maxTime) => {
     let days = ["sun", "mon", "tue", "wed", "thu"];
     let tableRows = [];
@@ -34,17 +38,18 @@ const getTemplate = (minTime, maxTime) => {
         tableRows.push(`<tr>${dayRow}</tr>`);
     }
     tableRows = tableRows.join().replaceAll(',', '');
+    const isHebrew = !isPageInEnglish()
     return `
-    <h5>זמני הקורס</h5>
+    <h5>${isHebrew ? 'זמני הקורס': 'Course Schedule'}</h5>
     <table class="scheduale-table">
         <thead>
             <tr>
                 <th style="width: 3%;"></th>
-                <th style="width: 19%;"> א </th>
-                <th style="width: 19%;"> ב </th>
-                <th style="width: 19%;"> ג </th>
-                <th style="width: 19%;"> ד </th>
-                <th style="width: 19%;"> ה </th>
+                <th style="width: 19%;"> ${isHebrew ? 'א': 'Sunday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ב': 'Monday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ג': 'Tuesday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ד': 'Wednesday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ה': 'Thursday'} </th>
             </tr>
         </thead>
         <tbody>
@@ -120,21 +125,22 @@ const addCourseScheduale = () => {
 }
 
 const addDataToScheduale = (dataToAdd) => {
+    const isHebrew = !isPageInEnglish()
     for (let data of dataToAdd) {
         let typeColor = '#e2e2e2';
         let typeName = 'סוג לא ידוע';
         switch (data["type"]) {
             case 'T':
                 typeColor = '#ffd359';
-                typeName = 'תרגול';
+                typeName = isHebrew ? 'תרגול' : "Tirgul";
                 break;
             case 'S':
                 typeColor = '#ff78df';
-                typeName = 'סדנה';
+                typeName = isHebrew ? 'סדנה' : "Workshop";
                 break;
             case 'C':
                 typeColor = '#9aff91';
-                typeName = 'שיעור';
+                typeName = isHebrew ? 'שיעור' : "Lecture";
                 break;
             case 'Q':
                 typeColor = '#9ef0ff';
@@ -146,9 +152,9 @@ const addDataToScheduale = (dataToAdd) => {
             cell.style.backgroundColor = typeColor;
             cell.innerHTML = `
                 <div>${typeName}</div>
-                <div>קבוצה: ${data["group"]}</div>
-                <div>${data["teacher"]}</div>
-                <div>${data["location"]}</div>
+                <div>${isHebrew ? "קבוצה:" : "Group:"} ${data["group"]}</div>
+                <div>${isHebrew ? "מרצה:" : "Teacher:"} ${data["teacher"]}</div>
+                ${ data["location"] !== "Unknown" ? `<div>${data["location"]}</div>` : ""}
             `
         }
     }
@@ -178,7 +184,7 @@ const getSchedualeData = () => {
                     } else {
                         switch (cellIndex) {
                             case 0:
-                                schedualeRawData[dataIndex].push("מיקום לא ידוע")
+                                schedualeRawData[dataIndex].push("Unknown")
                                 break;
                             case 3:
                                 schedualeRawData[dataIndex].push("קבוצה לא ידועה")
