@@ -34,6 +34,8 @@
             btn.type = "button";
             btn.id = "bruh" + courseIndex;
             btn.className = "btn-close";
+            btn.style = "background-color: Transparent;border: none;overflow: hidden;color: #ca3120 !important;font: caption;"
+            btn.innerHTML = "✖";
             btn.addEventListener('click', async function () {
                 const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
                 const courseID = new URL(link).searchParams.get("id")
