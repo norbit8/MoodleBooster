@@ -34,6 +34,8 @@
             btn.type = "button";
             btn.id = "bruh" + courseIndex;
             btn.className = "btn-close";
+            btn.style = "background-color: Transparent;border: none;overflow: hidden;color: #961406 !important;font: caption; font-size: 20px !important;"
+            btn.innerHTML = "✖";
             btn.addEventListener('click', async function () {
                 const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
                 const courseID = new URL(link).searchParams.get("id")
@@ -41,6 +43,12 @@
                 await btnCleaner();
                 courses_list[courseIndex].remove();
                 addCourseRemovingOption(); // refresh indecies.
+            });
+            btn.addEventListener("mouseover", function() {
+                this.style.color = "#ff1c03";
+              });
+            btn.addEventListener("mouseout", function() {
+            this.style.color = "#961406";
             });
             courses_list[courseIndex].insertBefore(btn, courses_list[courseIndex].firstChild);
         }

@@ -11,14 +11,10 @@
       "matches": [
         "*://*.ac.il/*"
       ],
-      "css": [
-        "bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css"
-      ],
       "js": [
         "/webextension-polyfill/dist/browser-polyfill.js",
         "/content_scripts/dashboard.js",
         "/content_scripts/storageLoader.js",
-        "bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js",
         "/content_scripts/courseScheduale.js",
         "/content_scripts/courseReverseOrder.js"
       ],
