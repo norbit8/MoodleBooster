@@ -147,6 +147,7 @@ function setIconListeners() {
 }
 
 async function loader() {
+    listenForContentScriptsMessages()
     setIconListeners()
     listenForClicks()
     listenForRange()
