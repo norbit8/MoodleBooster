@@ -6,28 +6,22 @@
     --text-schedule-text: #03dac5;
 }
 
-body input,body div,body select{
-    border-color: white !important;
-}
-
-.scheduale-table th {
-    background-color: var(--header-background) !important;
-    color: var(--text-schedule-title);
-    border-color: white !important;
-}
-.scheduale-area {
-   border-color: white !important;
-}
-
-.scheduale-table td {
+body, a, span, nav.footer, table, tr, td, th {
+    color: var(--text) !important;
     background-color: var(--background) !important;
-    color: var(--text-schedule-text);
-    border-color: white !important;
 }
 
-.navbar, .navbar * {
-    background-color: var(--header-background) !important;
-    color: var(--text);
+.course-content *, footer#page-footer.bg-dark, .popover-header, .popover-body, .forumng-post.forumng-read {
+    color: var(--text) !important;
+    background-color: var(--background) !important;
+}
+
+div, section {
+    background-color: var(--background) !important;
+}
+
+body input, body div, body select {
+    border-color: white !important;
 }
 
 input, select {
@@ -35,15 +29,17 @@ input, select {
     color: white !important;
 }
 
+.navbar, .navbar * {
+    background-color: var(--header-background) !important;
+    color: var(--text) !important;
+}
+
+a, h1, h2, h3, h4, .scheduale-area > h5, b {
+    color: var(--text) !important;
+}
 .dimmed_text:link {
     color: #AAA !important;
 }
-
-body, a, span, nav.footer, footer#page-footer.bg-dark, .popover-header, .popover-body {
-    color: var(--text) !important;
-    background-color: var(--background) !important;
-}
-
 
 #page-header div.d-flex {
     border: white 0.1rem solid;
@@ -57,18 +53,11 @@ body, a, span, nav.footer, footer#page-footer.bg-dark, .popover-header, .popover
     background-color: transparent !important;
 }
 
-a, h1, h2, h3, h4, .scheduale-area > h5, b {
-    color: var(--text) !important;
-}
 
 h5, h6 {
     color: black !important;
 }
 
-
-div, section {
-    background-color: var(--background) !important;
-}
 
 #frame2-page, .card.mb-3 {
     border: white 0.1rem solid;
@@ -80,4 +69,20 @@ div, section {
     background-image: none !important;
     background-color: transparent !important;
     color: white !important;
+}
+
+.scheduale-table th {
+    background-color: var(--header-background) !important;
+    color: var(--text-schedule-title) !important;
+    border-color: white !important;
+}
+
+.scheduale-area {
+    border-color: white !important;
+}
+
+.scheduale-table td {
+    background-color: var(--background) !important;
+    color: var(--text-schedule-text) !important;
+    border-color: white !important;
 }
