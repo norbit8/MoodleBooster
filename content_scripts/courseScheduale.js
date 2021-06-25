@@ -45,7 +45,7 @@ const getTemplate = (minTime, maxTime) => {
         <thead>
             <tr>
                 <th style="width: 3%;"></th>
-                <th style="width: 19%;"> ${isHebrew ? 'א' : 'Sunday'} </th>
+                <th style="width: 19%;"> ${isHebrew ? 'ראשון' : 'Sunday'} </th>
                 <th style="width: 19%;"> ${isHebrew ? 'ב' : 'Monday'} </th>
                 <th style="width: 19%;"> ${isHebrew ? 'ג' : 'Tuesday'} </th>
                 <th style="width: 19%;"> ${isHebrew ? 'ד' : 'Wednesday'} </th>
