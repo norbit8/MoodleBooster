@@ -1,5 +1,6 @@
 "use strict";
 
+const currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML
 const defaultSaveSettings = {
     'RemovedCourses': [],
     'courseRemoverStatus': false,
@@ -235,10 +236,10 @@ async function loadSave() {
      *  if it doesn't then it creates one)
      * and then it initialize the page according to the instructions given in the loaded settings.
      */
-    var moodleBoosterData = localStorage.getItem('MoodleBooster');   // Load MoodleBooster's data from the localStorage
+    var moodleBoosterData = localStorage.getItem('MoodleBooster' + currentYear);   // Load MoodleBooster's data from the localStorage
     // ---------------- SAVE NOT FOUND ----------------
     if (moodleBoosterData == null) {  // No data => init one.
-        localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
+        localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(defaultSaveSettings));
     }
         // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
@@ -329,7 +330,7 @@ function handleCourseRemoverAction(parsedData, payload) {
 
 function resetCourseRemoverStatus(parsedData) {
     parsedData.courseRemoverStatus = false;
-    localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
+    localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(parsedData));
 }
 
 /**
@@ -337,7 +338,7 @@ function resetCourseRemoverStatus(parsedData) {
  */
 function listenForBackgroundMessages() {
     browser.runtime.onMessage.addListener(({action, payload}) => {
-        let parsedData = JSON.parse(localStorage.getItem('MoodleBooster'));
+        let parsedData = JSON.parse(localStorage.getItem('MoodleBooster' + currentYear));
         switch (action) {
             case "DarkMode":
                 handleDarkModeAction(parsedData, payload);
@@ -355,7 +356,7 @@ function listenForBackgroundMessages() {
                 parsedData = defaultSaveSettings;
                 break
         }
-        localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
+        localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(parsedData));
         return Promise.resolve(parsedData);
     });
 }
@@ -368,9 +369,9 @@ function saveToStorage(parameter, data, overwrite = true) {
      * > data: Self-explanatory.
      * > overwrite: Should the function overwrite the current data with the given one?
      */
-    var moodleBoosterData = localStorage.getItem('MoodleBooster');
+    var moodleBoosterData = localStorage.getItem('MoodleBooster' + currentYear);
     if (moodleBoosterData == null) {  // No data => init one.
-        localStorage.setItem('MoodleBooster', JSON.stringify(defaultSaveSettings));
+        localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(defaultSaveSettings));
     }
     var parsedData = JSON.parse(moodleBoosterData);
     // TODO: make sure that the parameter is a valid one.
@@ -379,7 +380,7 @@ function saveToStorage(parameter, data, overwrite = true) {
     } else {
         parsedData[parameter].push(data);
     }
-    localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
+    localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(parsedData));
 }
 
 
