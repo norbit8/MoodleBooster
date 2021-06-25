@@ -26,7 +26,7 @@ There are two ways to run our extension, the difference between them is that by 
 **First Way (Recommended):**
 
 - Download Firefox ([🔥Firefox](https://www.mozilla.org/en-US/firefox/new/)) or Chrome ([🔥Chrome](https://www.google.com/chrome/)).
-- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows), [on Ubuntu](https://www.liquidweb.com/kb/create-clone-repo-github-ubuntu-18-04/)
+- Install Node.js and NPM if not already installed: [on Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows), [on Ubuntu](https://www.liquidweb.com/kb/create-clone-repo-github-ubuntu-18-04/) (Currently we support vesrions : node>=12.0.0 , 7.0.0>npm>=6.9.0)
 - Clone the repo to your pc, by running the following command:  
   `git clone https://github.com/norbit8/MoodleBooster.git`
 - Run `npm install` in the root directory of the project to install all dependencies.
