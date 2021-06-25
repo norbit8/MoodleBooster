@@ -147,11 +147,14 @@ const setLineSpacing = (lineSpacingValue) => {
     }
 }
 
-function addSemesterCourses(coursesList, semesterA, title) {
+function addSemesterCourses(coursesList, semesterCourses, title) {
+    if (semesterCourses.length === 0) {
+        return
+    }
     const semesterTitle = document.createElement('li')
     semesterTitle.appendChild(document.createTextNode(title))
     coursesList.appendChild(semesterTitle)
-    for (const semesterAElement of semesterA) {
+    for (const semesterAElement of semesterCourses) {
         coursesList.appendChild(semesterAElement)
     }
 }
