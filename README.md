@@ -7,8 +7,8 @@
 Firefox (Soon to be Chrome) extension / add-on that boosts moodle's UI/UX \
 You can download our production version add-on on [Mozilla's website](https://addons.mozilla.org/en-US/firefox/addon/moodlebooster/).
 
-![256909](https://user-images.githubusercontent.com/18491183/121560059-d5851e00-ca1f-11eb-9b50-452cbd2630ab.png)
-![256910](https://user-images.githubusercontent.com/18491183/121560114-e2097680-ca1f-11eb-8049-bc2e66ebd850.png)
+<img width="400" alt="Screen Shot 2021-06-25 at 23 24 41" src="https://user-images.githubusercontent.com/18491183/123481580-9ef8f700-d60c-11eb-9a5f-c0770e9a2aac.png"> <img width="400" alt="Screen Shot 2021-06-25 at 23 24 56" src="https://user-images.githubusercontent.com/18491183/123481593-a3251480-d60c-11eb-9933-0ab5b22cd2b4.png">
+
 
 ## Table of Contents
 
