@@ -13,11 +13,16 @@ body input,body div,body select{
 .scheduale-table th {
     background-color: var(--header-background) !important;
     color: var(--text-schedule-title);
+    border-color: white !important;
+}
+.scheduale-area {
+   border-color: white !important;
 }
 
 .scheduale-table td {
     background-color: var(--background) !important;
     color: var(--text-schedule-text);
+    border-color: white !important;
 }
 
 .navbar, .navbar * {
