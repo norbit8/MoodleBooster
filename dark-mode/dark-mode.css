@@ -6,7 +6,12 @@
     --text-schedule-text: #03dac5;
 }
 
-body, a, span, nav.footer, footer#page-footer.bg-dark, .popover-header, .popover-body,table,tr,td,th {
+body, a, span, nav.footer, table, tr, td, th {
+    color: var(--text) !important;
+    background-color: var(--background) !important;
+}
+
+.course-content *, footer#page-footer.bg-dark, .popover-header, .popover-body, .forumng-post.forumng-read {
     color: var(--text) !important;
     background-color: var(--background) !important;
 }
@@ -15,7 +20,7 @@ div, section {
     background-color: var(--background) !important;
 }
 
-body input,body div,body select{
+body input, body div, body select {
     border-color: white !important;
 }
 
@@ -69,6 +74,7 @@ h5, h6 {
     color: var(--text-schedule-title) !important;
     border-color: white !important;
 }
+
 .scheduale-area {
     border-color: white !important;
 }
