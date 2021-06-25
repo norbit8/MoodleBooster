@@ -77,7 +77,7 @@ const setFontSize = (sizeValue) => {
 }
 
 const setContrast = (contrastValue) => {
-    if(!document.getElementsByTagName("body")[0].style.filter.includes("contrast")){
+    if (!document.getElementsByTagName("body")[0].style.filter.includes("contrast")) {
         document.getElementsByTagName("body")[0].style.filter += "contrast(1)";
     }
     let value = document.getElementsByTagName("body")[0].style.filter;
@@ -103,7 +103,7 @@ const setContrast = (contrastValue) => {
 }
 
 const setSaturation = (saturationValue) => {
-    if(!document.getElementsByTagName("body")[0].style.filter.includes("saturate")){
+    if (!document.getElementsByTagName("body")[0].style.filter.includes("saturate")) {
         document.getElementsByTagName("body")[0].style.filter += "saturate(1)";
     }
     let value = document.getElementsByTagName("body")[0].style.filter;
@@ -147,6 +147,47 @@ const setLineSpacing = (lineSpacingValue) => {
     }
 }
 
+function addSemesterCourses(coursesList, semesterCourses, title) {
+    if (semesterCourses.length === 0) {
+        return
+    }
+    const semesterTitle = document.createElement('li')
+    semesterTitle.appendChild(document.createTextNode(title))
+    coursesList.appendChild(semesterTitle)
+    for (const semesterAElement of semesterCourses) {
+        coursesList.appendChild(semesterAElement)
+    }
+}
+
+function rearrangeCourses(parsedData) {
+    if (!parsedData['userCoursesBySemester']) {
+        return
+    }
+    const semesterA = []
+    const semesterB = []
+    const unknownSemester = []
+    let coursesList = document.querySelector('.type_system.depth_2.contains_branch > ul')
+    if (coursesList === null) {
+        return
+    }
+    coursesList.childNodes.forEach(c => {
+        const link = c.querySelector("a[href]").getAttribute("href")
+        const courseID = new URL(link).searchParams.get("id")
+        if (parsedData['userCoursesBySemester']['a'].includes(courseID)) {
+            semesterA.push(c)
+        } else if (parsedData['userCoursesBySemester']['b'].includes(courseID)) {
+            semesterB.push(c)
+        } else {
+            unknownSemester.push(c)
+        }
+    })
+    coursesList.childNodes.forEach(c => c.remove())
+
+    addSemesterCourses(coursesList, semesterA, "Semester A")
+    addSemesterCourses(coursesList, semesterB, "Semester B")
+    addSemesterCourses(coursesList, unknownSemester, "Semester Unknown")
+}
+
 function removeCoursesByConfiguration(parsedData) {
     if (parsedData.RemovedCourses.length !== 0) {
         var courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
@@ -161,6 +202,30 @@ function removeCoursesByConfiguration(parsedData) {
             }
         }
     }
+}
+
+async function saveUserCoursesBySemester(parsedData) {
+    if (parsedData['userCoursesBySemester']) {
+        return
+    }
+    let userCoursesBySemester = {
+        "a": [],
+        "b": [],
+        "Unknown": []
+    }
+    let courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
+    if (courses_list.length === 0) {
+        return
+    }
+    for (let courseIndex = 0; courseIndex < courses_list.length - 1; ++courseIndex) {
+        const link = courses_list[courseIndex].querySelector("a[href]").getAttribute("href")
+        const courseID = new URL(link).searchParams.get("id")
+        const semester = await getCourseSemester(courseID)
+        userCoursesBySemester[semester].push(courseID)
+    }
+    console.log(userCoursesBySemester)
+    saveToStorage('userCoursesBySemester', userCoursesBySemester, true)
+    parsedData['userCoursesBySemester'] = userCoursesBySemester
 }
 
 async function loadSave() {
@@ -178,7 +243,7 @@ async function loadSave() {
         // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
     else {  // Found MoodleBooster data on the localStorage (Yay!)
-        var parsedData = JSON.parse(moodleBoosterData);        
+        var parsedData = JSON.parse(moodleBoosterData);
         // DarkMode
         if (parsedData.DarkMode) {
             addDarkMode();
@@ -195,6 +260,8 @@ async function loadSave() {
         setSaturation(parsedData.EnhancePage.Saturation);
         setLineSpacing(parsedData.EnhancePage.lineSpacing)
         // CourseRemover
+        await saveUserCoursesBySemester(parsedData)
+        rearrangeCourses(parsedData)
         removeCoursesByConfiguration(parsedData);
         resetCourseRemoverStatus(parsedData);
     }
@@ -211,7 +278,7 @@ function removeDarkMode() {
 }
 
 function handleEnhancePageAction(parsedData, payload) {
-    const {contrast, fontSize, saturation, cursor,lineSpacing} = payload
+    const {contrast, fontSize, saturation, cursor, lineSpacing} = payload
     if (cursor === "big") {
         makeCursorBigger();
         parsedData.EnhancePage.cursor = "big"
@@ -228,7 +295,7 @@ function handleEnhancePageAction(parsedData, payload) {
         setContrast(contrast);
         parsedData.EnhancePage.Contrast = contrast;
     }
-    if(lineSpacing){
+    if (lineSpacing) {
         setLineSpacing(lineSpacing)
         parsedData.EnhancePage.lineSpacing = lineSpacing;
     }
@@ -256,11 +323,11 @@ function handleDarkModeAction(parsedData, payload) {
     }
 }
 
-function handleCourseRemoverAction(parsedData, payload){
+function handleCourseRemoverAction(parsedData, payload) {
     parsedData.courseRemoverStatus = payload.val;
 }
 
-function resetCourseRemoverStatus(parsedData){
+function resetCourseRemoverStatus(parsedData) {
     parsedData.courseRemoverStatus = false;
     localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
 }
@@ -315,6 +382,23 @@ function saveToStorage(parameter, data, overwrite = true) {
     localStorage.setItem('MoodleBooster', JSON.stringify(parsedData));
 }
 
+
+/**
+ * Send messages with request that contains action to be preformed and payload to the storageLoader
+ */
+async function sendMessageToBackgroundScript(action, payload = {}) {
+    /**
+     * Send Message to the content-script
+     */
+    const resp = await browser.runtime.sendMessage(
+        {
+            action: action,
+            payload: payload
+        }
+    )
+    return resp.response
+}
+
 /**
  * General method to scrape DOM inside html
  * @param url   The url consisting the DOM element
@@ -324,43 +408,36 @@ function saveToStorage(parameter, data, overwrite = true) {
  *                                                   otherwise just one DOM element
  */
 async function scrapeWebsiteDOM(url, cssSelector, all = false) {
-    const CharSetInContentType = "charset="
+    const html = await sendMessageToBackgroundScript("FetchHtml", {url: url})
     let parser = new DOMParser()
-    let response = await fetch(url)
-    const contentType = response.headers.get('Content-Type')
-    const charsetStartIndex = contentType.lastIndexOf(CharSetInContentType)
-    let htmlDoc
-
-    // in case the charset of the html is different than utf-8 we encoding it with the correct charset format we got from Content-Type
-    if (charsetStartIndex !== -1) {
-        const charSet = contentType.substring(charsetStartIndex + CharSetInContentType.length)
-        const html = new TextDecoder(charSet).decode(await response.arrayBuffer())
-        htmlDoc = parser.parseFromString(html, 'text/html')
-    } else {
-        htmlDoc = parser.parseFromString(await response.text(), 'text/html')
-    }
+    let htmlDoc = parser.parseFromString(html, 'text/html')
     return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
 }
 
 /**
  *  Initial scrapping functionality from Syllabus to get in which semester is a course by Syllabus content
  * @param courseId  The ID of the course to check
- * @returns {Promise<string>} "a" for semester A and "b" for semester B
+ * @returns {Promise<string>} "a" for semester A and "b" for semester B and Unknown in case not found
  */
 async function getCourseSemester(courseId) {
     const ValidCourseIdLength = 5
     courseId = courseId.trim()
-    if (courseId.length > ValidCourseIdLength){
-        throw "course id invalid"
+    if (courseId.length > ValidCourseIdLength) {
+        courseId = courseId.substring(0, ValidCourseIdLength)
     }
     // as syllabus expecting id with 5 chars we need to add prefix of 0s so the id will be with 5 chars
     if (courseId.length < ValidCourseIdLength) {
         let numOfZero = ValidCourseIdLength - courseId.length
         courseId = "0".repeat(numOfZero) + courseId
     }
+
     const semester = await scrapeWebsiteDOM(
         `https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`,
         '.hebItem:nth-of-type(4)')
+
+    if (semester == null) {
+        return 'Unknown'
+    }
     return semester.textContent.includes("ב'") ? "b" : "a"
 }
 

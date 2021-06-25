@@ -31,13 +31,15 @@ input, select {
 
 .navbar, .navbar * {
     background-color: var(--header-background) !important;
-    color: var(--text);
+    color: var(--text) !important;
 }
 
 a, h1, h2, h3, h4, .scheduale-area > h5, b {
     color: var(--text) !important;
 }
-
+.dimmed_text:link {
+    color: #AAA !important;
+}
 
 #page-header div.d-flex {
     border: white 0.1rem solid;

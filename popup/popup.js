@@ -147,10 +147,50 @@ function setIconListeners() {
 }
 
 async function loader() {
+    listenForContentScriptsMessages()
     setIconListeners()
     listenForClicks()
     listenForRange()
     sendMessageToTabs("")
+}
+
+
+/**
+ * General method to scrape DOM inside html
+ * @param url   The url consisting the DOM element
+ * @param cssSelector   CSS selector to find the DOM element
+ * @param all   Get all DOM elements matching the selector or just the first one (default false)
+ * @returns {Promise<String>}  Array of dom elements in case sent with all param "true"
+ *                                                   otherwise just one DOM element
+ */
+async function fetchHtml(url, cssSelector, all = false) {
+    const CharSetInContentType = "charset="
+    let response = await fetch(url)
+    const contentType = response.headers.get('Content-Type')
+    const charsetStartIndex = contentType.lastIndexOf(CharSetInContentType)
+
+    // in case the charset of the html is different than utf-8 we encoding it with the correct charset format we got from Content-Type
+    if (charsetStartIndex !== -1) {
+        const charSet = contentType.substring(charsetStartIndex + CharSetInContentType.length)
+        return new TextDecoder(charSet).decode(await response.arrayBuffer())
+    } else {
+        return await response.text()
+    }
+}
+
+
+/**
+ * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
+ */
+function listenForContentScriptsMessages() {
+    browser.runtime.onMessage.addListener(async ({action, payload}) => {
+        console.log("got message action", action, "payload ", payload)
+        switch (action) {
+            case "FetchHtml":
+                const res = await fetchHtml(payload.url)
+                return {response: res}
+        }
+    });
 }
 
 

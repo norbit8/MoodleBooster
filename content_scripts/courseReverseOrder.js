@@ -31,7 +31,7 @@ const isButtonExist = () => {
 
 const addCourseReverse = () => {
     const dashboard = window.moodleBoosterDashboard
-    if (dashboard !== null && !isButtonExist()) {
+    if (dashboard && !isButtonExist()) {
         let reverseCourseBtn = document.createElement("button");
         reverseCourseBtn.innerHTML = 'Reverse topics order';
         reverseCourseBtn.className = 'reverse-button';
