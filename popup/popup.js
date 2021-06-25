@@ -46,11 +46,8 @@ async function listenForClicks() {
 }
 
 async function handleReset() {
-    const confirm = window.confirm("Are you sure? reset is an irreversible action")
-    if (confirm) {
-        sendMessageToTabs("reset")
-        alert("Please refresh your browser tab to apply.")
-    }
+    await sendMessageToTabs("reset")
+    alert("Please refresh your browser tab to apply.")
 }
 
 /**
