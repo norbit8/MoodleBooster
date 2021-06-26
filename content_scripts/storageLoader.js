@@ -1,7 +1,7 @@
 "use strict";
 
 try {
-    var currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML 
+    var currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML
 } catch (error) {
     currentYear = ""
 }
@@ -69,16 +69,34 @@ const makeCursorBigger = () => {
 }
 
 const setFontSize = (sizeValue) => {
+    const dashboard = window.moodleBoosterDashboard;
     switch (sizeValue) {
         case "1":
             document.getElementsByTagName("body")[0].style.fontSize = "30px";
+            setTableFontSize('larger');
             return;
         case "2":
             document.getElementsByTagName("body")[0].style.fontSize = "50px";
+            setTableFontSize('large');
             return;
         default:
             document.getElementsByTagName("body")[0].style.fontSize = "";
+            setTableFontSize('meduim');
     }
+}
+
+const setTableFontSize = (sizeValue) => {
+    var tableStyle = document.getElementById('tableStyle');
+    var cssStr = `table {font-size:${sizeValue};}`;
+    if (!tableStyle) {
+        const style = document.createElement('style');
+        style.textContent = cssStr;
+        style.id = 'tableStyle';
+        document.head.append(style);
+    } else {
+        tableStyle.textContent = cssStr;
+    }
+
 }
 
 const setContrast = (contrastValue) => {
@@ -245,7 +263,7 @@ async function loadSave() {
     if (moodleBoosterData == null) {  // No data => init one.
         localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(defaultSaveSettings));
     }
-        // -------------------------------------------
+    // -------------------------------------------
     // ---------------- SAVE FOUND ---------------
     else {  // Found MoodleBooster data on the localStorage (Yay!)
         var parsedData = JSON.parse(moodleBoosterData);
@@ -283,7 +301,7 @@ function removeDarkMode() {
 }
 
 function handleEnhancePageAction(parsedData, payload) {
-    const {contrast, fontSize, saturation, cursor, lineSpacing} = payload
+    const { contrast, fontSize, saturation, cursor, lineSpacing } = payload
     if (cursor === "big") {
         makeCursorBigger();
         parsedData.EnhancePage.cursor = "big"
@@ -341,7 +359,7 @@ function resetCourseRemoverStatus(parsedData) {
  * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
  */
 function listenForBackgroundMessages() {
-    browser.runtime.onMessage.addListener(({action, payload}) => {
+    browser.runtime.onMessage.addListener(({ action, payload }) => {
         let parsedData = JSON.parse(localStorage.getItem('MoodleBooster' + currentYear));
         switch (action) {
             case "DarkMode":
@@ -413,7 +431,7 @@ async function sendMessageToBackgroundScript(action, payload = {}) {
  *                                                   otherwise just one DOM element
  */
 async function scrapeWebsiteDOM(url, cssSelector, all = false) {
-    const html = await sendMessageToBackgroundScript("FetchHtml", {url: url})
+    const html = await sendMessageToBackgroundScript("FetchHtml", { url: url })
     let parser = new DOMParser()
     let htmlDoc = parser.parseFromString(html, 'text/html')
     return all ? htmlDoc.querySelectorAll(cssSelector) : htmlDoc.querySelector(cssSelector)
@@ -445,7 +463,7 @@ async function getCourseSemester(courseId) {
     }
     const semesterContent = semester.textContent
 
-    if(semesterContent.includes("ב'") && semesterContent.includes("א'")){
+    if (semesterContent.includes("ב'") && semesterContent.includes("א'")) {
         return 'Unknown'
     }
 
