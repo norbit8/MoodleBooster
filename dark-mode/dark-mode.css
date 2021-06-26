@@ -1,74 +1,97 @@
 :root {
-    --text: whitesmoke;
-    --background: #222;
-    --header-background: #2c3034;
-    --text-schedule-title: #bb86fc;
-    --text-schedule-text: #03dac5;
+  --text: whitesmoke;
+  --background: #222;
+  --header-background: #2c3034;
+  --text-schedule-title: #bb86fc;
+  --text-schedule-text: #03dac5;
 }
 
-body input,body div,body select{
-    border-color: white !important;
+body input,
+body div,
+body select {
+  border-color: white !important;
 }
 
 .scheduale-table th {
-    background-color: var(--header-background) !important;
-    color: var(--text-schedule-title);
+  background-color: var(--header-background) !important;
+  color: var(--text-schedule-title);
 }
 
 .scheduale-table td {
-    background-color: var(--background) !important;
-    color: var(--text-schedule-text);
+  background-color: var(--background) !important;
+  color: var(--text-schedule-text);
 }
 
-.navbar, .navbar * {
-    background-color: var(--header-background) !important;
-    color: var(--text);
+.navbar,
+.navbar * {
+  background-color: var(--header-background) !important;
+  color: var(--text);
 }
 
-input, select {
-    background-color: #505967 !important;
-    color: white !important;
+input,
+select {
+  background-color: #505967 !important;
+  color: white !important;
 }
 
-body, a, span, nav.footer, footer#page-footer.bg-dark, .popover-header, .popover-body {
-    color: var(--text) !important;
-    background-color: var(--background) !important;
+body,
+a,
+span,
+nav.footer,
+footer#page-footer.bg-dark,
+.popover-header,
+.popover-body {
+  color: var(--text) !important;
+  background-color: var(--background) !important;
 }
-
 
 #page-header div.d-flex {
-    border: white 0.1rem solid;
-    border-radius: 16px !important;;
-    padding: 0.5rem;
-    margin-top: 0.4rem
+  border: white 0.1rem solid;
+  border-radius: 16px !important;
+  padding: 0.5rem;
+  margin-top: 0.4rem;
 }
 
 #page-header div.flex-wrap {
-    background-image: none !important;
-    background-color: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
 }
 
-a, h1, h2, h3, h4, .scheduale-area > h5, b {
-    color: var(--text) !important;
+a,
+h1,
+h2,
+h3,
+h4,
+.scheduale-area > h5,
+b {
+  color: var(--text) !important;
 }
 
-h5, h6 {
-    color: black !important;
+h5,
+h6 {
+  color: black !important;
 }
 
-
-div, section {
-    background-color: var(--background) !important;
+div,
+section {
+  background-color: var(--background) !important;
 }
 
-#frame2-page, .card.mb-3 {
-    border: white 0.1rem solid;
-    border-radius: 16px !important;;
-    padding: 0.5rem
+#frame2-page,
+.card.mb-3 {
+  border: white 0.1rem solid;
+  border-radius: 16px !important;
+  padding: 0.5rem;
 }
 
 .card-title {
-    background-image: none !important;
-    background-color: transparent !important;
-    color: white !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  color: white !important;
+}
+td > *,
+tr,
+table {
+  background-color: var(--background);
+  color: var(--text);
 }
