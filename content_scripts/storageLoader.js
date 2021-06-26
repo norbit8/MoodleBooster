@@ -1,6 +1,10 @@
 "use strict";
 
-const currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML
+try {
+    var currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML 
+} catch (error) {
+    currentYear = ""
+}
 const defaultSaveSettings = {
     'RemovedCourses': [],
     'courseRemoverStatus': false,
