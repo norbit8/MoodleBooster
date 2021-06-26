@@ -65,10 +65,11 @@ Pushing code to our master branch is forbidden.
 
 If you want to contribute, all you need to do is to
 
-1. Open a new branch (locally) and start working on it.
-2. Push it.
-3. Create a new pull request.
-4. Add new tag to main branch after pull request merge (Thank you! ❤️)
+1. Fork the repository (or if you're a contributor just clone this repo).
+2. Open a new branch (locally) and start working on it.
+3. Push it.
+4. Create a new pull request.
+5. Add new tag to main branch after pull request merge (Thank you! ❤️)
 
 <a name="Contributors"/>
 
