@@ -20,8 +20,8 @@
         "/content_scripts/storageLoader.js",
         "bootstrap-5.0.0-beta3-dist/js/bootstrap.min.js",
         "/content_scripts/courseScheduale.js",
-        "/content_scripts/courseReverseOrder.js",
-        "/content_scripts/csGrades.js"
+        "/content_scripts/csGrades.js",
+        "/content_scripts/courseReverseOrder.js"
       ],
       "run_at": "document_end"
     }

@@ -6,7 +6,7 @@ function addGradesButton() {
 
 }
 function isButtonExist() {
-    return getElementById('gradesBtn') !== null;
+    return document.getElementById('gradesBtn') !== null;
 
 }
 function isCsGradesAvailable() {
@@ -52,7 +52,7 @@ async function extractDataFromTable(table) {
                         return response.text()
                     })
                         .then((html) => parseCommentsFromCsAdmin(html, tableRow)
-                        );
+                        ).catch((e)=>console.error(e));
                 }
             }
         }
@@ -75,7 +75,7 @@ async function onShowGradesClicked(e, dashboard) {
     const table = section.querySelector('table');
     const tableRows = await extractDataFromTable(table);
 
-    let template = getTemplate(tableRows);
+    let template = getGradesTemplate(tableRows);
     let topDiv = document.getElementsByClassName("course-content")[0];
     var gradesDiv = document.createElement("div");
     gradesDiv.className = ''
@@ -84,7 +84,7 @@ async function onShowGradesClicked(e, dashboard) {
     topDiv.insertBefore(gradesDiv, topDiv.childNodes[0]);
     dashboard.removeSpinner();
 };
-function getTemplate(tableRows) {
+function getGradesTemplate(tableRows) {
     return `
      <h5>ציונים</h5>
      <table class="scheduale-table">
@@ -104,8 +104,5 @@ function getTemplate(tableRows) {
 
 
 
-if (isCsGradesAvailable()) { //Only if exists grades in cs admin add those
-    initCsGradesButton(dashboard);
-}
 addGradesButton()
 
