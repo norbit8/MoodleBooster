@@ -1,7 +1,7 @@
 "use strict";
 
 try {
-    var currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML 
+    var currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML
 } catch (error) {
     currentYear = ""
 }
@@ -357,8 +357,8 @@ function listenForBackgroundMessages() {
                 handleEnhancePageAction(parsedData, payload);
                 break
             case "reset":
-                parsedData = defaultSaveSettings;
-                break
+                localStorage.removeItem('MoodleBooster' + currentYear)
+                return
         }
         localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(parsedData));
         return Promise.resolve(parsedData);
