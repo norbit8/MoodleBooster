@@ -16,6 +16,7 @@
         "/content_scripts/dashboard.js",
         "/content_scripts/storageLoader.js",
         "/content_scripts/courseScheduale.js",
+        "/content_scripts/oneClickDownload.js",
         "/content_scripts/courseReverseOrder.js"
       ],
       "run_at": "document_end"

@@ -6,7 +6,7 @@ class Dashboard {
     createContainer() {
         try {
             const prevContainer = document.querySelector('.dashboard-container')
-            if(prevContainer !== null){
+            if (prevContainer !== null) {
                 prevContainer.remove()
             }
             const main = document.querySelector('[id="region-main-box"]')
@@ -29,6 +29,31 @@ class Dashboard {
         style.textContent = styleString;
         document.head.append(style);
     }
+    getButtonStyle() {
+        return `
+        .menu-button{
+            background-color: #269CE9;
+            border: none;
+            color: white;
+            padding: 6px 28px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+            font-size: 14px;
+            border-radius: 5px;
+            font-weight: bold;
+          }
+          
+        .menu-button:hover{
+            background-color: #70B9E8;
+        }
+        
+        .menu-button:active{
+            background: #269CE9;
+        }
+        `
+    };
 
     addDashboardContainerStyle() {
         this.addStyle(`
