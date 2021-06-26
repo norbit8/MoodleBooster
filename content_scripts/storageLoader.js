@@ -178,9 +178,9 @@ function rearrangeCourses(parsedData) {
     coursesList.childNodes.forEach(c => {
         const link = c.querySelector("a[href]").getAttribute("href")
         const courseID = new URL(link).searchParams.get("id")
-        if (parsedData['userCoursesBySemester']['a'].includes(courseID)) {
+        if (parsedData['userCoursesBySemester']['Semester A'].includes(courseID)) {
             semesterA.push(c)
-        } else if (parsedData['userCoursesBySemester']['b'].includes(courseID)) {
+        } else if (parsedData['userCoursesBySemester']['Semester B'].includes(courseID)) {
             semesterB.push(c)
         } else {
             unknownSemester.push(c)
@@ -214,8 +214,8 @@ async function saveUserCoursesBySemester(parsedData) {
         return
     }
     let userCoursesBySemester = {
-        "a": [],
-        "b": [],
+        "Semester A": [],
+        "Semester B": [],
         "Unknown": []
     }
     let courses_list = [...document.getElementsByClassName('type_course depth_3 contains_branch')];
@@ -422,7 +422,7 @@ async function scrapeWebsiteDOM(url, cssSelector, all = false) {
 /**
  *  Initial scrapping functionality from Syllabus to get in which semester is a course by Syllabus content
  * @param courseId  The ID of the course to check
- * @returns {Promise<string>} "a" for semester A and "b" for semester B and Unknown in case not found
+ * @returns {Promise<string>} "Semester A/B" for semester A and B. Unknown if course's is learnt in both semesters.
  */
 async function getCourseSemester(courseId) {
     const ValidCourseIdLength = 5
@@ -440,10 +440,16 @@ async function getCourseSemester(courseId) {
         `https://shnaton.huji.ac.il/index.php/NewSyl/${courseId}/1/2021/`,
         '.hebItem:nth-of-type(4)')
 
-    if (semester == null) {
+    if (semester === null || (semester.textContent.includes("ב'") && semester.textContent.includes("א'"))) {
         return 'Unknown'
     }
-    return semester.textContent.includes("ב'") ? "b" : "a"
+    const semesterContent = semester.textContent
+
+    if(semesterContent.includes("ב'") && semesterContent.includes("א'")){
+        return 'Unknown'
+    }
+
+    return semester.textContent.includes("ב'") ? "Semester B" : "Semester A"
 }
 
 
