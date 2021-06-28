@@ -73,11 +73,11 @@ const setFontSize = (sizeValue) => {
     switch (sizeValue) {
         case "1":
             document.getElementsByTagName("body")[0].style.fontSize = "30px";
-            setTableFontSize('larger');
+            setTableFontSize('large');
             return;
         case "2":
             document.getElementsByTagName("body")[0].style.fontSize = "50px";
-            setTableFontSize('large');
+            setTableFontSize('larger');
             return;
         default:
             document.getElementsByTagName("body")[0].style.fontSize = "";
