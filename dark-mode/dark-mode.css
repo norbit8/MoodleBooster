@@ -6,7 +6,7 @@
     --text-schedule-text: #03dac5;
 }
 
-body, a, span, nav.footer, table, tr, td, th {
+body, a, span, nav.footer, table, tr, td, th,form * {
     color: var(--text) !important;
     background-color: var(--background) !important;
 }
@@ -85,4 +85,9 @@ h5, h6 {
     background-color: var(--background) !important;
     color: var(--text-schedule-text) !important;
     border-color: white !important;
+}
+
+section[role=navigation] span.thispageholder{
+    background-color: transparent !important;
+    color: black !important;
 }
