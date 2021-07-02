@@ -29,7 +29,6 @@
   },
   "permissions": [
     "*://*.ac.il/*cs/*",
-    "downloads",
     "activeTab",
     "tabs"
   ],

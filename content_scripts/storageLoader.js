@@ -1,24 +1,11 @@
 "use strict";
 
 try {
-    var currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML 
+    var currentYear = document.querySelector(".page-header-headings").children[0].querySelectorAll("span")[1].innerHTML
 } catch (error) {
     currentYear = ""
 }
-const defaultSaveSettings = {
-    'RemovedCourses': [],
-    'courseRemoverStatus': false,
-    'DarkMode': false,
-    'EnhancePage': {
-        'Monochrome': false,
-        'FontSize': "0",
-        'Contrast': "2",
-        'Saturation': "2",
-        'lineSpacing': "2",
-        'cursor': "normal"
-    },
-};
-
+const storageKey = 'MoodleBooster' + currentYear
 const repoVersion = "latest"
 const repo = `MoodleBooster@${repoVersion}`
 
@@ -228,49 +215,43 @@ async function saveUserCoursesBySemester(parsedData) {
         const semester = await getCourseSemester(courseID)
         userCoursesBySemester[semester].push(courseID)
     }
-    console.log(userCoursesBySemester)
-    saveToStorage('userCoursesBySemester', userCoursesBySemester, true)
+    await sendMessageToBackgroundScript("SetStorageParam", {
+        key: storageKey,
+        param: "userCoursesBySemester",
+        data: userCoursesBySemester,
+        overwrite: true
+    })
     parsedData['userCoursesBySemester'] = userCoursesBySemester
 }
 
+/**
+ * >>> IMPORTANT <<<
+ * Loads the recently saved settings of the MoodleBooster addon (if one exists,
+ *  if it doesn't then it creates one)
+ * and then it initialize the page according to the instructions given in the loaded settings.
+ */
 async function loadSave() {
-    /**
-     * >>> IMPORTANT <<<
-     * Loads the recently saved settings of the MoodleBooster addon (if one exists,
-     *  if it doesn't then it creates one)
-     * and then it initialize the page according to the instructions given in the loaded settings.
-     */
-    var moodleBoosterData = localStorage.getItem('MoodleBooster' + currentYear);   // Load MoodleBooster's data from the localStorage
-    // ---------------- SAVE NOT FOUND ----------------
-    if (moodleBoosterData == null) {  // No data => init one.
-        localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(defaultSaveSettings));
+    var parsedData = await sendMessageToBackgroundScript("GetStorage", {key: storageKey});   // Load MoodleBooster's data from the localStorage
+    // DarkMode
+    if (parsedData.DarkMode) {
+        addDarkMode();
     }
-        // -------------------------------------------
-    // ---------------- SAVE FOUND ---------------
-    else {  // Found MoodleBooster data on the localStorage (Yay!)
-        var parsedData = JSON.parse(moodleBoosterData);
-        // DarkMode
-        if (parsedData.DarkMode) {
-            addDarkMode();
-        }
-        // EnhancePage
-        if (parsedData.EnhancePage.Monochrome) {
-            setMonochrome();
-        }
-        if (parsedData.EnhancePage.cursor === "big") {
-            makeCursorBigger();
-        }
-        setFontSize(parsedData.EnhancePage.FontSize);
-        setContrast(parsedData.EnhancePage.Contrast);
-        setSaturation(parsedData.EnhancePage.Saturation);
-        setLineSpacing(parsedData.EnhancePage.lineSpacing)
-        // CourseRemover
-        await saveUserCoursesBySemester(parsedData)
-        rearrangeCourses(parsedData)
-        removeCoursesByConfiguration(parsedData);
-        resetCourseRemoverStatus(parsedData);
+    // EnhancePage
+    if (parsedData.EnhancePage.Monochrome) {
+        setMonochrome();
     }
-    // --------------------------------------------
+    if (parsedData.EnhancePage.cursor === "big") {
+        makeCursorBigger();
+    }
+    setFontSize(parsedData.EnhancePage.FontSize);
+    setContrast(parsedData.EnhancePage.Contrast);
+    setSaturation(parsedData.EnhancePage.Saturation);
+    setLineSpacing(parsedData.EnhancePage.lineSpacing)
+    // CourseRemover
+    await saveUserCoursesBySemester(parsedData)
+    removeCoursesByConfiguration(parsedData);
+    rearrangeCourses(parsedData)
+    resetCourseRemoverStatus(parsedData);
 }
 
 function removeDarkMode() {
@@ -332,17 +313,17 @@ function handleCourseRemoverAction(parsedData, payload) {
     parsedData.courseRemoverStatus = payload.val;
 }
 
-function resetCourseRemoverStatus(parsedData) {
+async function resetCourseRemoverStatus(parsedData) {
     parsedData.courseRemoverStatus = false;
-    localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(parsedData));
+    await sendMessageToBackgroundScript("SetStorage", {key:storageKey, value: parsedData})
 }
 
 /**
  * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
  */
 function listenForBackgroundMessages() {
-    browser.runtime.onMessage.addListener(({action, payload}) => {
-        let parsedData = JSON.parse(localStorage.getItem('MoodleBooster' + currentYear));
+    browser.runtime.onMessage.addListener(async ({action, payload}) => {
+        let parsedData = await sendMessageToBackgroundScript("GetStorage", {key: storageKey});
         switch (action) {
             case "DarkMode":
                 handleDarkModeAction(parsedData, payload);
@@ -357,36 +338,13 @@ function listenForBackgroundMessages() {
                 handleEnhancePageAction(parsedData, payload);
                 break
             case "reset":
-                parsedData = defaultSaveSettings;
+                parsedData = await sendMessageToBackgroundScript("ResetStorage", {key: storageKey})
                 break
         }
-        localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(parsedData));
-        return Promise.resolve(parsedData);
+        await sendMessageToBackgroundScript("SetStorage", {key: storageKey, value: parsedData})
+        return parsedData
     });
 }
-
-function saveToStorage(parameter, data, overwrite = true) {
-    /**
-     * This function loads MoodleBooster save from the localStorage and then
-     * appends or overwrites the data inside the specific parameter with the given data.
-     * > parameter: Parameter to add the data into.
-     * > data: Self-explanatory.
-     * > overwrite: Should the function overwrite the current data with the given one?
-     */
-    var moodleBoosterData = localStorage.getItem('MoodleBooster' + currentYear);
-    if (moodleBoosterData == null) {  // No data => init one.
-        localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(defaultSaveSettings));
-    }
-    var parsedData = JSON.parse(moodleBoosterData);
-    // TODO: make sure that the parameter is a valid one.
-    if (overwrite) {
-        parsedData[parameter] = data;
-    } else {
-        parsedData[parameter].push(data);
-    }
-    localStorage.setItem('MoodleBooster' + currentYear, JSON.stringify(parsedData));
-}
-
 
 /**
  * Send messages with request that contains action to be preformed and payload to the storageLoader
@@ -445,7 +403,7 @@ async function getCourseSemester(courseId) {
     }
     const semesterContent = semester.textContent
 
-    if(semesterContent.includes("ב'") && semesterContent.includes("א'")){
+    if (semesterContent.includes("ב'") && semesterContent.includes("א'")) {
         return 'Unknown'
     }
 

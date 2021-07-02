@@ -1,5 +1,23 @@
 "use strict"
 
+const defaultSaveSettings = {
+    'RemovedCourses': [],
+    'courseRemoverStatus': false,
+    'DarkMode': false,
+    'EnhancePage': {
+        'Monochrome': false,
+        'FontSize': "0",
+        'Contrast': "2",
+        'Saturation': "2",
+        'lineSpacing': "2",
+        'cursor': "normal"
+    },
+}
+
+async function handleReset() {
+    await sendMessageToTabs("reset")
+}
+
 /**
  * Listen for clicks on the buttons, and send the appropriate message to
  * the content script in the page.
@@ -44,9 +62,10 @@ async function listenForClicks() {
     })
 }
 
-async function handleReset() {
-    await sendMessageToTabs("reset")
+async function resetStorage(key) {
+    localStorage.removeItem(key)
     alert("Please refresh your browser tab to apply.")
+    return defaultSaveSettings
 }
 
 /**
@@ -110,7 +129,7 @@ const setBtnsStyle = (localStorageData) => {
         setSliderValue("saturation-range", localStorageData.EnhancePage.Saturation)
         setSliderValue("line-spacing-range", localStorageData.EnhancePage.lineSpacing)
         setBtnStyle("cursor", localStorageData.EnhancePage.cursor === "big")
-    } else {
+    } else if(window.location.href.includes("index.html")){
         setBtnStyle("dark-mode", localStorageData.DarkMode)
         setBtnStyle("remove-courses", localStorageData.courseRemoverStatus)
     }
@@ -142,6 +161,18 @@ function setIconListeners() {
     });
 }
 
+async function setStorage(key, value) {
+    await localStorage.setItem(key, JSON.stringify(value))
+}
+
+async function getStorage(key) {
+    const res = await localStorage.getItem(key)
+    if (typeof res === "string") {
+        return await JSON.parse(res)
+    }
+    return defaultSaveSettings
+}
+
 async function loader() {
     listenForContentScriptsMessages()
     setIconListeners()
@@ -152,6 +183,7 @@ async function loader() {
 
 
 /**
+ * General method to scrape DOM inside html
  * General method to scrape DOM inside html
  * @param url   The url consisting the DOM element
  * @param cssSelector   CSS selector to find the DOM element
@@ -174,6 +206,19 @@ async function fetchHtml(url, cssSelector, all = false) {
     }
 }
 
+const setStorageParam = async (key, param, data, overwrite) => {
+    let moodleBoosterData = await getStorage(key);
+    if (moodleBoosterData == null) {
+        moodleBoosterData = defaultSaveSettings
+    }
+    if (overwrite) {
+        moodleBoosterData[param] = data;
+    } else {
+        moodleBoosterData[param].push(data);
+    }
+    await setStorage(key, moodleBoosterData);
+}
+
 
 /**
  * Getting messages with request that contains action to be preformed and payload sent by "sendMessageToTabs" in popup
@@ -181,11 +226,32 @@ async function fetchHtml(url, cssSelector, all = false) {
 function listenForContentScriptsMessages() {
     browser.runtime.onMessage.addListener(async ({action, payload}) => {
         console.log("got message action", action, "payload ", payload)
-        switch (action) {
-            case "FetchHtml":
-                const res = await fetchHtml(payload.url)
-                return {response: res}
+        let res;
+        try {
+            switch (action) {
+                case "FetchHtml":
+                    res = await fetchHtml(payload.url)
+                    return {response: res}
+                case "SetStorage":
+                    res = await setStorage(payload.key, payload.value)
+                    return {response: res}
+                case "SetStorageParam":
+                    res = await setStorageParam(payload.key, payload.param,payload.data,payload.overwrite)
+                    return {response: res}
+                case "GetStorage":
+                    res = await getStorage(payload.key)
+                    return {response: res}
+                case "ResetStorage":
+                    res = await resetStorage(payload.key)
+                    return {response: res}
+                default:
+                    console.log(`no action ${action}`)
+                    return {response: null}
+            }
+        } catch (e) {
+            throw e
         }
+
     });
 }
 
