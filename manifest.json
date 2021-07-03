@@ -9,7 +9,7 @@
   "content_scripts": [
     {
       "matches": [
-        "*://moodle2.cs.huji.ac.il/*"
+        "*://*moodle2.cs.huji.ac.il/*"
       ],
       "js": [
         "/webextension-polyfill/dist/browser-polyfill.js",
