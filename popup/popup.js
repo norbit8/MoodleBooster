@@ -151,7 +151,7 @@ function onError(error) {
 
 function setIconListeners() {
     browser.tabs.onUpdated.addListener(function (tabId, change, tab) {
-        if (!tab.url || tab.url.match(/.*:\/\/.*[.]ac[.]il\/.*/) === null) {
+        if (!tab.url || tab.url.match(/.*:\/\/.*moodle2[.]cs[.]huji[.]ac[.]il\/.*/) === null) {
             browser.browserAction.setPopup({tabId: tabId, popup: ''});
             browser.browserAction.setIcon({path: '/images/moodlebooster_icon_disabled.png', tabId: tabId});
         } else {
