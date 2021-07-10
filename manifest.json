@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "MoodleBooster",
-  "version": "0.1",
+  "version": "1.0",
   "description": "Boosts moodle UI/UX",
   "icons": {
     "48": "images/moodlebooster_icon.png"
@@ -13,6 +13,7 @@
       ],
       "js": [
         "/webextension-polyfill/dist/browser-polyfill.js",
+        "/content_scripts/contentScriptsEnabler.js",
         "/content_scripts/dashboard.js",
         "/content_scripts/storageLoader.js",
         "/content_scripts/courseScheduale.js",

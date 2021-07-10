@@ -416,4 +416,7 @@ function main() {
     listenForBackgroundMessages();
 }
 
-main();
+
+if(window.RunContentScripts){
+    main()
+}

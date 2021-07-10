@@ -72,7 +72,12 @@ async function createDashboard() {
 }
 
 
-if (isInCourseView()) {
-    createDashboard()
+function main() {
+    if (isInCourseView()) {
+        createDashboard()
+    }
 }
-//TODO add more html content with dashboard.insertHtmlToDashboard()
+
+if(window.RunContentScripts){
+    main()
+}
