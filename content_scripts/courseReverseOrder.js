@@ -48,4 +48,10 @@ const addCourseReverse = () => {
     }
 }
 
-addCourseReverse();
+function main(){
+    addCourseReverse();
+}
+
+if(ContentScriptsEnabled){
+    main()
+}

@@ -14,6 +14,9 @@ const defaultSaveSettings = {
     },
 }
 
+const DISABLE_EXTENSION_REGEX = /.*(.pdf|.xls|.docx|.odt|.xlsx|.ods|.ppt|.pptx|.doc)$/
+const ENABLE_EXTENSION_REGEX = /.*:\/\/.*moodle2[.]cs[.]huji[.]ac[.]il\/.*/
+
 async function handleReset() {
     await sendMessageToTabs("reset")
 }
@@ -149,9 +152,12 @@ function onError(error) {
     console.log("Error occured " + error)
 }
 
+
+
 function setIconListeners() {
     browser.tabs.onUpdated.addListener(function (tabId, change, tab) {
-        if (!tab.url || tab.url.match(/.*:\/\/.*moodle2[.]cs[.]huji[.]ac[.]il\/.*/) === null) {
+        let url = tab.url
+        if (!url || url.match(ENABLE_EXTENSION_REGEX) === null || url.match(DISABLE_EXTENSION_REGEX) !== null) {
             browser.browserAction.setPopup({tabId: tabId, popup: ''});
             browser.browserAction.setIcon({path: '/images/moodlebooster_icon_disabled.png', tabId: tabId});
         } else {

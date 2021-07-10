@@ -223,4 +223,11 @@ const getSchedualeData = () => {
     return schedualeData;
 }
 
-addCourseScheduale();
+
+function main(){
+    addCourseScheduale()
+}
+
+if(ContentScriptsEnabled){
+    main()
+}
