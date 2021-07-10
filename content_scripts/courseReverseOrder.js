@@ -52,6 +52,6 @@ function main(){
     addCourseReverse();
 }
 
-if(window.RunContentScripts){
+if(ContentScriptsEnabled){
     main()
 }

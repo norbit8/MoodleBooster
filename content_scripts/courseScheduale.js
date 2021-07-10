@@ -228,6 +228,6 @@ function main(){
     addCourseScheduale()
 }
 
-if(window.RunContentScripts){
+if(ContentScriptsEnabled){
     main()
 }

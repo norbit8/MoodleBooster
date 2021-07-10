@@ -417,6 +417,6 @@ function main() {
 }
 
 
-if(window.RunContentScripts){
+if(ContentScriptsEnabled){
     main()
 }
